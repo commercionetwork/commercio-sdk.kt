@@ -1,4 +1,5 @@
-apply from: rootProject.file('gradle/dokka.gradle')
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
 
 task sourcesJar(type: Jar, dependsOn: classes) {
     archiveClassifier.set("sources")
@@ -9,13 +10,13 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             groupId = group
-            artifactId = "sacco.kt"
+            artifactId = "sdk"
             artifact sourcesJar
             artifact javadocJar
             pom {
-                name = 'Sacco.kt'
-                description = 'A cryptographic library that allows easy creation, signing and sending of Cosmos Network transactions'
-                url = 'https://github.com/commercionetwork/sacco.kt'
+                name = 'Commercio.network SDK'
+                description = 'The official Commercio.network SDK'
+                url = 'https://github.com/commercionetwork/sdk'
                 licenses {
                     license {
                         name = 'The MIT License'

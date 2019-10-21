@@ -1,7 +1,12 @@
-# Commercio.network Kotlin SDK
-> The official Commercio.network Kotlin SDK
+![](.img/logo.png)
 
-> Entirely base on [Sacco.kt](https://github.com/commercionetwork/sacco.kt) 
+<!-- [![Release](https://jitpack.io/v/commercionetwork/sdk.svg)](https://jitpack.io/#commercionetwork/sdk) -->
+![Travis (.org)](https://img.shields.io/travis/commercionetwork/sdk)
+![](https://img.shields.io/badge/compatible-Kotlin-blue)
+![](https://img.shields.io/badge/compatible-JVM-blue)
+
+The official Commercio.network Kotlin SDK.  
+Entirely base on [Sacco.kt](https://github.com/commercionetwork/sacco.kt) 
 
 ## Road map
 ### Utils 
@@ -11,12 +16,12 @@
 
 ### CommercioDOCS
 - [x] Share document
-- [ ] Send receipt
-- [ ] List documents
-- [ ] List receipts
+- [x] Send receipt
+- [x] List documents
+- [x] List receipts
 
 ### CommercioID
-- [ ] Create Did Document
+- [x] Create Did Document
 - [ ] Request deposit
 - [ ] Request power up
 - [ ] Create connection invitation
