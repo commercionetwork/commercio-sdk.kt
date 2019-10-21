@@ -1,5 +1,6 @@
 package network.commercio.sdk.entities.id
 
+import network.commercio.sacco.models.types.StdCoin
 import network.commercio.sacco.models.types.StdMsg
 
 /**
@@ -7,7 +8,7 @@ import network.commercio.sacco.models.types.StdMsg
  */
 data class MsgRequestDidPowerUp(
     private val claimantDid: String,
-    private val amount: String,
+    private val amount: List<StdCoin>,
     private val powerUpProof: String,
     private val encryptionKey: String
 ) : StdMsg(

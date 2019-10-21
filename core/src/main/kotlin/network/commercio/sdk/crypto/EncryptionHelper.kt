@@ -11,6 +11,14 @@ import javax.crypto.Cipher
 object EncryptionHelper {
 
     /**
+     * Returns the RSA public key associated to the government that should be used when
+     * encrypting the data that only it should see.
+     */
+    suspend fun getGovernmentRsaPubKey(): PublicKey {
+        TODO()
+    }
+
+    /**
      * Encrypts the given [data] with AES using the specified [key].
      */
     fun encryptWithAes(data: String, key: Key): ByteArray {
