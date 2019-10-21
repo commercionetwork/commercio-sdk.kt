@@ -45,7 +45,7 @@ object EncryptionHelper {
      * Encrypts the given [data] with RSA using the specified [key].
      */
     fun encryptWithRsa(data: ByteArray, key: PublicKey): ByteArray {
-        return Cipher.getInstance("RSAWithSHA256").apply {
+        return Cipher.getInstance("RSA").apply {
             init(Cipher.ENCRYPT_MODE, key)
         }.doFinal(data)
     }
@@ -61,7 +61,7 @@ object EncryptionHelper {
      * Encrypts the given [data] with RSA using the specified [certificate].
      */
     fun encryptWithRsa(data: ByteArray, certificate: X509Certificate): ByteArray {
-        return Cipher.getInstance("RSAWithSHA256").apply {
+        return Cipher.getInstance("RSA").apply {
             init(Cipher.ENCRYPT_MODE, certificate)
         }.doFinal(data)
     }
