@@ -1,0 +1,1 @@
+{"type":"commercio/MsgRequestDidDeposit","value":{"amount":[{"amount":"100","denom":"ucommercio"}],"encryption_key":"AES-256 key","from_address":"did:com:1xlp0adcdl8363q9y833084cwuzhqy7fucmqh9r","proof":"Proof","recipient":"did:com:1ttwtq7kxustrqxstjpcjf7wf7l9ljd8jz7z64r"}}

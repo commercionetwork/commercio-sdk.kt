@@ -10,7 +10,8 @@ data class MsgShareDocument(
     private val recipientsDid: List<String>,
     private val document: CommercioDoc
 ) : StdMsg(
-    type = "commercio/MsgShareDocument", value = mapOf(
+    type = "commercio/MsgShareDocument",
+    value = mapOf(
         "sender" to senderDid,
         "recipients" to recipientsDid,
         "document" to document

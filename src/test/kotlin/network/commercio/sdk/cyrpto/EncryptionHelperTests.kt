@@ -1,7 +1,7 @@
 package network.commercio.sdk.cyrpto
 
 import network.commercio.sdk.crypto.EncryptionHelper
-import network.commercio.sdk.testutils.readResource
+import network.commercio.sdk.readResource
 import org.bouncycastle.util.encoders.Base64
 import org.bouncycastle.util.encoders.Hex
 import org.junit.Assert.assertEquals

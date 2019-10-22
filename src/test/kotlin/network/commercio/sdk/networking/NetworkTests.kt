@@ -11,7 +11,7 @@ import io.ktor.http.headersOf
 import io.mockk.every
 import io.mockk.mockkObject
 import kotlinx.coroutines.runBlocking
-import network.commercio.sdk.testutils.readResource
+import network.commercio.sdk.readResource
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Test
@@ -34,7 +34,7 @@ class NetworkTests {
             }
 
             engine {
-                addHandler { request ->
+                addHandler {
                     val responseHeaders = headersOf("Content-Type" to listOf(ContentType.Application.Json.toString()))
                     val response = readResource("sent_documents_response.json")
                     respond(response, headers = responseHeaders)

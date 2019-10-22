@@ -32,11 +32,11 @@ data class CommercioDoc(
     ) {
 
         enum class Algorithm {
-            @JsonProperty("MD5") MD5,
-            @JsonProperty("SHA-1") SHA1,
-            @JsonProperty("SHA-224") SHA224,
-            @JsonProperty("SHA-384") SHA384,
-            @JsonProperty("SHA-512") SHA512
+            @JsonProperty("md5") MD5,
+            @JsonProperty("sha-1") SHA1,
+            @JsonProperty("sha-224") SHA224,
+            @JsonProperty("sha-384") SHA384,
+            @JsonProperty("sha-512") SHA512
         }
     }
 
