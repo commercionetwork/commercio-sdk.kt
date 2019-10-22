@@ -13,9 +13,11 @@ internal object Network {
 
     /**
      * Default client that must be used when performing network requests.
+     *
+     * Notes. Internal for testing.
      */
-    private val client: HttpClient by lazy {
-        return@lazy HttpClient {
+    internal val client: HttpClient by lazy {
+        HttpClient {
             install(JsonFeature) {
                 serializer = JacksonSerializer()
             }

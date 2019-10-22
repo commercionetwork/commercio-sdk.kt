@@ -4,7 +4,8 @@ import network.commercio.sacco.TxResponse
 import network.commercio.sacco.Wallet
 import network.commercio.sacco.models.types.StdCoin
 import network.commercio.sacco.models.types.StdFee
-import network.commercio.sdk.entities.Did
+import network.commercio.sdk.crypto.KeysHelper
+import network.commercio.sdk.entities.id.Did
 import network.commercio.sdk.entities.docs.CommercioDoc
 import network.commercio.sdk.entities.docs.CommercioDocReceipt
 import network.commercio.sdk.entities.docs.MsgSendDocumentReceipt
@@ -12,6 +13,7 @@ import network.commercio.sdk.entities.docs.MsgShareDocument
 import network.commercio.sdk.networking.Network
 import network.commercio.sdk.tx.TxHelper
 import java.util.*
+import javax.crypto.SecretKey
 
 /**
  * Allows to easily perform CommercioDOCS related operations
@@ -30,6 +32,7 @@ object DocsHelper {
         checksum: CommercioDoc.Checksum,
         recipients: List<Did>,
         wallet: Wallet,
+        aesKey: SecretKey = KeysHelper.generateAesKey(),
         encryptedData: List<EncryptedData> = listOf()
     ): TxResponse {
 
@@ -45,7 +48,7 @@ object DocsHelper {
         // Encrypt its contents, if necessary
         val finalDoc = when (encryptedData.isEmpty()) {
             true -> document
-            false -> document.encryptField(encryptedData, recipients, wallet)
+            false -> document.encryptField(aesKey, encryptedData, recipients, wallet)
         }
 
         // Build the tx message

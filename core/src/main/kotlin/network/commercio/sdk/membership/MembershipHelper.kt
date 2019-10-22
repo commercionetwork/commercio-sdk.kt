@@ -2,7 +2,7 @@ package network.commercio.sdk.membership
 
 import network.commercio.sacco.TxResponse
 import network.commercio.sacco.Wallet
-import network.commercio.sdk.entities.Did
+import network.commercio.sdk.entities.id.Did
 import network.commercio.sdk.tx.TxHelper
 
 /**

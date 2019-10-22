@@ -1,6 +1,7 @@
 package network.commercio.sdk.crypto
 
 import java.security.Key
+import java.security.PrivateKey
 import java.security.PublicKey
 import java.security.cert.X509Certificate
 import javax.crypto.Cipher
@@ -64,5 +65,15 @@ object EncryptionHelper {
         return Cipher.getInstance("RSA").apply {
             init(Cipher.ENCRYPT_MODE, certificate)
         }.doFinal(data)
+    }
+
+    /**
+     * Decrypts the given data using the specified private [key].
+     */
+    fun decryptWithRsa(data: ByteArray, key: PrivateKey): String {
+        val decrypted = Cipher.getInstance("RSA").apply {
+            init(Cipher.DECRYPT_MODE, key)
+        }.doFinal(data)
+        return String(decrypted)
     }
 }

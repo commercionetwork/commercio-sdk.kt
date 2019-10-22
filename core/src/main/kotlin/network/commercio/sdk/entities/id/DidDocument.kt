@@ -13,7 +13,10 @@ import java.security.spec.PKCS8EncodedKeySpec
 data class DidDocument(
     @field:JsonProperty("@context") val context: String,
     @field:JsonProperty("id") val did: String,
-    @field:JsonProperty("publicKey") val publicKeys: List<DidDocumentPublicKey>
+    @field:JsonProperty("publicKey") val publicKeys: List<DidDocumentPublicKey>,
+    @field:JsonProperty("authentication") val authentication: List<String>,
+    @field: JsonProperty("proof") val proof: DidDocumentProof,
+    @field: JsonProperty("service") val services: List<DidDocumentService>
 ) {
 
     val encryptionKey: PublicKey?

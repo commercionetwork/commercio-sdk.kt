@@ -1,12 +1,12 @@
 package network.commercio.sdk.id
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import network.commercio.sdk.entities.id.MsgRequestDidPowerUp
 
-data class DidPowerUpRequestSignatureJson(
-    @JsonProperty("pairwise_did") val pairwiseDid: String,
-    @JsonProperty("timestamp") val timestamp: String
-)
-
+/**
+ * Represents the payload that should be put inside a
+ * [MsgRequestDidPowerUp] message.
+ */
 data class DidPowerUpRequestPayload(
     @JsonProperty("pairwise_did") val pairwiseDid: String,
     @JsonProperty("timestamp") val timestamp: String,

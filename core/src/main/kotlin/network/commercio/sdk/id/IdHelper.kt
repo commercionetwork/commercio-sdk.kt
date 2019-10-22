@@ -4,11 +4,7 @@ import network.commercio.sacco.TxResponse
 import network.commercio.sacco.Wallet
 import network.commercio.sacco.models.types.StdCoin
 import network.commercio.sdk.crypto.SignHelper
-import network.commercio.sdk.entities.Did
-import network.commercio.sdk.entities.id.DidDocument
-import network.commercio.sdk.entities.id.MsgRequestDidDeposit
-import network.commercio.sdk.entities.id.MsgRequestDidPowerUp
-import network.commercio.sdk.entities.id.MsgSetDidDocument
+import network.commercio.sdk.entities.id.*
 import network.commercio.sdk.networking.Network
 import network.commercio.sdk.tx.TxHelper
 import network.commercio.sdk.utils.tryOrNull

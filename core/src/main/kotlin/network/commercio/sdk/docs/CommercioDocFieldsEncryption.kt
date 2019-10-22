@@ -1,14 +1,13 @@
 package network.commercio.sdk.docs
 
 import network.commercio.sacco.Wallet
-import org.spongycastle.util.encoders.Hex
-import javax.crypto.Cipher
 import network.commercio.sdk.crypto.EncryptionHelper
-import network.commercio.sdk.crypto.KeysHelper
-import network.commercio.sdk.entities.Did
+import network.commercio.sdk.entities.id.Did
 import network.commercio.sdk.entities.docs.CommercioDoc
 import network.commercio.sdk.id.IdHelper
 import network.commercio.sdk.utils.toHex
+import org.spongycastle.util.encoders.Hex
+import javax.crypto.SecretKey
 
 enum class EncryptedData {
     CONTENT,
@@ -27,6 +26,7 @@ enum class EncryptedData {
 }
 
 internal suspend fun CommercioDoc.encryptField(
+    aesKey: SecretKey,
     encryptedData: List<EncryptedData>,
     recipients: List<Did>,
     wallet: Wallet
@@ -35,9 +35,6 @@ internal suspend fun CommercioDoc.encryptField(
     // -----------------
     // --- Encryption
     // -----------------
-
-    // Create an AES encryption key
-    val aesKey = KeysHelper.generateAesKey()
 
     // Encrypt the contents
     val encryptedContentUri = when (encryptedData.contains(EncryptedData.CONTENT_URI)) {
@@ -64,17 +61,15 @@ internal suspend fun CommercioDoc.encryptField(
 
     // Get a list of al the Did Documents and the associated encryption key
     val keys = recipientsDidDocs
-        .map { it to it.encryptionKey }
+        .mapNotNull { did ->
+            // Returns null if the key is null, a Pair(Did, Key) otherwise
+            did.encryptionKey?.let { key -> did to key }
+        }
         .map { (didDoc, encKey) -> Pair(didDoc, encKey) }
-        .filter { it.second != null }
-
 
     // Create the encryption key field
-    val encryptionKeys = keys.map { (didDoc, encryptionKey) ->
-        val encryptedAesKey = Cipher.getInstance("RSAWithSHA256").apply {
-            init(Cipher.ENCRYPT_MODE, encryptionKey)
-        }.doFinal(aesKey.encoded)
-
+    val encryptionKeys = keys.map { (didDoc, pubKey) ->
+        val encryptedAesKey = EncryptionHelper.encryptWithRsa(aesKey.encoded, pubKey)
         CommercioDoc.EncryptionData.Key(recipientDid = didDoc.did, value = Hex.toHexString(encryptedAesKey))
     }
 
