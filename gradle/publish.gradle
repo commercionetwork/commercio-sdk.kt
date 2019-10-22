@@ -1,8 +1,7 @@
-apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
 task sourcesJar(type: Jar, dependsOn: classes) {
-    archiveClassifier.set("sources")
+    classifier = "sources"
     from sourceSets.main.allSource
 }
 
@@ -10,9 +9,11 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             groupId = group
-            artifactId = "sdk"
+            artifactId = "sdk.kt"
             artifact sourcesJar
             artifact javadocJar
+            from components.java
+
             pom {
                 name = 'Commercio.network SDK'
                 description = 'The official Commercio.network SDK'

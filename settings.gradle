@@ -1,3 +1,1 @@
-rootProject.name = 'commerciosdk'
-
-include ':core'
+rootProject.name = 'Commercio SDK'

@@ -12,37 +12,54 @@ buildscript {
     }
 }
 
-ext.configuredVersion = project.hasProperty("releaseVersion") ? project.releaseVersion : project.version
+apply plugin: 'kotlin'
+apply from: rootProject.file('gradle/dokka.gradle')
+apply from: rootProject.file('gradle/publish.gradle')
 
-allprojects {
-    group = "network.commercio.sdk"
-    version = configuredVersion
-
-    apply plugin: "kotlin"
-
-    repositories {
-        jcenter()
-        mavenCentral()
-        maven { url 'https://jitpack.io' }
-    }
-
-    apply from: rootProject.file('gradle/dokka.gradle')
-    apply from: rootProject.file('gradle/publish.gradle')
-
-    compileKotlin {
-        kotlinOptions {
-            freeCompilerArgs = ["-XXLanguage:+InlineClasses"]
-        }
-    }
+repositories {
+    jcenter()
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
-afterEvaluate {
-    task dokkaWebsite(type: dokka.getClass()) {
-        outputFormat = 'kotlin-website'
-        outputDirectory = "${rootProject.projectDir}/apidoc"
+dependencies {
+    // Kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
 
-        kotlinTasks { allCompileKotlinTasks }
+    // Crypto
+    implementation "org.bouncycastle:bcprov-jdk15on:1.64"
+    implementation "org.bitcoinj:bitcoinj-core:0.14.7"
+    implementation "com.github.komputing:kethereum:$kethereum_version"
+    implementation "com.github.commercionetwork:sacco.kt:$sacco_version"
 
-        reportUndocumented = false
-    }
+    // Serialization
+    implementation "com.fasterxml.jackson.core:jackson-databind:2.0.1"
+    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.7"
+
+    // Networking
+    implementation "io.ktor:ktor-client:$ktor_version"
+    implementation "io.ktor:ktor-client-jackson:$ktor_version"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-jackson:$retrofit_version"
+
+    // ------------
+    // --- Tests
+    // ------------
+    testImplementation "junit:junit:$junit_version"
+    testImplementation "io.ktor:ktor-client-mock-jvm:$ktor_version"
+    testImplementation "io.mockk:mockk:$mockk_version"
+}
+
+sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.freeCompilerArgs = ["-XXLanguage:+InlineClasses"]
+}
+
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
 }
