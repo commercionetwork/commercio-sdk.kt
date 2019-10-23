@@ -5,6 +5,7 @@ import network.commercio.sdk.crypto.SignHelper
 import network.commercio.sdk.entities.id.DidDocument
 import network.commercio.sdk.entities.id.DidDocumentProof
 import network.commercio.sdk.entities.id.DidDocumentPublicKey
+import network.commercio.sdk.utils.getTimeStamp
 import org.spongycastle.util.encoders.Hex
 import java.security.PublicKey
 import java.security.interfaces.ECPublicKey
@@ -74,7 +75,7 @@ object DidDocumentHelper {
     private fun computeProof(authKeyid: String, content: DidDocumentProofSignatureContent, wallet: Wallet): DidDocumentProof {
         return DidDocumentProof(
             type = "LinkedDataSignature2015",
-            creationTimeStamp = getTimeStamp(),
+            iso8601CreationTimeStamp = getTimeStamp(),
             creatorKeyId = authKeyid,
             signatureValue = Hex.toHexString(SignHelper.signSorted(content, wallet))
         )

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import org.spongycastle.util.encoders.Hex
 import java.security.KeyFactory
 import java.security.PublicKey
+import java.security.interfaces.RSAPublicKey
 import java.security.spec.PKCS8EncodedKeySpec
 
 /**
@@ -19,13 +20,16 @@ data class DidDocument(
     @field: JsonProperty("service") val services: List<DidDocumentService>
 ) {
 
-    val encryptionKey: PublicKey?
+    /**
+     * Returns the [PublicKey] that should be used as the public encryption key when encrypting data
+     * that can later be read only by the owner of this Did Document.
+     */
+    val encryptionKey: RSAPublicKey?
         get() {
             // Find the encryption key
             return publicKeys.firstOrNull { it.type == DidDocumentPublicKey.Type.RSA }?.let {
                 val pubKeySpec = PKCS8EncodedKeySpec(Hex.decode(it.publicKeyHex))
-                KeyFactory.getInstance("RSA").generatePublic(pubKeySpec)
+                KeyFactory.getInstance("RSA").generatePublic(pubKeySpec) as RSAPublicKey
             }
         }
-
 }

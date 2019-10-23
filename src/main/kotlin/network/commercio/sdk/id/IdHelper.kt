@@ -7,6 +7,7 @@ import network.commercio.sdk.crypto.SignHelper
 import network.commercio.sdk.entities.id.*
 import network.commercio.sdk.networking.Network
 import network.commercio.sdk.tx.TxHelper
+import network.commercio.sdk.utils.getTimeStamp
 import network.commercio.sdk.utils.tryOrNull
 import org.spongycastle.util.encoders.Hex
 
@@ -15,6 +16,9 @@ import org.spongycastle.util.encoders.Hex
  */
 object IdHelper {
 
+    /**
+     * Returns the Did Document associated with the given [did], or `null` if no Did Document was found.
+     */
     suspend fun getDidDocument(did: Did, wallet: Wallet): DidDocument? = tryOrNull {
         Network.query<DidDocument>(url = "${wallet.networkInfo.lcdUrl}/identities/${did.value}")
     }

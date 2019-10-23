@@ -51,18 +51,18 @@ class EncryptionHelperTests {
     }
 
     @Test
-    fun `encryptWithRsa works with String data an public key`() {
+    fun `encryptWithRsa works with String data`() {
         val input = "This is a test!"
         val encrypted = EncryptionHelper.encryptWithRsa(input, rsaPubKey)
         val decrypted = EncryptionHelper.decryptWithRsa(encrypted, rsaPrivateKey)
-        assertEquals(input, decrypted)
+        assertEquals(input, String(decrypted))
     }
 
     @Test
-    fun `encryptWithRsa works with ByteArray data and public key`() {
+    fun `encryptWithRsa works with ByteArray data`() {
         val input = "Long text for RSA encryption and decryption that should be read as a ByteArray"
         val encrypted = EncryptionHelper.encryptWithRsa(input.toByteArray(), rsaPubKey)
         val decrypted = EncryptionHelper.decryptWithRsa(encrypted, rsaPrivateKey)
-        assertEquals(input, decrypted)
+        assertEquals(input, String(decrypted))
     }
 }

@@ -3,12 +3,6 @@ package network.commercio.sdk.id
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import network.commercio.sdk.crypto.EncryptionHelper
 import network.commercio.sdk.crypto.KeysHelper
-import java.text.SimpleDateFormat
-import java.util.*
-
-fun getTimeStamp(): String {
-    return SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.getDefault()).format(Date())
-}
 
 class ProofGenerationResult(val encryptedProof: ByteArray, val encryptedAesKey: ByteArray)
 

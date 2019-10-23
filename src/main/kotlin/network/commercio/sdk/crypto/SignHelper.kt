@@ -22,6 +22,6 @@ object SignHelper {
         }
 
         val jsonSignData = objectMapper.writeValueAsString(data)
-        return wallet.signTxData(jsonSignData)
+        return wallet.sign(jsonSignData)
     }
 }

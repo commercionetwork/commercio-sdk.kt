@@ -1,4 +1,4 @@
-package network.commercio.sdk.membership
+package network.commercio.sdk.entities.membership
 
 import network.commercio.sacco.models.types.StdMsg
 

@@ -2,6 +2,9 @@ package network.commercio.sdk.entities.id
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
+/**
+ * Contains the data of public key contained inside a Did document.
+ */
 data class DidDocumentPublicKey(
     @field:JsonProperty("id") val id: String,
     @field:JsonProperty("type") val type: Type,
