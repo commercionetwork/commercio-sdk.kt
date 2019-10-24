@@ -2,8 +2,8 @@ package network.commercio.sdk.docs
 
 import network.commercio.sacco.Wallet
 import network.commercio.sdk.crypto.EncryptionHelper
-import network.commercio.sdk.entities.id.Did
 import network.commercio.sdk.entities.docs.CommercioDoc
+import network.commercio.sdk.entities.id.Did
 import network.commercio.sdk.id.IdHelper
 import network.commercio.sdk.utils.toHex
 import org.spongycastle.util.encoders.Hex
@@ -25,6 +25,12 @@ enum class EncryptedData {
     }
 }
 
+/**
+ * Transforms [this] document into one having the proper fields encrypted as specified inside the [encryptedData] list.
+ * All the fields will be encrypted using the specified [aesKey]. This key will later be encrypted for each and every
+ * Did specified into the [recipients] list.
+ * The overall encrypted data will be put inside the proper document field.
+ */
 internal suspend fun CommercioDoc.encryptField(
     aesKey: SecretKey,
     encryptedData: List<EncryptedData>,
