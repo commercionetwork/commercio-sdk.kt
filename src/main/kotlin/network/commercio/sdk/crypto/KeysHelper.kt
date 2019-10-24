@@ -4,6 +4,7 @@ import java.security.KeyPair
 import java.security.KeyPairGenerator
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
+import javax.crypto.spec.SecretKeySpec
 
 /**
  * Allows to easily generate new keys either to be used with AES or RSA key.
@@ -17,6 +18,10 @@ object KeysHelper {
         return KeyGenerator.getInstance("AES").apply {
             init(256)
         }.generateKey()
+    }
+
+    fun recoverAesKey(bytes: ByteArray): SecretKey {
+        return SecretKeySpec(bytes, "AES")
     }
 
     /**

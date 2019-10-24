@@ -24,8 +24,8 @@ Entirely base on [Sacco.kt](https://github.com/commercionetwork/sacco.kt)
 - [x] Create Did Document
 - [x] Request deposit
 - [x] Request power up
-- [ ] Create connection invitation
-- [ ] Accept connection invitation
+- [x] Create connection invitation
+- [x] Verify connection invitation
 
 ### CommercioMINT
 - [x] Open CDP

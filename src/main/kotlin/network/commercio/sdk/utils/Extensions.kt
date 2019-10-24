@@ -24,6 +24,10 @@ fun ByteArray.toHex(): String {
     return Hex.toHexString(this)
 }
 
+fun String.readHex(): ByteArray {
+    return Hex.decode(this)
+}
+
 fun getTimeStamp(): String {
     return SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.getDefault()).format(Date())
 }
