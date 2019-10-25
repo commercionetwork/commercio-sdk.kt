@@ -28,20 +28,20 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
 
     // Crypto
-    implementation "org.bouncycastle:bcprov-jdk15on:1.64"
-    implementation "org.bitcoinj:bitcoinj-core:0.14.7"
-    implementation "com.github.komputing:kethereum:$kethereum_version"
-    implementation "com.github.commercionetwork:sacco.kt:$sacco_version"
+    compile "org.bouncycastle:bcprov-jdk15on:1.64"
+    compile "org.bitcoinj:bitcoinj-core:0.14.7"
+    compile "com.github.komputing:kethereum:$kethereum_version"
+    compile "com.github.commercionetwork:sacco.kt:$sacco_version"
 
     // Serialization
-    implementation "com.fasterxml.jackson.core:jackson-databind:2.0.1"
-    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.7"
+    compile "com.fasterxml.jackson.core:jackson-databind:2.0.1"
+    compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.7"
 
     // Networking
-    implementation "io.ktor:ktor-client:$ktor_version"
-    implementation "io.ktor:ktor-client-jackson:$ktor_version"
-    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    implementation "com.squareup.retrofit2:converter-jackson:$retrofit_version"
+    compile "io.ktor:ktor-client:$ktor_version"
+    compile "io.ktor:ktor-client-jackson:$ktor_version"
+    compile "com.squareup.retrofit2:retrofit:$retrofit_version"
+    compile "com.squareup.retrofit2:converter-jackson:$retrofit_version"
 
     // ------------
     // --- Tests
