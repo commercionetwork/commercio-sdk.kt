@@ -2,7 +2,7 @@ package network.commercio.sdk.entities.id
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
-import org.spongycastle.util.encoders.Hex
+import network.commercio.sdk.utils.readHex
 import java.security.KeyFactory
 import java.security.PublicKey
 import java.security.interfaces.RSAPublicKey
@@ -30,7 +30,7 @@ data class DidDocument(
         get() {
             // Find the encryption key
             return publicKeys.firstOrNull { it.type == DidDocumentPublicKey.Type.RSA }?.let {
-                val pubKeySpec = PKCS8EncodedKeySpec(Hex.decode(it.publicKeyHex))
+                val pubKeySpec = PKCS8EncodedKeySpec(it.publicKeyHex.readHex())
                 KeyFactory.getInstance("RSA").generatePublic(pubKeySpec) as RSAPublicKey
             }
         }

@@ -1,7 +1,7 @@
 ![](.img/logo.png)
 
-<!-- [![Release](https://jitpack.io/v/commercionetwork/sdk.svg)](https://jitpack.io/#commercionetwork/sdk) -->
-![Travis (.org)](https://img.shields.io/travis/commercionetwork/sdk.kt)
+[![Release](https://jitpack.io/v/commercionetwork/sdk.svg)](https://jitpack.io/#commercionetwork/sdk)
+[![Travis (.org)](https://img.shields.io/travis/commercionetwork/sdk.kt)](https://travis-ci.org/commercionetwork/sdk.kt)
 ![](https://img.shields.io/badge/compatible-Kotlin-blue)
 ![](https://img.shields.io/badge/compatible-JVM-blue)
 

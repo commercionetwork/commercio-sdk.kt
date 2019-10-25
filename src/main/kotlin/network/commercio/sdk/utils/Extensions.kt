@@ -1,6 +1,6 @@
 package network.commercio.sdk.utils
 
-import org.spongycastle.util.encoders.Hex
+import org.bouncycastle.util.encoders.Hex
 import java.text.SimpleDateFormat
 import java.util.*
 

@@ -28,14 +28,8 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
 
     // Crypto
-    compile "org.bouncycastle:bcprov-jdk15on:1.64"
-    compile "org.bitcoinj:bitcoinj-core:0.14.7"
     compile "com.github.komputing:kethereum:$kethereum_version"
     compile "com.github.commercionetwork:sacco.kt:$sacco_version"
-
-    // Serialization
-    compile "com.fasterxml.jackson.core:jackson-databind:2.0.1"
-    compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.7"
 
     // Networking
     compile "io.ktor:ktor-client:$ktor_version"

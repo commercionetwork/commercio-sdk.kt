@@ -6,7 +6,7 @@ import network.commercio.sdk.entities.id.DidDocument
 import network.commercio.sdk.entities.id.DidDocumentProof
 import network.commercio.sdk.entities.id.DidDocumentPublicKey
 import network.commercio.sdk.utils.getTimeStamp
-import org.spongycastle.util.encoders.Hex
+import network.commercio.sdk.utils.toHex
 import java.security.PublicKey
 import java.security.interfaces.ECPublicKey
 import java.security.interfaces.RSAPublicKey
@@ -27,7 +27,7 @@ object DidDocumentHelper {
             id = authKeyId,
             type = DidDocumentPublicKey.Type.SECP256K1,
             controller = wallet.bech32Address,
-            publicKeyHex = Hex.toHexString(wallet.publicKey.key.toByteArray())
+            publicKeyHex = wallet.publicKey.key.toByteArray().toHex()
         )
 
         // Compute the proof
@@ -65,7 +65,7 @@ object DidDocumentHelper {
                 else -> DidDocumentPublicKey.Type.ED25519
             },
             controller = wallet.bech32Address,
-            publicKeyHex = Hex.toHexString(pubKey.encoded)
+            publicKeyHex = pubKey.encoded.toHex()
         )
     }
 
@@ -77,7 +77,7 @@ object DidDocumentHelper {
             type = "LinkedDataSignature2015",
             iso8601CreationTimeStamp = getTimeStamp(),
             creatorKeyId = authKeyid,
-            signatureValue = Hex.toHexString(SignHelper.signSorted(content, wallet))
+            signatureValue = SignHelper.signSorted(content, wallet).toHex()
         )
     }
 }

@@ -6,7 +6,6 @@ import network.commercio.sdk.entities.docs.CommercioDoc
 import network.commercio.sdk.entities.id.Did
 import network.commercio.sdk.id.IdHelper
 import network.commercio.sdk.utils.toHex
-import org.spongycastle.util.encoders.Hex
 import javax.crypto.SecretKey
 
 enum class EncryptedData {
@@ -76,7 +75,7 @@ internal suspend fun CommercioDoc.encryptField(
     // Create the encryption key field
     val encryptionKeys = keys.map { (didDoc, pubKey) ->
         val encryptedAesKey = EncryptionHelper.encryptWithRsa(aesKey.encoded, pubKey)
-        CommercioDoc.EncryptionData.Key(recipientDid = didDoc.did, value = Hex.toHexString(encryptedAesKey))
+        CommercioDoc.EncryptionData.Key(recipientDid = didDoc.did, value = encryptedAesKey.toHex())
     }
 
     // Return a copy of the document
