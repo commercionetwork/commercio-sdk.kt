@@ -19,6 +19,7 @@ apply from: rootProject.file('gradle/publish.gradle')
 repositories {
     jcenter()
     mavenCentral()
+    mavenLocal()
     maven { url 'https://jitpack.io' }
 }
 
