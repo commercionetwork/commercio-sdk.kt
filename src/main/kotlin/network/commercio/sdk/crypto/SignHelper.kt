@@ -1,5 +1,6 @@
 package network.commercio.sdk.crypto
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.MapperFeature
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -28,6 +29,7 @@ object SignHelper {
     private val objectMapper = jacksonObjectMapper().apply {
         configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true)
         configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
+        setSerializationInclusion(JsonInclude.Include.NON_EMPTY)
     }
 
     /**

@@ -5,11 +5,11 @@ import network.commercio.sacco.Wallet
 import network.commercio.sacco.models.types.StdCoin
 import network.commercio.sacco.models.types.StdFee
 import network.commercio.sdk.crypto.KeysHelper
-import network.commercio.sdk.entities.id.Did
 import network.commercio.sdk.entities.docs.CommercioDoc
 import network.commercio.sdk.entities.docs.CommercioDocReceipt
 import network.commercio.sdk.entities.docs.MsgSendDocumentReceipt
 import network.commercio.sdk.entities.docs.MsgShareDocument
+import network.commercio.sdk.entities.id.Did
 import network.commercio.sdk.networking.Network
 import network.commercio.sdk.tx.TxHelper
 import java.util.*
@@ -73,7 +73,7 @@ object DocsHelper {
      */
     suspend fun getSentDocuments(address: Did, wallet: Wallet): List<CommercioDoc> {
         val queryUrl = "${wallet.networkInfo.lcdUrl}/docs/${address.value}/sent"
-        return Network.query<List<CommercioDoc>>(queryUrl) ?: listOf()
+        return Network.queryChain<List<CommercioDoc>>(queryUrl) ?: listOf()
     }
 
     /**
@@ -81,7 +81,7 @@ object DocsHelper {
      */
     suspend fun getReceivedDocuments(address: Did, wallet: Wallet): List<CommercioDoc> {
         val queryUrl = "${wallet.networkInfo.lcdUrl}/docs/${address.value}/received"
-        return Network.query<List<CommercioDoc>>(queryUrl) ?: listOf()
+        return Network.queryChain<List<CommercioDoc>>(queryUrl) ?: listOf()
     }
 
     /**
@@ -115,7 +115,7 @@ object DocsHelper {
      */
     suspend fun getSentReceipts(address: Did, wallet: Wallet): List<CommercioDocReceipt> {
         val queryUrl = "${wallet.networkInfo.lcdUrl}/receipts/${address.value}/sent"
-        return Network.query<List<CommercioDocReceipt>>(queryUrl) ?: listOf()
+        return Network.queryChain<List<CommercioDocReceipt>>(queryUrl) ?: listOf()
     }
 
     /**
@@ -123,6 +123,6 @@ object DocsHelper {
      */
     suspend fun getReceivedReceipts(address: Did, wallet: Wallet): List<CommercioDocReceipt> {
         val queryUrl = "${wallet.networkInfo.lcdUrl}/receipts/${address.value}/received"
-        return Network.query<List<CommercioDocReceipt>>(queryUrl) ?: listOf()
+        return Network.queryChain<List<CommercioDocReceipt>>(queryUrl) ?: listOf()
     }
 }

@@ -43,7 +43,7 @@ class NetworkTests {
         }
         every { Network.client } returns mockClient
 
-        val result = runBlocking { Network.query<List<TestData>>("http://example.com") }
+        val result = runBlocking { Network.queryChain<List<TestData>>("http://example.com") }
         assertNotNull(result)
         assertEquals(4, result?.size)
     }

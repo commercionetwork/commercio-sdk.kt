@@ -1,10 +1,12 @@
 package network.commercio.sdk.networking
 
 import io.ktor.client.HttpClient
+import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.features.json.JacksonSerializer
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.request.get
 import network.commercio.sdk.utils.tryOrNull
+import okhttp3.logging.HttpLoggingInterceptor
 
 /**
  * Allows to easily perform network-related operations.
@@ -17,7 +19,12 @@ internal object Network {
      * Notes. Internal for testing.
      */
     internal val client: HttpClient by lazy {
-        HttpClient {
+        HttpClient(OkHttp) {
+            engine {
+                val loggingInterceptor = HttpLoggingInterceptor()
+                loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+                addInterceptor(loggingInterceptor)
+            }
             install(JsonFeature) {
                 serializer = JacksonSerializer()
             }
@@ -27,7 +34,15 @@ internal object Network {
     /**
      * Queries the given [url] and returns an object of type [T], or `null` if some error raised.
      */
-    suspend fun <T> query(url: String): T? = tryOrNull {
+    suspend fun <T> queryChain(url: String): T? = tryOrNull {
         client.get<QueryResult<T>>(url).result
+    }
+
+    /**
+     * Gets the contents located at the given [url] as an object of type [T].
+     * If something goes wrong, returns `null` instead.
+     */
+    suspend inline fun <reified T> get(url: String): T? = tryOrNull {
+        client.get<T>(url)
     }
 }

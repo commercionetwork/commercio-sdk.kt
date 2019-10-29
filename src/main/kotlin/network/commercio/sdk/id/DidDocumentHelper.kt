@@ -27,7 +27,7 @@ object DidDocumentHelper {
             id = authKeyId,
             type = DidDocumentPublicKey.Type.SECP256K1,
             controller = wallet.bech32Address,
-            publicKeyHex = wallet.publicKey.key.toByteArray().toHex()
+            publicKeyHex = wallet.ecKey.publicKeyAsHex
         )
 
         // Compute the proof
@@ -48,7 +48,7 @@ object DidDocumentHelper {
             publicKeys = proofContent.publicKeys,
             authentication = proofContent.authentication,
             proof = proof,
-            services = listOf()
+            services = null
         )
     }
 

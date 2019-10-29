@@ -26,7 +26,7 @@ object IdHelper {
      * Returns the Did Document associated with the given [did], or `null` if no Did Document was found.
      */
     suspend fun getDidDocument(did: Did, wallet: Wallet): DidDocument? = tryOrNull {
-        Network.query<DidDocument>(url = "${wallet.networkInfo.lcdUrl}/identities/${did.value}")
+        Network.queryChain<DidDocument>(url = "${wallet.networkInfo.lcdUrl}/identities/${did.value}")
     }
 
     /**
