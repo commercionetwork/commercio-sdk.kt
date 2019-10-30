@@ -15,12 +15,15 @@ import javax.crypto.SecretKey
  */
 object EncryptionHelper {
 
+    private const val RSA_ALGORITHM = "RSA/ECB/PKCS1Padding"
+    private const val AES_ALGORITHM = "AES"
+
     /**
      * Returns the RSA public key associated to the government that should be used when
      * encrypting the data that only it should see.
      */
     suspend fun getGovernmentRsaPubKey(): PublicKey {
-        val response = Network.get<String>("http://localhost:8080/govPublicKey")
+        val response = Network.get<String>("http://localhost:8080/government/publicKey")
             ?: throw UnsupportedOperationException("Cannot get government RSA public key")
 
         val cleaned = response
@@ -43,7 +46,7 @@ object EncryptionHelper {
      * Encrypts the given [data] with AES using the specified [key].
      */
     fun encryptWithAes(data: ByteArray, key: SecretKey): ByteArray {
-        return Cipher.getInstance("AES").apply {
+        return Cipher.getInstance(AES_ALGORITHM).apply {
             init(Cipher.ENCRYPT_MODE, key)
         }.doFinal(data)
     }
@@ -52,7 +55,7 @@ object EncryptionHelper {
      * Decrypts the given [data] with AES using the specified [key].
      */
     fun decryptWithAes(data: ByteArray, key: SecretKey): ByteArray {
-        return Cipher.getInstance("AES").apply {
+        return Cipher.getInstance(AES_ALGORITHM).apply {
             init(Cipher.DECRYPT_MODE, key)
         }.doFinal(data)
     }
@@ -68,7 +71,7 @@ object EncryptionHelper {
      * Encrypts the given [data] with RSA using the specified [key].
      */
     fun encryptWithRsa(data: ByteArray, key: PublicKey): ByteArray {
-        return Cipher.getInstance("RSA").apply {
+        return Cipher.getInstance(RSA_ALGORITHM).apply {
             init(Cipher.ENCRYPT_MODE, key)
         }.doFinal(data)
     }
@@ -84,7 +87,7 @@ object EncryptionHelper {
      * Encrypts the given [data] with RSA using the specified [certificate].
      */
     fun encryptWithRsa(data: ByteArray, certificate: X509Certificate): ByteArray {
-        return Cipher.getInstance("RSA").apply {
+        return Cipher.getInstance(RSA_ALGORITHM).apply {
             init(Cipher.ENCRYPT_MODE, certificate)
         }.doFinal(data)
     }
@@ -93,7 +96,7 @@ object EncryptionHelper {
      * Decrypts the given data using the specified private [key].
      */
     fun decryptWithRsa(data: ByteArray, key: PrivateKey): ByteArray {
-        return Cipher.getInstance("RSA").apply {
+        return Cipher.getInstance(RSA_ALGORITHM).apply {
             init(Cipher.DECRYPT_MODE, key)
         }.doFinal(data)
     }
