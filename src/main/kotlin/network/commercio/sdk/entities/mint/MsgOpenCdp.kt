@@ -9,12 +9,10 @@ import network.commercio.sacco.models.types.StdMsg
  */
 data class MsgOpenCdp(
     private val depositAmount: List<StdCoin>,
-    private val signerDid: String,
-    private val timeStamp: String
+    private val depositorDid: String
 ) : StdMsg(
     type = "commercio/MsgOpenCdp", value = mapOf(
         "deposit_amount" to depositAmount,
-        "signer" to signerDid,
-        "timestamp" to timeStamp
+        "depositor" to depositorDid
     )
 )

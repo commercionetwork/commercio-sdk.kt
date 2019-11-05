@@ -11,11 +11,13 @@ import network.commercio.sdk.entities.docs.CommercioDoc
 import network.commercio.sdk.entities.id.Did
 import network.commercio.sdk.id.DidDocumentHelper
 import network.commercio.sdk.id.IdHelper
+import network.commercio.sdk.mint.MintHelper
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.security.KeyPair
 import java.util.*
 
+@Suppress("EXPERIMENTAL_API_USAGE")
 class Examples {
 
     private val info = NetworkInfo(bech32Hrp = "did:com:", lcdUrl = "http://localhost:1317")
@@ -206,5 +208,35 @@ class Examples {
         assertTrue(response is TxResponse.Successful)
     }
 
+    @Test
+    fun `MintHelper examples`() = runBlocking {
+
+        // --- Open CDP
+        // openCdp(amount = 100_000.toUInt(), wallet = userWallet)
+
+        // --- Close CDP
+        // closeCdp(timestamp = 4, wallet = userWallet)
+    }
+
+    /**
+     * Shows how to open a new Collateralized Debt Position in order to get half the specified [amount] of
+     * Commercio Cash Credits millionth parts (`uccc`).
+     * Please note that `uccc` are millionth of Commercio Cash Credits and thus to send one document you wil need
+     * 10.000 `uccc`.
+     */
+    private suspend fun openCdp(amount: UInt, wallet: Wallet) {
+        val response = MintHelper.openCdp(commercioTokenAmount = amount, wallet = wallet)
+        assertTrue(response is TxResponse.Successful)
+    }
+
+    /**
+     * Shows how to close a Collateralized Debt Position in order to allow the user controlling the given [wallet]
+     * to get back the amount of pico Commercio Tokens (`ucommercio`) giving back the lent pico Commercio
+     * Cash Credits (`uccc`).
+     */
+    private suspend fun closeCdp(timestamp: Int, wallet: Wallet) {
+        val response = MintHelper.closeCdp(timestamp = timestamp, wallet = wallet)
+        assertTrue(response is TxResponse.Successful)
+    }
 
 }

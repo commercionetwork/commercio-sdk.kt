@@ -8,10 +8,10 @@ import network.commercio.sacco.models.types.StdMsg
  */
 data class MsgCloseCdp(
     private val signerDid: String,
-    private val timeStamp: String
+    private val timeStamp: Int
 ) : StdMsg(
     type = "commercio/MsgCloseCdp", value = mapOf(
         "signer" to signerDid,
-        "timestamp" to timeStamp
+        "cdp_timestamp" to timeStamp.toString()
     )
 )

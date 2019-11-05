@@ -6,7 +6,6 @@ import network.commercio.sacco.models.types.StdCoin
 import network.commercio.sdk.entities.mint.MsgCloseCdp
 import network.commercio.sdk.entities.mint.MsgOpenCdp
 import network.commercio.sdk.tx.TxHelper
-import network.commercio.sdk.utils.getTimeStamp
 
 /**
  * Allows to easily perform CommercioMINT related transactions.
@@ -15,22 +14,27 @@ object MintHelper {
 
     /**
      * Opens a new CDP depositing the given [commercioTokenAmount].
+     * This will allows the user controlling the given [wallet] to receive half the [commercioTokenAmount] of
+     * pico Commercio Cash Credits (`uccc`) into his wallet.
+     * Please note that `uccc` are millionth of Commercio Cash Credits and thus to send one document you wil need
+     * 10.000 `uccc`.
      */
-    suspend fun openCdp(commercioTokenAmount: Int, wallet: Wallet): TxResponse {
+    @Suppress("EXPERIMENTAL_API_USAGE")
+    suspend fun openCdp(commercioTokenAmount: UInt, wallet: Wallet): TxResponse {
         val msg = MsgOpenCdp(
-            depositAmount = listOf(StdCoin(denom = "ucommercio", amount = (commercioTokenAmount * 1000000).toString())),
-            signerDid = wallet.bech32Address,
-            timeStamp = getTimeStamp()
+            depositAmount = listOf(StdCoin(denom = "ucommercio", amount = commercioTokenAmount.toString())),
+            depositorDid = wallet.bech32Address
         )
         return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet)
     }
 
     /**
      * Closes the CDP having the given [timestamp].
+     * This will allow the user to trade back the lent amount of pico Commercio Cash Credits (`uccc`) to get the
+     * deposited amount of pico Commercio Tokens (`ucommercio`)
      */
-    suspend fun closeCdp(timestamp: String, wallet: Wallet): TxResponse {
+    suspend fun closeCdp(timestamp: Int, wallet: Wallet): TxResponse {
         val msg = MsgCloseCdp(timeStamp = timestamp, signerDid = wallet.bech32Address)
         return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet)
     }
-
 }

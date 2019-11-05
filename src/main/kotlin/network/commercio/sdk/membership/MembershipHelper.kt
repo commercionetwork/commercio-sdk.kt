@@ -34,5 +34,4 @@ object MembershipHelper {
         )
         return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet)
     }
-
 }
