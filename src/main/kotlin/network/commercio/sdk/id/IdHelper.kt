@@ -97,7 +97,7 @@ object IdHelper {
 
         // Build the message and send the tx
         val msg = MsgRequestDidPowerUp(
-            claimantDid = pairwiseDid.value,
+            claimantDid = wallet.bech32Address,
             amount = amount,
             powerUpProof = result.encryptedProof.toHex(),
             encryptionKey = result.encryptedAesKey.toHex()

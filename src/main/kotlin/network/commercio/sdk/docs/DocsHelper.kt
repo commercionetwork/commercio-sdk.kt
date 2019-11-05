@@ -27,18 +27,22 @@ object DocsHelper {
      */
     @JvmOverloads
     suspend fun shareDocument(
+        id: String,
         contentUri: String,
         metadata: CommercioDoc.Metadata,
-        checksum: CommercioDoc.Checksum,
         recipients: List<Did>,
+        fees: List<StdCoin>,
         wallet: Wallet,
+        checksum: CommercioDoc.Checksum? = null,
         aesKey: SecretKey = KeysHelper.generateAesKey(),
         encryptedData: List<EncryptedData> = listOf()
     ): TxResponse {
 
         // Build a generic document
         val document = CommercioDoc(
-            uuid = UUID.randomUUID().toString(),
+            senderDid = wallet.bech32Address,
+            recipientsDids = recipients.map { it.value },
+            uuid = id,
             contentUri = contentUri,
             metadata = metadata,
             checksum = checksum,
@@ -52,17 +56,13 @@ object DocsHelper {
         }
 
         // Build the tx message
-        val msg = MsgShareDocument(
-            senderDid = wallet.bech32Address,
-            document = finalDoc,
-            recipientsDid = recipients.map { it.value }
-        )
+        val msg = MsgShareDocument(document = finalDoc)
 
         return TxHelper.createSignAndSendTx(
             msgs = listOf(msg),
             fee = StdFee(
                 gas = "200000",
-                amount = listOf(StdCoin(denom = "uccc", amount = "10000"))
+                amount = fees
             ),
             wallet = wallet
         )
@@ -94,11 +94,12 @@ object DocsHelper {
         recipient: Did,
         txHash: String,
         documentId: String,
-        proof: String? = null,
+        proof: String = "",
         wallet: Wallet
     ): TxResponse {
         val msg = MsgSendDocumentReceipt(
             CommercioDocReceipt(
+                uuid = UUID.randomUUID().toString(),
                 recipientDid = recipient.value,
                 txHash = txHash,
                 documentUuid = documentId,

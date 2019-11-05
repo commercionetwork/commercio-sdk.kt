@@ -8,9 +8,10 @@ import com.fasterxml.jackson.annotation.JsonProperty
  * @property proof optional reading proof.
  */
 data class CommercioDocReceipt(
+    @JsonProperty("uuid") val uuid: String,
     @JsonProperty("sender") val senderDid: String,
     @JsonProperty("recipient") val recipientDid: String,
     @JsonProperty("tx_hash") val txHash: String,
     @JsonProperty("document_uuid") val documentUuid: String,
-    @JsonProperty("proof") val proof: String?
+    @JsonProperty("proof") val proof: String = ""
 )

@@ -7,17 +7,19 @@ import com.fasterxml.jackson.annotation.JsonProperty
  * a document with another user.
  */
 data class CommercioDoc(
+    @JsonProperty("sender") val senderDid: String,
+    @JsonProperty("recipients") val recipientsDids: List<String>,
     @JsonProperty("uuid") val uuid: String,
     @JsonProperty("content_uri") val contentUri: String,
     @JsonProperty("metadata") val metadata: Metadata,
-    @JsonProperty("checksum") val checksum: Checksum,
-    @JsonProperty("encryption_data") val encryptionData: EncryptionData?
+    @JsonProperty("checksum") val checksum: Checksum? = null,
+    @JsonProperty("encryption_data") val encryptionData: EncryptionData? = null
 ) {
 
     data class Metadata(
         @JsonProperty("content_uri") val contentUri: String,
         @JsonProperty("schema") val schema: Schema? = null,
-        @JsonProperty("schema_type") val schemaType: String? = null
+        @JsonProperty("schema_type") val schemaType: String = ""
     ) {
 
         data class Schema(

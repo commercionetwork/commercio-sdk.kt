@@ -11,5 +11,5 @@ data class MsgSendDocumentReceipt(
     private val receipt: CommercioDocReceipt
 ) : StdMsg(
     type = "commercio/MsgSendDocumentReceipt",
-    value = jacksonObjectMapper().convertValue(receipt, object : TypeReference<Map<String, Any>>() {})
+    value = jacksonObjectMapper().convertValue(receipt, object : TypeReference<Map<String, Any?>>() {})
 )

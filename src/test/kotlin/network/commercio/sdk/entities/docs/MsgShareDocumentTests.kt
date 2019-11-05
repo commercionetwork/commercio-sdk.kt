@@ -10,9 +10,9 @@ class MsgShareDocumentTests {
     @Test
     fun `toJson works properly`() {
         val msg = MsgShareDocument(
-            senderDid = "did:com:1xlp0adcdl8363q9y833084cwuzhqy7fucmqh9r",
-            recipientsDid = listOf("did:com:1ttwtq7kxustrqxstjpcjf7wf7l9ljd8jz7z64r"),
             document = CommercioDoc(
+                senderDid = "did:com:1xlp0adcdl8363q9y833084cwuzhqy7fucmqh9r",
+                recipientsDids = listOf("did:com:1ttwtq7kxustrqxstjpcjf7wf7l9ljd8jz7z64r"),
                 checksum = CommercioDoc.Checksum(
                     algorithm = CommercioDoc.Checksum.Algorithm.MD5,
                     value = "7815696ecbf1c96e6894b779456d330e"
