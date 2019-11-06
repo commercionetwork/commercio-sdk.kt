@@ -9,14 +9,20 @@ import network.commercio.sdk.crypto.KeysHelper
 import network.commercio.sdk.docs.DocsHelper
 import network.commercio.sdk.entities.docs.CommercioDoc
 import network.commercio.sdk.entities.id.Did
+import network.commercio.sdk.entities.membership.MembershipType
 import network.commercio.sdk.id.DidDocumentHelper
 import network.commercio.sdk.id.IdHelper
+import network.commercio.sdk.membership.MembershipHelper
 import network.commercio.sdk.mint.MintHelper
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.security.KeyPair
 import java.util.*
 
+/**
+ * Contains a list of methods that illustrate how to use each and every method that is present inside the
+ * different helpers contained into this SDK.
+ */
 @Suppress("EXPERIMENTAL_API_USAGE")
 class Examples {
 
@@ -239,4 +245,58 @@ class Examples {
         assertTrue(response is TxResponse.Successful)
     }
 
+    @Test
+    fun `MembershipsHelper examples`() = runBlocking {
+        val newUserMnemonic = listOf(
+            "often",
+            "emerge",
+            "table",
+            "boat",
+            "add",
+            "crowd",
+            "obtain",
+            "creek",
+            "skill",
+            "flat",
+            "master",
+            "gift",
+            "provide",
+            "peasant",
+            "famous",
+            "blur",
+            "flight",
+            "lady",
+            "elephant",
+            "twenty",
+            "join",
+            "depth",
+            "laptop",
+            "arrest"
+        )
+        val newUserWallet = Wallet.derive(newUserMnemonic, info)
+
+        // --- Invite user
+        // inviteUser(user = Did(newUserWallet.bech32Address), wallet = userWallet)
+
+        // --- Buy a membership
+        // buyMembership(membershipType = MembershipType.GOLD, wallet = newUserWallet)
+    }
+
+    /**
+     * Shows how to perform a transaction to invite a user.
+     * Note that in order to invite a user, you must already have a membership.
+     */
+    private suspend fun inviteUser(user: Did, wallet: Wallet) {
+        val response = MembershipHelper.inviteUser(user, wallet)
+        assertTrue(response is TxResponse.Successful)
+    }
+
+    /**
+     * Shows how to perform the transaction that allows the owner of the given [wallet] to buy a memebership
+     * of the specified [membershipType].
+     */
+    private suspend fun buyMembership(membershipType: MembershipType, wallet: Wallet) {
+        val response = MembershipHelper.buyMembership(membershipType, wallet)
+        assertTrue(response is TxResponse.Successful)
+    }
 }

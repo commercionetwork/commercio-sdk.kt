@@ -6,8 +6,8 @@ import network.commercio.sacco.models.types.StdMsg
  * Represents the transaction message that must be used when wanting to buy a membership.
  */
 data class MsgBuyMembership(
-    val membershipType: MembershipType,
-    val buyerDid: String
+    private val membershipType: MembershipType,
+    private val buyerDid: String
 ) : StdMsg(
     type = "commercio/MsgBuyMembership",
     value = mapOf(

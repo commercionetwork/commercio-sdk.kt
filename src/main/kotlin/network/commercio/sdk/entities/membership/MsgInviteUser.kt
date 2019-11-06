@@ -8,10 +8,11 @@ import network.commercio.sacco.models.types.StdMsg
  * able to get a reward based on your current membership and the type he has bought.
  */
 data class MsgInviteUser(
-    val recipientDid: String,
-    val senderDid: String
+    private val recipientDid: String,
+    private val senderDid: String
 ) : StdMsg(
-    type = "commercio/MsgInviteUser", value = mapOf(
+    type = "commercio/MsgInviteUser",
+    value = mapOf(
         "recipient" to recipientDid,
         "sender" to senderDid
     )
