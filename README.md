@@ -1,6 +1,6 @@
 ![](.img/logo.png)
 
-[![Release](https://jitpack.io/v/commercionetwork/sdk.svg)](https://jitpack.io/#commercionetwork/sdk)
+[![JitPack](https://img.shields.io/jitpack/v/github/commercionetwork/sdk.kt)](https://jitpack.io/#commercionetwork/sdk.kt)
 [![Travis](https://img.shields.io/travis/com/commercionetwork/sdk.kt)](https://travis-ci.com/commercionetwork/sdk.kt)
 ![](https://img.shields.io/badge/compatible-Kotlin-blue)
 ![](https://img.shields.io/badge/compatible-JVM-blue)
