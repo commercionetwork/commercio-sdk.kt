@@ -50,7 +50,7 @@ object SignHelper {
             is RSAPublicKey -> "SHA256WithRSA"
             else -> throw UnsupportedOperationException("Invalid public key type when checking the signature")
         }
-        return Signature.getInstance(signatureType, "BC").apply {
+        return Signature.getInstance(signatureType, BouncyCastleProvider()).apply {
             initVerify(key)
             update(signedData)
         }.verify(signature)

@@ -292,7 +292,7 @@ class Examples {
     }
 
     /**
-     * Shows how to perform the transaction that allows the owner of the given [wallet] to buy a memebership
+     * Shows how to perform the transaction that allows the owner of the given [wallet] to buy a membership
      * of the specified [membershipType].
      */
     private suspend fun buyMembership(membershipType: MembershipType, wallet: Wallet) {
