@@ -28,8 +28,32 @@ class Examples {
 
     private val info = NetworkInfo(bech32Hrp = "did:com:", lcdUrl = "http://localhost:1317")
 
-    private val userMnemonic = listOf("curve", "attend", "elephant", "garage", "tide", "neither", "enforce", "auction", "dumb", "brief", "divert",
-        "creek", "palm", "equip", "festival", "spice", "race", "message", "domain", "seed", "ship", "hunt", "mercy", "mail")
+    private val userMnemonic = listOf(
+        "will",
+        "hard",
+        "topic",
+        "spray",
+        "beyond",
+        "ostrich",
+        "moral",
+        "morning",
+        "gas",
+        "loyal",
+        "couch",
+        "horn",
+        "boss",
+        "across",
+        "age",
+        "post",
+        "october",
+        "blur",
+        "piece",
+        "wheel",
+        "film",
+        "notable",
+        "word",
+        "man"
+    )
     private val userWallet = Wallet.derive(mnemonic = userMnemonic, networkInfo = info)
 
     @Test
@@ -38,7 +62,7 @@ class Examples {
         // --- Set the Did Document
         val rsaKeyPair = KeysHelper.generateRsaKeyPair()
         val ecKeyPair = KeysHelper.generateEcKeyPair()
-        //createDidDocument(wallet = userWallet, rsaKeyPair = rsaKeyPair, ecKeyPair = ecKeyPair)
+        // createDidDocument(wallet = userWallet, rsaKeyPair = rsaKeyPair, ecKeyPair = ecKeyPair)
 
         // --- Request the Did deposit
         val depositAmount = listOf(StdCoin(denom = "ucommercio", amount = "10"))
@@ -194,7 +218,7 @@ class Examples {
     fun `MintHelper examples`() = runBlocking {
 
         // --- Open CDP
-        openCdp(amount = 100_000.toUInt(), wallet = userWallet)
+        // openCdp(amount = 100_000.toUInt(), wallet = userWallet)
 
         // --- Close CDP
         // closeCdp(timestamp = 4, wallet = userWallet)
