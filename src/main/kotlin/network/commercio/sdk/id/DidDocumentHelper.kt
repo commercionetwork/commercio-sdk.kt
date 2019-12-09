@@ -32,7 +32,7 @@ object DidDocumentHelper {
 
         // Compute the proof
         val proofContent = DidDocumentProofSignatureContent(
-            context = "https://www.w3.org/2019/did/v1",
+            context = "https://www.w3.org/ns/did/v1",
             did = wallet.bech32Address,
             publicKeys = listOf(authKey) + pubKeys.mapIndexed { index, key ->
                 convertKey(wallet = wallet, index = index + 2, pubKey = key)
