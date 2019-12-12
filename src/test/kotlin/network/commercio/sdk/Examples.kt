@@ -10,6 +10,7 @@ import network.commercio.sdk.docs.DocsHelper
 import network.commercio.sdk.entities.docs.CommercioDoc
 import network.commercio.sdk.entities.id.Did
 import network.commercio.sdk.entities.membership.MembershipType
+import network.commercio.sdk.crypto.CertificateHelper
 import network.commercio.sdk.id.DidDocumentHelper
 import network.commercio.sdk.id.IdHelper
 import network.commercio.sdk.membership.MembershipHelper
@@ -98,6 +99,22 @@ class Examples {
         val pairwiseWallet = Wallet.derive(mnemonic = pairwiseMnemonic, networkInfo = info)
         // postPowerUpRequest(pairwiseDid = pairwiseWallet.bech32Address, amount = depositAmount, wallet = userWallet)
 
+    }
+
+    @Test
+    fun `CertificateHelper examples`() = runBlocking {
+        val rsaKeyPair = KeysHelper.generateRsaKeyPair()
+        val exportedPublic = KeysHelper.exportPublicKeyHEX(rsaKeyPair.public, "RSA")
+        val exportedPrivate = KeysHelper.exportPrivateKeyHEX(rsaKeyPair.private, "RSA")
+        val cert = createX509Certificate(userWallet, rsaKeyPair)
+        println(cert)
+        println("Public: $exportedPublic")
+        println("Private: $exportedPrivate")
+    }
+
+    private fun createX509Certificate(wallet: Wallet, rsaKeyPair: KeyPair): String {
+        val certificate = CertificateHelper.x509certificateFromWallet(wallet.bech32Address, rsaKeyPair)
+        return CertificateHelper.getPem(certificate)
     }
 
     /**

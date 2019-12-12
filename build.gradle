@@ -39,6 +39,11 @@ dependencies {
     compile "com.squareup.retrofit2:converter-jackson:$retrofit_version"
     compile "com.squareup.okhttp3:logging-interceptor:4.2.1"
 
+    // X509 creation
+   //compile "org.bouncycastle:bcprov-jdk15on:$bouncycastle_version"
+   compile "org.bouncycastle:bcpkix-jdk15on:$bouncycastle_version"
+
+
     // ------------
     // --- Tests
     // ------------
