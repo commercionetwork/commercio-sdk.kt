@@ -27,9 +27,9 @@ object CertificateHelper {
      * Creates an X509 certificate using the given [keyPair] and [walletAddress].
      * @param walletAddress bech32Address of the user wallet that will be used as certificate issuer and subject.
      * @param keyPair pair of keys that will be used to sign and build the certificate.
-     * @param signatureAlgorithm identifies the algorithm with which the signature will be done.
+     * @param digestAlgorithm identifies the algorithm with which the signature will be done.
      */
-    fun x509certificateFromWallet(walletAddress: String, keyPair: KeyPair, signatureAlgorithm: String = "SHA256withRSA"): X509Certificate {
+    fun x509certificateFromWallet(walletAddress: String, keyPair: KeyPair, digestAlgorithm: String = "SHA256withRSA"): X509Certificate {
         val creationDate = Date()
         val serial = BigInteger.valueOf(Random().nextLong())
 
@@ -72,7 +72,7 @@ object CertificateHelper {
         )
 
         //Define who is the authority signing the certificate
-        val signer = JcaContentSignerBuilder(signatureAlgorithm)
+        val signer = JcaContentSignerBuilder(digestAlgorithm)
             .setProvider(BouncyCastleProvider())
             .build(keyPair.private)
 

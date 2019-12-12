@@ -57,7 +57,7 @@ object KeysHelper {
     }
 
     /**
-     * Export public [key] of [type] RSA or EC into an HEX string.
+     * Export private [key] of [type] RSA or EC into an HEX string.
      */
     fun exportPrivateKeyHEX(key: PrivateKey, type: String): String {
         val fact = KeyFactory.getInstance(type)
