@@ -48,3 +48,96 @@ suspend fun getSentReceipts(address: Did, wallet: Wallet): List<CommercioDocRece
 ```kotlin
 suspend fun getReceivedReceipts(address: Did, wallet: Wallet): List<CommercioDocReceipt>
 ```
+## Usage examples
+```kotlin
+    val info = NetworkInfo(bech32Hrp = "did:com:", lcdUrl = "http://localhost:1317")
+
+    val userMnemonic = listOf(
+        "will",
+        "hard",
+        "topic",
+        "spray",
+        "beyond",
+        "ostrich",
+        "moral",
+        "morning",
+        "gas",
+        "loyal",
+        "couch",
+        "horn",
+        "boss",
+        "across",
+        "age",
+        "post",
+        "october",
+        "blur",
+        "piece",
+        "wheel",
+        "film",
+        "notable",
+        "word",
+        "man"
+    )
+    
+    val senderWallet = Wallet.derive(mnemonic = userMnemonic, networkInfo = info)
+    
+    val recipientMnemonic = listOf(
+            "crisp",
+            "become",
+            "thumb",
+            "fetch",
+            "forest",
+            "senior",
+            "polar",
+            "slush",
+            "wise",
+            "wash",
+            "doctor",
+            "sunset",
+            "skate",
+            "disease",
+            "power",
+            "tool",
+            "sock",
+            "upper",
+            "diary",
+            "what",
+            "trap",
+            "artist",
+            "wood",
+            "cereal"
+    )
+    
+    val recipientWallet = Wallet.derive(recipientMnemonic, info)
+
+    // --- Share a document
+    val docRecipientDid = Did(recipientWallet.bech32Address)
+    
+    val docId = UUID.randomUUID().toString()
+    
+    val response = DocsHelper.shareDocument(
+        id = docId,
+        contentUri = "https://example.com/document",
+        metadata = CommercioDoc.Metadata(
+            contentUri = "https://example.com/document/metadata",
+            schema = CommercioDoc.Metadata.Schema(
+                uri = "https://example.com/custom/metadata/schema",
+                version = "1.0.0"
+            )
+        ),
+        recipients = recipients,
+        fees = listOf(StdCoin(denom = "ucommercio", amount = "10000")),
+        wallet = senderWallet
+    )
+    
+    val txHash = (response as TxResponse.Successful).txHash
+    
+    val recipient = Did(senderWallet.bech32Address)
+    
+    DocsHelper.sendDocumentReceipt(
+        recipient = recipient,
+        txHash = txHash,
+        documentId = docId,
+        wallet = recipientWallet
+    )
+```

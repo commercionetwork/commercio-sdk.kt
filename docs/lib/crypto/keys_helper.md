@@ -29,13 +29,3 @@ fun exportPublicKeyHEX(key: PublicKey, type: String): String
 ```kotlin
 fun exportPrivateKeyHEX(key: PrivateKey, type: String): String
 ```
-7. Sign `data` with the given `privateKey` and `digestAlgorithm`.  
-Algorithm can be either `SHA256withRSA`, `SHA1withECDSA`.
-```kotlin
-fun signData(data: String, privateKey: PrivateKey, digestAlgorithm: String): String
-```
-8. Verify the `signedData` with the given `publicKey` and `digestAlgorithm`.  
-Algorithm can be either `SHA256withRSA`, `SHA1withECDSA`.
-```kotlin
-fun verifySignedData(data: String, signedData: String, publicKey: PublicKey, digestAlgorithm: String): Boolean
-```
