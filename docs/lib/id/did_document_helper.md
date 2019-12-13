@@ -9,7 +9,10 @@ fun fromWallet(wallet: Wallet, pubKeys: List<PublicKey> = listOf()): DidDocument
 ```
 ## Usage examples
 ```kotlin
-    val info = NetworkInfo(bech32Hrp = "did:com:", lcdUrl = "http://localhost:1317")
+    val info = NetworkInfo(
+        bech32Hrp = "did:com:", 
+        lcdUrl = "http://localhost:1317"
+    )
 
     val userMnemonic = listOf(
         "will",
@@ -42,5 +45,8 @@ fun fromWallet(wallet: Wallet, pubKeys: List<PublicKey> = listOf()): DidDocument
     
     val rsaKeyPair = KeysHelper.generateRsaKeyPair()
     val ecKeyPair = KeysHelper.generateEcKeyPair()
-    val didDocument = DidDocumentHelper.fromWallet(wallet, listOf(rsaKeyPair.public, ecKeyPair.public))
+    val didDocument = DidDocumentHelper.fromWallet(
+        wallet, 
+        listOf(rsaKeyPair.public, ecKeyPair.public)
+    )
 ```

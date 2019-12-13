@@ -7,11 +7,15 @@ suspend fun inviteUser(user: Did, wallet: Wallet): TxResponse
 ```
 2. Buys the membership with the given `membershipType`.
 ```kotlin
-suspend fun buyMembership(membershipType: MembershipType, wallet: Wallet): TxResponse
+suspend fun buyMembership(membershipType: MembershipType, wallet: Wallet)
+    : TxResponse
 ```
 ## Usage examples
 ```kotlin
-    val info = NetworkInfo(bech32Hrp = "did:com:", lcdUrl = "http://localhost:1317")
+    val info = NetworkInfo(
+        bech32Hrp = "did:com:", 
+        lcdUrl = "http://localhost:1317"
+    )
 
     val userMnemonic = listOf(
         "will",

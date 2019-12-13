@@ -7,18 +7,17 @@ Docs helper allows to easily perform all the operations related to the commercio
    having the given `metadata` and `checksum`.   
    If `encryptedData` is specified, encrypts the proper data for the specified `recipients` and then sends the transaction to the blockchain.
 ```kotlin
-@JvmOverloads
-    suspend fun shareDocument(
-        id: String,
-        contentUri: String,
-        metadata: CommercioDoc.Metadata,
-        recipients: List<Did>,
-        fees: List<StdCoin>,
-        wallet: Wallet,
-        checksum: CommercioDoc.Checksum? = null,
-        aesKey: SecretKey = KeysHelper.generateAesKey(),
-        encryptedData: List<EncryptedData> = listOf()
-    ): TxResponse
+suspend fun shareDocument(
+    id: String,
+    contentUri: String,
+    metadata: CommercioDoc.Metadata,
+    recipients: List<Did>,
+    fees: List<StdCoin>,
+    wallet: Wallet,
+    checksum: CommercioDoc.Checksum? = null,
+    aesKey: SecretKey = KeysHelper.generateAesKey(),
+    encryptedData: List<EncryptedData> = listOf()
+): TxResponse
 ```
 2. Returns the list of all the `CommercioDoc` that the specified `address` has sent.
 ```kotlin
@@ -31,26 +30,30 @@ suspend fun getReceivedDocuments(address: Did, wallet: Wallet): List<CommercioDo
 4. Creates a new transaction which tells the `recipient` that the document having the specified `documentId` and
    present inside the transaction with hash `txHash` has been properly seen.
 ```kotlin
- @JvmOverloads
-    suspend fun sendDocumentReceipt(
-        recipient: Did,
-        txHash: String,
-        documentId: String,
-        proof: String = "",
-        wallet: Wallet
-    ): TxResponse
+suspend fun sendDocumentReceipt(
+    recipient: Did,
+    txHash: String,
+    documentId: String,
+    proof: String = "",
+    wallet: Wallet
+): TxResponse
 ```
 5. Returns the list of all the `CommercioDocReceipt` that have been sent from the given `address`.
 ```kotlin
-suspend fun getSentReceipts(address: Did, wallet: Wallet): List<CommercioDocReceipt>
+suspend fun getSentReceipts(address: Did, wallet: Wallet)
+    : List<CommercioDocReceipt>
 ```
 6. Returns the list of all the `CommercioDocReceipt` that have been received from the given `address`
 ```kotlin
-suspend fun getReceivedReceipts(address: Did, wallet: Wallet): List<CommercioDocReceipt>
+suspend fun getReceivedReceipts(address: Did, wallet: Wallet)
+    : List<CommercioDocReceipt>
 ```
 ## Usage examples
 ```kotlin
-    val info = NetworkInfo(bech32Hrp = "did:com:", lcdUrl = "http://localhost:1317")
+    val info = NetworkInfo(
+        bech32Hrp = "did:com:", 
+        lcdUrl = "http://localhost:1317"
+    )
 
     val userMnemonic = listOf(
         "will",
@@ -109,6 +112,7 @@ suspend fun getReceivedReceipts(address: Did, wallet: Wallet): List<CommercioDoc
     )
     
     val recipientWallet = Wallet.derive(recipientMnemonic, info)
+    val recipientDid = Did(senderWallet.bech32Address)
 
     // --- Share a document
     val docRecipientDid = Did(recipientWallet.bech32Address)
@@ -125,17 +129,16 @@ suspend fun getReceivedReceipts(address: Did, wallet: Wallet): List<CommercioDoc
                 version = "1.0.0"
             )
         ),
-        recipients = recipients,
+        recipients = listOf(recipientDid),
         fees = listOf(StdCoin(denom = "ucommercio", amount = "10000")),
         wallet = senderWallet
     )
     
     val txHash = (response as TxResponse.Successful).txHash
     
-    val recipient = Did(senderWallet.bech32Address)
     
     DocsHelper.sendDocumentReceipt(
-        recipient = recipient,
+        recipient = recipientDid,
         txHash = txHash,
         documentId = docId,
         wallet = recipientWallet
