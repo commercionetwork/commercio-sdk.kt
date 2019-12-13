@@ -1,16 +1,40 @@
-language: java
+jobs:
 
-jdk:
-  - oraclejdk9
+  ## ----------------------------------------
+  ## --- Steps to test and build the code
+  ## ----------------------------------------
 
-before_install:
-  - chmod +x gradlew
+  include:
+    - language: java
+      jdk:
+        - oraclejdk9
+      before_install:
+        - chmod +x gradlew
+      before_cache:
+        - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+        - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+      cache:
+        directories:
+          - $HOME/.gradle/caches/
+          - $HOME/.gradle/wrapper/
 
-before_cache:
-  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
-
-cache:
-  directories:
-    - $HOME/.gradle/caches/
-    - $HOME/.gradle/wrapper/
+  ## ----------------------------------------------------
+  ## --- Steps to build and publish the documentation
+  ## ----------------------------------------------------
+    - language: node_js
+      stage: Build docs
+      node_js:
+        - lts/*
+      install:
+        - npm ci
+      script:
+        - npm run docs:build
+        - echo 'kt.sdk.docs.commercio.network' > docs/.vuepress/dist/CNAME
+      deploy:
+        provider: pages
+        skip_cleanup: true
+        local_dir: docs/.vuepress/dist
+        github_token: $GITHUB_TOKEN
+        keep_history: true
+        on:
+          branch: master
