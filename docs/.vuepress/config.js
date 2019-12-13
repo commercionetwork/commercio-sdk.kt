@@ -1,6 +1,6 @@
 module.exports = {
     title: "Commercio.network Kotlin SDK Documentation",
-    description: "Documentation for the Commercio.network blockhain.",
+    description: "Documentation for the Commercio.network blockhain Kotlin SDK.",
     head: [
         ['link', { rel: "commercio-icon", href: "/.vuepress/icon.png" }]
     ],
