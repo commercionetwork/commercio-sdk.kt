@@ -3,7 +3,7 @@ Did Document Helper allows to perform common Did Document related operations.
 
 
 ## Provided Operations
-1. Creates a `DidDocument` from the given `wallet` and optional `pubKeys`.
+1. Creates a [DidDocument](../glossary.md) from the given `wallet` and optional `pubKeys`.
 ```kotlin
 fun fromWallet(wallet: Wallet, pubKeys: List<PublicKey> = listOf()): DidDocument
 ```

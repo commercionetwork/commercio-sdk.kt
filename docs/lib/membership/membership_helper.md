@@ -9,7 +9,7 @@ suspend fun inviteUser(user: Did, wallet: Wallet): TxResponse
 ```kotlin
 suspend fun buyMembership(membershipType: MembershipType, wallet: Wallet): TxResponse
 ```
-## Usage Examples
+## Usage examples
 ```kotlin
     val info = NetworkInfo(bech32Hrp = "did:com:", lcdUrl = "http://localhost:1317")
 

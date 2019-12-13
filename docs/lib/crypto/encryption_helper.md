@@ -36,3 +36,8 @@ fun encryptWithRsa(data: ByteArray, certificate: X509Certificate): ByteArray
 ```kotlin
 fun decryptWithRsa(data: ByteArray, key: PrivateKey): ByteArray
 ```
+9. Returns the RSA `PublicKey` associated to the government that should be used when
+   encrypting the data that only it should see.
+```kotlin
+suspend fun getGovernmentRsaPubKey(): PublicKey
+```
