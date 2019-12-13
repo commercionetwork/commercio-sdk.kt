@@ -10,3 +10,44 @@ fun x509certificateFromWallet(walletAddress: String, keyPair: KeyPair, digestAlg
 ```kotlin
 fun getPem(certificate: X509Certificate): String
 ```
+## Usage examples
+```kotlin
+  val info = NetworkInfo(bech32Hrp = "did:com:", lcdUrl = "http://localhost:1317")
+
+  val userMnemonic = listOf(
+        "will",
+        "hard",
+        "topic",
+        "spray",
+        "beyond",
+        "ostrich",
+        "moral",
+        "morning",
+        "gas",
+        "loyal",
+        "couch",
+        "horn",
+        "boss",
+        "across",
+        "age",
+        "post",
+        "october",
+        "blur",
+        "piece",
+        "wheel",
+        "film",
+        "notable",
+        "word",
+        "man"
+  )
+  
+  val userWallet = Wallet.derive(mnemonic = userMnemonic, networkInfo = info)
+
+  val rsaKeyPair = KeysHelper.generateRsaKeyPair()
+
+  // Creating X509 self-signed certificate
+  val certificate = CertificateHelper.x509certificateFromWallet(userWallet.bech32Address, rsaKeyPair)
+  
+  // Getting the PEM encoded certificate
+  val pemCertificate = CertificateHelper.getPem(certificate)
+```

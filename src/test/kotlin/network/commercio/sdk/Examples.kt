@@ -63,7 +63,7 @@ class Examples {
         // --- Set the Did Document
         val rsaKeyPair = KeysHelper.generateRsaKeyPair()
         val ecKeyPair = KeysHelper.generateEcKeyPair()
-        // createDidDocument(wallet = userWallet, rsaKeyPair = rsaKeyPair, ecKeyPair = ecKeyPair)
+        //createDidDocument(wallet = userWallet, rsaKeyPair = rsaKeyPair, ecKeyPair = ecKeyPair)
 
         // --- Request the Did deposit
         val depositAmount = listOf(StdCoin(denom = "ucommercio", amount = "10"))
