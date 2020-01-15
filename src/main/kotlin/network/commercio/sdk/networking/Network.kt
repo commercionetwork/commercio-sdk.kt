@@ -11,14 +11,14 @@ import okhttp3.logging.HttpLoggingInterceptor
 /**
  * Allows to easily perform network-related operations.
  */
-internal object Network {
+object Network {
 
     /**
      * Default client that must be used when performing network requests.
      *
      * Notes. Internal for testing.
      */
-    internal val client: HttpClient by lazy {
+    val client: HttpClient by lazy {
         HttpClient(OkHttp) {
             engine {
                 val loggingInterceptor = HttpLoggingInterceptor()

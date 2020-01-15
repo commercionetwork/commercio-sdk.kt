@@ -8,7 +8,7 @@ import java.util.*
  * Tries to execute the given [block], returning its result or `null` if some exception was
  * raised.
  */
-internal suspend fun <T> tryOrNull(block: suspend () -> T): T? {
+suspend fun <T> tryOrNull(block: suspend () -> T): T? {
     return try {
         block()
     } catch (t: Throwable) {
