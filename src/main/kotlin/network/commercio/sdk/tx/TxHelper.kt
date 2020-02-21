@@ -22,6 +22,6 @@ object TxHelper {
     ): TxResponse {
         val stdTx = TxBuilder.buildStdTx(stdMsgs = msgs, fee = fee)
         val signedTx = TxSigner.signStdTx(stdTx = stdTx, wallet = wallet)
-        return TxSender.broadcastStdTx(stdTx = signedTx, wallet = wallet, mode = "block")
+        return TxSender.broadcastStdTx(stdTx = signedTx, wallet = wallet)
     }
 }
