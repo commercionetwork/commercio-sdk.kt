@@ -95,7 +95,8 @@ object DocsHelper {
         txHash: String,
         documentId: String,
         proof: String = "",
-        wallet: Wallet
+        wallet: Wallet,
+        fee: StdFee = StdFee(gas = "200000", amount = listOf(StdCoin(denom = "ucommercio", amount = "10000")))
     ): TxResponse {
         val msg = MsgSendDocumentReceipt(
             CommercioDocReceipt(
@@ -108,7 +109,7 @@ object DocsHelper {
             )
         )
 
-        return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet)
+        return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet, fee = fee)
     }
 
     /**

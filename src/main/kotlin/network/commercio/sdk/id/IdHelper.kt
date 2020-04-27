@@ -4,6 +4,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import network.commercio.sacco.TxResponse
 import network.commercio.sacco.Wallet
 import network.commercio.sacco.models.types.StdCoin
+import network.commercio.sacco.models.types.StdFee
 import network.commercio.sdk.crypto.EncryptionHelper
 import network.commercio.sdk.crypto.KeysHelper
 import network.commercio.sdk.crypto.SignHelper
@@ -33,9 +34,13 @@ object IdHelper {
      * Performs a transaction setting the specified [didDocument] as being associated with the
      * address present inside the specified [wallet].
      */
-    suspend fun setDidDocument(didDocument: DidDocument, wallet: Wallet): TxResponse {
+    suspend fun setDidDocument(
+        didDocument: DidDocument,
+        wallet: Wallet,
+        fee: StdFee = StdFee(gas = "200000", amount = listOf(StdCoin(denom = "ucommercio", amount = "10000")))
+    ): TxResponse {
         val msg = MsgSetDidDocument(didDocument)
-        return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet)
+        return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet, fee = fee)
     }
 
     /**
@@ -43,7 +48,12 @@ object IdHelper {
      * Signs everything that needs to be signed (i.e. the signature JSON inside the payload) with the
      * private key contained inside the given [wallet].
      */
-    suspend fun requestDidDeposit(recipient: Did, amount: List<StdCoin>, wallet: Wallet): TxResponse {
+    suspend fun requestDidDeposit(
+        recipient: Did,
+        amount: List<StdCoin>,
+        wallet: Wallet,
+        fee: StdFee = StdFee(gas = "200000", amount = listOf(StdCoin(denom = "ucommercio", amount = "10000")))
+    ): TxResponse {
         // Get the timestamp
         val timestamp = getTimeStamp()
 
@@ -69,7 +79,7 @@ object IdHelper {
             encryptionKey = result.encryptedAesKey.toHex(),
             senderDid = wallet.bech32Address
         )
-        return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet)
+        return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet, fee = fee)
     }
 
     /**
@@ -77,7 +87,13 @@ object IdHelper {
      * Signs everything that needs to be signed (i.e. the signature JSON inside the payload) with the
      * private key contained inside the given [wallet].
      */
-    suspend fun requestDidPowerUp(pairwiseDid: Did, amount: List<StdCoin>, wallet: Wallet): TxResponse {
+    suspend fun requestDidPowerUp(
+        pairwiseDid: Did,
+        amount: List<StdCoin>,
+        wallet: Wallet,
+        fee: StdFee = StdFee(gas = "200000", amount = listOf(StdCoin(denom = "ucommercio", amount = "10000")))
+
+    ): TxResponse {
         // Get the timestamp
         val timestamp = getTimeStamp()
 
@@ -102,7 +118,7 @@ object IdHelper {
             powerUpProof = result.encryptedProof.toHex(),
             encryptionKey = result.encryptedAesKey.toHex()
         )
-        return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet)
+        return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet, fee = fee)
     }
 
     /**
