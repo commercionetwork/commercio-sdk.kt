@@ -37,7 +37,7 @@ object IdHelper {
     suspend fun setDidDocument(
         didDocument: DidDocument,
         wallet: Wallet,
-        fee: StdFee = StdFee(gas = "200000", amount = listOf(StdCoin(denom = "ucommercio", amount = "10000")))
+        fee: StdFee? = null
     ): TxResponse {
         val msg = MsgSetDidDocument(didDocument)
         return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet, fee = fee)
@@ -52,7 +52,7 @@ object IdHelper {
         recipient: Did,
         amount: List<StdCoin>,
         wallet: Wallet,
-        fee: StdFee = StdFee(gas = "200000", amount = listOf(StdCoin(denom = "ucommercio", amount = "10000")))
+        fee: StdFee? = null
     ): TxResponse {
         // Get the timestamp
         val timestamp = getTimeStamp()
@@ -91,7 +91,7 @@ object IdHelper {
         pairwiseDid: Did,
         amount: List<StdCoin>,
         wallet: Wallet,
-        fee: StdFee = StdFee(gas = "200000", amount = listOf(StdCoin(denom = "ucommercio", amount = "10000")))
+        fee: StdFee? = null
 
     ): TxResponse {
         // Get the timestamp

@@ -96,7 +96,7 @@ object DocsHelper {
         documentId: String,
         proof: String = "",
         wallet: Wallet,
-        fee: StdFee = StdFee(gas = "200000", amount = listOf(StdCoin(denom = "ucommercio", amount = "10000")))
+        fee: StdFee? = null
     ): TxResponse {
         val msg = MsgSendDocumentReceipt(
             CommercioDocReceipt(

@@ -24,7 +24,7 @@ object MintHelper {
     suspend fun openCdp(
         commercioTokenAmount: UInt,
         wallet: Wallet,
-        fee: StdFee = StdFee(gas = "200000", amount = listOf(StdCoin(denom = "ucommercio", amount = "10000")))
+        fee: StdFee? = null
     ): TxResponse {
 
         val msg = MsgOpenCdp(
@@ -47,7 +47,7 @@ object MintHelper {
     suspend fun closeCdp(
         timestamp: Int,
         wallet: Wallet,
-        fee: StdFee = StdFee(gas = "200000", amount = listOf(StdCoin(denom = "ucommercio", amount = "10000")))
+        fee: StdFee? = null
     ): TxResponse {
         val msg = MsgCloseCdp(timeStamp = timestamp, signerDid = wallet.bech32Address)
         return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet, fee = fee)

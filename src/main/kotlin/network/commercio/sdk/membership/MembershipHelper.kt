@@ -21,7 +21,7 @@ object MembershipHelper {
     suspend fun inviteUser(
         user: Did,
         wallet: Wallet,
-        fee: StdFee = StdFee(gas = "200000", amount = listOf(StdCoin(denom = "ucommercio", amount = "10000")))
+        fee: StdFee? = null
     ): TxResponse {
         val msg = MsgInviteUser(
             recipientDid = user.value,
@@ -36,7 +36,7 @@ object MembershipHelper {
     suspend fun buyMembership(
         membershipType: MembershipType,
         wallet: Wallet,
-        fee: StdFee = StdFee(gas = "200000", amount = listOf(StdCoin(denom = "ucommercio", amount = "10000")))
+        fee: StdFee? = null
     ): TxResponse {
         val msg = MsgBuyMembership(
             membershipType = membershipType,
