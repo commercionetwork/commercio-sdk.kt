@@ -242,7 +242,6 @@ class Examples {
                 )
             ),
             recipients = recipients,
-            fees = listOf(StdCoin(denom = "ucommercio", amount = "10000")),
             wallet = wallet
         )
         assertTrue(response is TxResponse.Successful)
