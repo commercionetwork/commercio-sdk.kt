@@ -22,14 +22,24 @@ object EncryptionHelper {
      * Returns the RSA public key associated to the government that should be used when
      * encrypting the data that only it should see.
      */
-    suspend fun getGovernmentRsaPubKey(): PublicKey {
-        val response = Network.get<String>("http://localhost:8080/government/publicKey")
+    suspend fun getGovernmentRsaPubKey(lcdUrl: String): PublicKey {
+
+        val tumbler = Network.get<Map<String, Any>>("$lcdUrl/government/tumbler")
+            ?: throw UnsupportedOperationException("Cannot get tumbler address")
+
+        val tumblerAddress = (tumbler["result"] as Map<String, String>)["tumbler_address"]
+            ?: throw UnsupportedOperationException("Missing tumbler_address in response")
+
+        val responsePublicKeyPem = Network.get<Map<String, Any>>("$lcdUrl/identities/$tumblerAddress")
             ?: throw UnsupportedOperationException("Cannot get government RSA public key")
 
-        val cleaned = response
+        val publicKeyPem = (((responsePublicKeyPem["result"] as Map<String, Any>)["did_document"] as Map<String, Any>) ["publicKey"] as List<Map<String, Any>>)
+            .first().get("publicKeyPem") ?: throw UnsupportedOperationException("Missing publicKeyPem in response")
+
+        val cleaned = publicKeyPem.toString()
             .replace("\n", "")
-            .replace("-----BEGIN RSA PUBLIC KEY-----", "")
-            .replace("-----END RSA PUBLIC KEY-----", "")
+            .replace("-----BEGIN PUBLIC KEY-----", "")
+            .replace("-----END PUBLIC KEY-----", "")
 
         val keySpec = X509EncodedKeySpec(Base64.decode(cleaned))
         return KeyFactory.getInstance("RSA").generatePublic(keySpec)

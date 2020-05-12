@@ -30,7 +30,7 @@ data class DidDocument(
         get() {
             // Find the encryption key
             return publicKeys.firstOrNull { it.type == DidDocumentPublicKey.Type.RSA }?.let {
-                val pubKeySpec = PKCS8EncodedKeySpec(it.publicKeyHex.readHex())
+                val pubKeySpec = PKCS8EncodedKeySpec(it.publicKeyPem.readHex())
                 KeyFactory.getInstance("RSA").generatePublic(pubKeySpec) as RSAPublicKey
             }
         }

@@ -12,7 +12,7 @@ class ProofGenerationResult(val encryptedProof: ByteArray, val encryptedAesKey: 
 /**
  * Given a [payload], creates a new AES-256 key and uses that to encrypt the payload itself.
  */
-suspend fun generateProof(payload: Any): ProofGenerationResult {
+suspend fun generateProof(payload: Any, lcdUrl: String): ProofGenerationResult {
     // Generate the AES key
     val aesKey = KeysHelper.generateAesKey()
 
@@ -21,7 +21,7 @@ suspend fun generateProof(payload: Any): ProofGenerationResult {
     val encryptedPayload = EncryptionHelper.encryptWithAes(encryptionData, aesKey)
 
     // Encrypt the AES key
-    val rsaKey = EncryptionHelper.getGovernmentRsaPubKey()
+    val rsaKey = EncryptionHelper.getGovernmentRsaPubKey(lcdUrl)
     val encryptedAesKey = EncryptionHelper.encryptWithRsa(aesKey.encoded, rsaKey)
 
     return ProofGenerationResult(

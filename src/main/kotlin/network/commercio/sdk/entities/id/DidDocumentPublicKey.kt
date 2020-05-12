@@ -13,7 +13,7 @@ data class DidDocumentPublicKey(
     @field:JsonProperty("id") val id: String,
     @field:JsonProperty("type") val type: Type,
     @field:JsonProperty("controller") val controller: String,
-    @field:JsonProperty("publicKeyHex") val publicKeyHex: String
+    @field:JsonProperty("publicKeyPem") val publicKeyPem: String
 ) {
 
     enum class Type {
@@ -27,7 +27,7 @@ data class DidDocumentPublicKey(
      * @return the [PublicKey] instance, or `null` if this key is not supported.
      */
     fun toPublicKey(): PublicKey? {
-        val bytes = publicKeyHex.readHex()
+        val bytes = publicKeyPem.readHex()
         val keyFactory = when (type) {
             Type.RSA -> KeyFactory.getInstance("RSA")
             Type.SECP256K1 -> KeyFactory.getInstance("EC")

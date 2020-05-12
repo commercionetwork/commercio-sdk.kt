@@ -69,7 +69,7 @@ object IdHelper {
         )
 
         // Build the proof
-        val result = generateProof(payload)
+        val result = generateProof(payload, wallet.networkInfo.lcdUrl)
 
         // Build the message and send the tx
         val msg = MsgRequestDidDeposit(
@@ -109,7 +109,7 @@ object IdHelper {
         )
 
         // Build the proof
-        val result = generateProof(payload)
+        val result = generateProof(payload, wallet.networkInfo.lcdUrl)
 
         // Build the message and send the tx
         val msg = MsgRequestDidPowerUp(
