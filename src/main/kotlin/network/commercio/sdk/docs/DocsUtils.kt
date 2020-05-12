@@ -75,7 +75,7 @@ internal suspend fun CommercioDoc.encryptField(
     // Create the encryption key field
     val encryptionKeys = keys.map { (didDoc, pubKey) ->
         val encryptedAesKey = EncryptionHelper.encryptWithRsa(aesKey.encoded, pubKey)
-        CommercioDoc.EncryptionData.Key(recipientDid = didDoc.did, value = encryptedAesKey.toHex())
+        CommercioDoc.EncryptionData.Key(recipientDid = didDoc.id, value = encryptedAesKey.toHex())
     }
 
     // Return a copy of the document

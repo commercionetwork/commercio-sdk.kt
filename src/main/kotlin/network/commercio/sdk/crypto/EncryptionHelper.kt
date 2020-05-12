@@ -24,10 +24,10 @@ object EncryptionHelper {
      */
     suspend fun getGovernmentRsaPubKey(lcdUrl: String): PublicKey {
 
-        val tumbler = Network.get<Map<String, Any>>("$lcdUrl/government/tumbler")
+        val tumblerResponse = Network.get<Map<String, Any>>("$lcdUrl/government/tumbler")
             ?: throw UnsupportedOperationException("Cannot get tumbler address")
 
-        val tumblerAddress = (tumbler["result"] as Map<String, String>)["tumbler_address"]
+        val tumblerAddress = (tumblerResponse["result"] as Map<String, String>)["tumbler_address"]
             ?: throw UnsupportedOperationException("Missing tumbler_address in response")
 
         val responsePublicKeyPem = Network.get<Map<String, Any>>("$lcdUrl/identities/$tumblerAddress")
