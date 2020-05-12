@@ -61,19 +61,25 @@ data class CommercioDoc(
 
     data class CommercioDoSign(
         @JsonProperty("storage_uri") val storageUri: String,
-        @JsonProperty("signer_instance") val signerInstance: String,
-        @JsonProperty("sdn_data") val sdnData: List<CommercioSdnData>?= null,
+        @JsonProperty("signer_instance") val signerIstance: String,
         @JsonProperty("vcr_id") val vcrId: String,
-        @JsonProperty("certificate_profile") val certificateProfile: String
+        @JsonProperty("certificate_profile") val certificateProfile: String,
+        @JsonProperty("sdn_data") val sdnData: List<CommercioSdnData>?= null
     ) {
 
-        data class CommercioSdnData(
-            @JsonProperty("common_name") val COMMON_NAME: String ="",
-            @JsonProperty("surname") val SURNAME: String="",
-            @JsonProperty("serial_number") val SERIAL_NUMBER: String="",
-            @JsonProperty("given_name") val GIVEN_NAME: String="",
-            @JsonProperty("organization") val ORGANIZATION: String="",
-            @JsonProperty("country") val COUNTRY: String=""
-        )
+        enum class CommercioSdnData {
+            @JsonProperty("common_name")
+            COMMON_NAME,
+            @JsonProperty("surname")
+            SURNAME,
+            @JsonProperty("serial_number")
+            SERIAL_NUMBER,
+            @JsonProperty("given_name")
+            GIVEN_NAME,
+            @JsonProperty("organization")
+            ORGANIZATION,
+            @JsonProperty("country")
+            COUNTRY;
+        }
     }
 }
