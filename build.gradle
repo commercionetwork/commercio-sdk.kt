@@ -30,7 +30,10 @@ dependencies {
 
     // Crypto
     compile "com.github.komputing:kethereum:$kethereum_version"
-    compile "com.github.commercionetwork:sacco.kt:$sacco_version"
+    compile "org.bitcoinj:bitcoinj-core:0.15.1" //add
+    //compile "com.github.commercionetwork:sacco.kt:$sacco_version"
+    compile fileTree(dir: 'libs', include: '*.jar') //add
+
 
     // Networking
     compile "io.ktor:ktor-client-okhttp:$ktor_version"

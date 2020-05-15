@@ -38,6 +38,9 @@ object SignHelper {
      */
     fun signSorted(data: Any, wallet: Wallet): ByteArray {
         val jsonSignData = objectMapper.writeValueAsString(data)
+
+        print("\n\nIMPORTANTE\n\njsonSignData: ${jsonSignData} \n\n -- \n")
+        print("\n jsonSignData FIRMATO: ${wallet.sign(jsonSignData.toByteArray(Charsets.UTF_8))}")
         return wallet.sign(jsonSignData.toByteArray(Charsets.UTF_8))
     }
 

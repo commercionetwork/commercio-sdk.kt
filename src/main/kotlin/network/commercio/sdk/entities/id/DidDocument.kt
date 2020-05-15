@@ -28,7 +28,7 @@ data class DidDocument(
     val encryptionKey: RSAPublicKey?
         get() {
             // Find the encryption key
-            return publicKeys.firstOrNull { it.type == DidDocumentPublicKey.Type.RSA }?.let {
+            return publicKeys.firstOrNull { it.type == "RsaVerificationKey2018" || it.type == "RsaSignatureKey2018"}?.let {
                 val pubKeySpec = PKCS8EncodedKeySpec(it.publicKeyPem.readHex())
                 KeyFactory.getInstance("RSA").generatePublic(pubKeySpec) as RSAPublicKey
             }
