@@ -9,6 +9,8 @@ import java.security.cert.X509Certificate
 import java.security.spec.X509EncodedKeySpec
 import javax.crypto.Cipher
 import javax.crypto.SecretKey
+import javax.crypto.spec.SecretKeySpec
+import javax.crypto.spec.GCMParameterSpec
 
 /**
  * Allows to perform common encryption operations such as RSA/AES encryption and decryption.
@@ -17,6 +19,7 @@ object EncryptionHelper {
 
     private const val RSA_ALGORITHM = "RSA/ECB/PKCS1Padding"
     private const val AES_ALGORITHM = "AES"
+    private const val AES_ALGORITHM_GCM = "AES"
 
     /**
      * Returns the RSA public key associated to the government that should be used when
@@ -33,8 +36,11 @@ object EncryptionHelper {
         val responsePublicKeyPem = Network.get<Map<String, Any>>("$lcdUrl/identities/$tumblerAddress")
             ?: throw UnsupportedOperationException("Cannot get government RSA public key")
 
-        val publicKeyPem = (((responsePublicKeyPem["result"] as Map<String, Any>)["did_document"] as Map<String, Any>) ["publicKey"] as List<Map<String, Any>>)
-            .first().get("publicKeyPem") ?: throw UnsupportedOperationException("Missing publicKeyPem in response")
+        // TODO: get first RsaSignatureKey2018 not first pem key
+        val publicKeyPem = (((responsePublicKeyPem["result"] as Map<String, Any>)["did_document"] as Map<String, Any>) ["publicKey"] as List<Map<String, Any>>)[1].get("publicKeyPem") ?: throw UnsupportedOperationException("Missing publicKeyPem in response")
+
+        /*val publicKeyPem = (((responsePublicKeyPem["result"] as Map<String, Any>)["did_document"] as Map<String, Any>) ["publicKey"] as List<Map<String, Any>>)
+            .first().get("publicKeyPem") ?: throw UnsupportedOperationException("Missing publicKeyPem in response")*/
 
         val cleaned = publicKeyPem.toString()
             .replace("\n", "")
@@ -68,6 +74,19 @@ object EncryptionHelper {
         return Cipher.getInstance(AES_ALGORITHM).apply {
             init(Cipher.DECRYPT_MODE, key)
         }.doFinal(data)
+    }
+
+   /**
+     * Encrypts the given [data] with AES-GCM using the specified [key].
+     */
+
+    fun encryptStringWithAesGCM(data: ByteArray, key: SecretKey): ByteArray {
+        val nonce = KeysHelper.generateNonce()
+        val gcmSpec = GCMParameterSpec(128, nonce) // 128 bit authentication tag
+        val ciphertext = Cipher.getInstance("AES/GCM/NoPadding").apply {
+            init(Cipher.ENCRYPT_MODE, key, gcmSpec)
+        }.doFinal(data)
+        return nonce + ciphertext
     }
 
     /**

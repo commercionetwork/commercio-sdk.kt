@@ -9,12 +9,27 @@ import java.security.spec.X509EncodedKeySpec
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.SecretKeySpec
+import javax.crypto.spec.GCMParameterSpec
+import java.security.SecureRandom
+import javax.crypto.Cipher
+
 
 
 /**
  * Allows to easily generate new keys either to be used with AES or RSA key.
  */
 object KeysHelper {
+    /**
+     * Be sure to use a SecureRandom!
+     */
+    val secureRandom = SecureRandom()
+
+    fun generateNonce(): ByteArray {
+        val result = ByteArray(96 / 8)
+        secureRandom.nextBytes(result)
+        return result
+    }
+
 
     /**
      * Generates a new random AES-256 secret key without any initializing vector.
@@ -27,6 +42,15 @@ object KeysHelper {
 
     fun recoverAesKey(bytes: ByteArray): SecretKey {
         return SecretKeySpec(bytes, "AES")
+    }
+
+    /**
+     * Generates a new random AES secret key with initializing vector.
+     */
+    fun generateAesKey(bytes: Int = 256): SecretKey {
+        return KeyGenerator.getInstance("AES").apply {
+            init(bytes)
+        }.generateKey()
     }
 
     /**

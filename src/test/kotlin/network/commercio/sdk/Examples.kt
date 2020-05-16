@@ -20,6 +20,8 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.security.KeyPair
 import java.util.*
+import java.security.interfaces.RSAPrivateKey
+
 
 /**
  * Contains a list of methods that illustrate how to use each and every method that is present inside the
@@ -66,9 +68,6 @@ class Examples {
         val ecKeyPair = KeysHelper.generateEcKeyPair()
         //createDidDocument(wallet = userWallet, rsaKeyPair = rsaKeyPair, ecKeyPair = ecKeyPair)
 
-        // --- Request the Did deposit
-        val depositAmount = listOf(StdCoin(denom = "ucommercio", amount = "10000"))
-        // postDepositRequest(amount = depositAmount, wallet = userWallet)
 
         // --- Request the Did power up
         val pairwiseMnemonic = listOf(
@@ -128,29 +127,19 @@ class Examples {
         assertTrue(response is TxResponse.Successful)
     }
 
-    /**
-     * Shows how to post a request for a deposit that will be later read from the centralized APIs.
-     * Documentation: https://docs.commercio.network/x/id/tx/request-did-deposit.html
-     */
-    private suspend fun postDepositRequest(amount: List<StdCoin>, wallet: Wallet) {
-        val response = IdHelper.requestDidDeposit(
-            recipient = Did(wallet.bech32Address),
-            amount = amount,
-            wallet = wallet
-        )
-        assertTrue(response is TxResponse.Successful)
-    }
+
 
     /**
-     * Shows how to post a request for a deposit that will be later read from the centralized APIs.
-     * Documentation: https://docs.commercio.network/x/id/tx/request-did-deposit.html
+     * Shows how to request a pairwise Did power up. This request will later be read and handled by the centralized
+     * APIs that will send the funds to such account.
+     * Documentation: https://docs.commercio.network/x/id/tx/request-did-power-up.html
      */
-    private suspend fun postDepositRequest(amount: List<StdCoin>, wallet: Wallet, fee : StdFee) {
-        val response = IdHelper.requestDidDeposit(
-            recipient = Did(wallet.bech32Address),
+    private suspend fun postPowerUpRequest(pairwiseDid: String, amount: List<StdCoin>, wallet: Wallet, privateKey: RSAPrivateKey) {
+        val response = IdHelper.requestDidPowerUp(
+            pairwiseDid = Did(pairwiseDid),
             amount = amount,
             wallet = wallet,
-            fee = fee
+            privateKey = privateKey
         )
         assertTrue(response is TxResponse.Successful)
     }
@@ -160,25 +149,12 @@ class Examples {
      * APIs that will send the funds to such account.
      * Documentation: https://docs.commercio.network/x/id/tx/request-did-power-up.html
      */
-    private suspend fun postPowerUpRequest(pairwiseDid: String, amount: List<StdCoin>, wallet: Wallet) {
-        val response = IdHelper.requestDidPowerUp(
-            pairwiseDid = Did(pairwiseDid),
-            amount = amount,
-            wallet = wallet
-        )
-        assertTrue(response is TxResponse.Successful)
-    }
-
-    /**
-     * Shows how to request a pairwise Did power up. This request will later be read and handled by the centralized
-     * APIs that will send the funds to such account.
-     * Documentation: https://docs.commercio.network/x/id/tx/request-did-power-up.html
-     */
-    private suspend fun postPowerUpRequest(pairwiseDid: String, amount: List<StdCoin>, wallet: Wallet, fee : StdFee) {
+    private suspend fun postPowerUpRequest(pairwiseDid: String, amount: List<StdCoin>, wallet: Wallet, privateKey: RSAPrivateKey, fee : StdFee) {
         val response = IdHelper.requestDidPowerUp(
             pairwiseDid = Did(pairwiseDid),
             amount = amount,
             wallet = wallet,
+            privateKey = privateKey,
             fee = fee
         )
         assertTrue(response is TxResponse.Successful)
