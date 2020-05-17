@@ -39,14 +39,9 @@ object IdHelper {
         wallet: Wallet,
         fee: StdFee? = null
     ): TxResponse {
-        //System.setProperty("javax.net.ssl.trustStore", "NONE")
         System.setProperty("javax.net.ssl.trustStoreType", "JKS")
-        print("\n\nSetdidDocument:")
         val msg = MsgSetDidDocument(didDocument)
-        print("\n\nsetDidDocument.Msg: $msg \n\n")
-        val result = TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet, fee = fee)
-        print("\n\nsetDidDocument.result: $result \n\n")
-        return result
+        return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet, fee = fee)
     }
 
     /**

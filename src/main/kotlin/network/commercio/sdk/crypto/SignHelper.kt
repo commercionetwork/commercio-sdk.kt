@@ -27,9 +27,10 @@ object SignHelper {
      * so that it can be properly signed and verified against an existing signature.
      */
     private val objectMapper = jacksonObjectMapper().apply {
-        configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true)
-        configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
+        configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, false)
+        configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, false)
         setSerializationInclusion(JsonInclude.Include.NON_EMPTY)
+
     }
 
     /**
