@@ -16,7 +16,6 @@ import org.bouncycastle.util.encoders.Base64
 import java.io.ByteArrayOutputStream
 import java.security.KeyFactory
 
-
 /**
  * Allows to perform common Did Document related operations.
  */
@@ -30,14 +29,11 @@ object DidDocumentHelper {
         pubKeys: List<PublicKeyWrapper> = listOf(),
         service: List<DidDocumentService>? = null
     ): DidDocument {
-
         if (pubKeys.size < 2) {
             throw Exception("At least two keys are required")
         }
 
-        val keys = pubKeys.mapIndexed { index, key ->
-            convertKey(wallet = wallet, index = index + 1, pubKeyWrapper = key)
-        }
+        val keys = pubKeys.mapIndexed { index, key -> convertKey(wallet = wallet, index = index + 1, pubKeyWrapper = key) }
 
         // Compute the proof
         val proofContent = DidDocumentProofSignatureContent(
@@ -47,8 +43,6 @@ object DidDocumentHelper {
         )
 
         val verificationMethod = wallet.bech32PublicKey
-
-        print("\nInside DidDocumentHelper.fromWallet to build DidDocument\n")
         val proof = computeProof(proofContent.id, verificationMethod, proofContent, wallet)
 
         // Build the Did Document
@@ -106,5 +100,4 @@ ${pubKeyWrapper.public.encoded.toBase64()}
             signatureValue = SignHelper.signSortedTxData(proofSignatureContent, wallet).toBase64()
         )
     }
-
 }

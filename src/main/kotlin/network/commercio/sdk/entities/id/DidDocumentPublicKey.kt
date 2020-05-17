@@ -16,8 +16,11 @@ data class DidDocumentPublicKey(
     @field:JsonProperty("controller") val controller: String,
     @field:JsonProperty("publicKeyPem") val publicKeyPem: String
 ) {
-
-        fun toPublicKey(): PublicKey? {
+    /**
+     * Converts this key into a [PublicKey] instance.
+     * @return the [PublicKey] instance, or `null` if this key is not supported.
+     */
+    fun toPublicKey(): PublicKey? {
         val bytes = publicKeyPem.readHex()
         val keyFactory = when (type) {
             "RsaVerificationKey2018", "RsaSignatureKey2018" -> KeyFactory.getInstance("RSA")

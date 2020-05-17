@@ -12,6 +12,8 @@ import java.security.PublicKey
 import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.X509EncodedKeySpec
 import javax.crypto.spec.SecretKeySpec
+import java.security.interfaces.RSAPrivateKey
+import javax.crypto.SecretKey
 
 /**
  * Tests for [EncryptionHelper].
