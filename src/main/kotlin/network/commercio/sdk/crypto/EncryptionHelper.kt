@@ -1,5 +1,9 @@
 package network.commercio.sdk.crypto
 
+import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import network.commercio.sdk.entities.id.DidDocument
 import network.commercio.sdk.networking.Network
 import org.bouncycastle.util.encoders.Base64
 import java.security.KeyFactory
@@ -20,6 +24,11 @@ object EncryptionHelper {
     private const val RSA_ALGORITHM = "RSA/ECB/PKCS1Padding"
     private const val AES_ALGORITHM = "AES"
     private const val AES_ALGORITHM_GCM = "AES"
+
+    private val objectMapper = jacksonObjectMapper().apply {
+        configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+        setSerializationInclusion(JsonInclude.Include.ALWAYS)
+    }
 
     /**
      * Returns the RSA public key associated to the government that should be used when
@@ -90,7 +99,7 @@ object EncryptionHelper {
     }
 
     /**
-     * Encrypts the given [data] with RSA and the specified key.
+     * Encrypts the given [data] with RSA and the specified [key].
      */
     fun encryptWithRsa(data: String, key: PublicKey): ByteArray {
         return encryptWithRsa(data.toByteArray(Charsets.UTF_8), key)

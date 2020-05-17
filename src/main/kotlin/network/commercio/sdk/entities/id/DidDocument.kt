@@ -1,6 +1,7 @@
 package network.commercio.sdk.entities.id
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import network.commercio.sdk.utils.readHex
 import java.security.KeyFactory
@@ -12,12 +13,13 @@ import java.security.spec.PKCS8EncodedKeySpec
  * Commercio network's did document is described here:
  * https://scw-gitlab.zotsell.com/Commercio.network/Cosmos-application/blob/master/Commercio%20Decentralized%20ID%20framework.md
  */
+
 data class DidDocument(
     @JsonProperty("@context") val context: String,
     @JsonProperty("id") val id: String,
     @JsonProperty("publicKey") val publicKeys: List<DidDocumentPublicKey>,
     @JsonProperty("proof") val proof: DidDocumentProof,
-    @JsonProperty("service") val service: List<DidDocumentService>?
+    @JsonProperty("service") @JsonInclude(JsonInclude.Include.NON_NULL) val service: List<DidDocumentService>?
 ) {
 
     /**

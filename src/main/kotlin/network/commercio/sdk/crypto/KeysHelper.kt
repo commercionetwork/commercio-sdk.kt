@@ -1,5 +1,7 @@
 package network.commercio.sdk.crypto
 
+import KeyPairWrapper
+import PublicKeyWrapper
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.bouncycastle.util.encoders.Hex
 import java.security.*
@@ -57,16 +59,19 @@ object KeysHelper {
      * Generates a new RSA key pair having the given [bytes] length.
      * If no length is specified, the default is going to be 2048.
      */
-    fun generateRsaKeyPair(bytes: Int = 2048): KeyPair {
-        return KeyPairGenerator.getInstance("RSA").apply {
+    fun generateRsaKeyPair(bytes: Int = 2048, type: String="RsaVerificationKey2018"): KeyPairWrapper {
+        val keyPair: KeyPair = KeyPairGenerator.getInstance("RSA").apply {
             initialize(bytes)
         }.generateKeyPair()
+        return KeyPairWrapper(PublicKeyWrapper(public = keyPair.public, type = type),keyPair.private)
     }
 
-    fun generateEcKeyPair(): KeyPair {
-        return KeyPairGenerator.getInstance("EC", BouncyCastleProvider()).apply {
+
+    fun generateEcKeyPair(type: String="EcdsaSecp256k1VerificationKey2019"): KeyPairWrapper {
+        val keyPair= KeyPairGenerator.getInstance("EC", BouncyCastleProvider()).apply {
             initialize(ECGenParameterSpec("secp256k1"), SecureRandom())
         }.generateKeyPair()
+        return KeyPairWrapper(PublicKeyWrapper(public = keyPair.public, type = type),keyPair.private)
     }
 
     //TODO test these

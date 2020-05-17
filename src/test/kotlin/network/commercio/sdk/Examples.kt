@@ -1,5 +1,6 @@
 package network.commercio.sdk
 
+import KeyPairWrapper
 import kotlinx.coroutines.runBlocking
 import network.commercio.sacco.NetworkInfo
 import network.commercio.sacco.TxResponse
@@ -104,9 +105,9 @@ class Examples {
     @Test
     fun `CertificateHelper examples`() = runBlocking {
         val rsaKeyPair = KeysHelper.generateRsaKeyPair()
-        val exportedPublic = KeysHelper.exportPublicKeyHEX(rsaKeyPair.public, "RSA")
+        val exportedPublic = KeysHelper.exportPublicKeyHEX(rsaKeyPair.publicWrapper.public, "RSA")
         val exportedPrivate = KeysHelper.exportPrivateKeyHEX(rsaKeyPair.private, "RSA")
-        val cert = createX509Certificate(userWallet, rsaKeyPair)
+        val cert = createX509Certificate(userWallet, rsaKeyPair.toKeyPair())
         println(cert)
         println("Public: $exportedPublic")
         println("Private: $exportedPrivate")
@@ -121,8 +122,8 @@ class Examples {
      * Shows how to create a Did Document and associate it to an existing account Did.
      * Documentation: https://docs.commercio.network/x/id/tx/associate-a-did-document.html
      */
-    private suspend fun createDidDocument(wallet: Wallet, rsaKeyPair: KeyPair, ecKeyPair: KeyPair) {
-        val didDocument = DidDocumentHelper.fromWallet(wallet, listOf(rsaKeyPair.public, ecKeyPair.public))
+    private suspend fun createDidDocument(wallet: Wallet, rsaKeyPair: KeyPairWrapper, ecKeyPair: KeyPairWrapper) {
+        val didDocument = DidDocumentHelper.fromWallet(wallet, listOf(rsaKeyPair.publicWrapper, ecKeyPair.publicWrapper))
         val response = IdHelper.setDidDocument(didDocument, wallet)
         assertTrue(response is TxResponse.Successful)
     }

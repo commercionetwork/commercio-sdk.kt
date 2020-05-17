@@ -30,9 +30,9 @@ dependencies {
 
     // Crypto
     compile "com.github.komputing:kethereum:$kethereum_version"
-    //compile "com.github.commercionetwork:sacco.kt:$sacco_version"
-    compile "org.bitcoinj:bitcoinj-core:0.15.1" // you need it
-    compile fileTree(dir: 'libs', include: '*.jar') 
+    compile "org.bitcoinj:bitcoinj-core:0.15.1"
+    compile "com.github.commercionetwork:sacco.kt:$sacco_version"
+
 
     // Networking
     compile "io.ktor:ktor-client-okhttp:$ktor_version"
@@ -42,9 +42,7 @@ dependencies {
     compile "com.squareup.okhttp3:logging-interceptor:4.2.1"
 
     // X509 creation
-   //compile "org.bouncycastle:bcprov-jdk15on:$bouncycastle_version"
    compile "org.bouncycastle:bcpkix-jdk15on:$bouncycastle_version"
-
 
     // ------------
     // --- Tests

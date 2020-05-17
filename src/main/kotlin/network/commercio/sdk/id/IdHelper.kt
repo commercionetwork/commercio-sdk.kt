@@ -43,6 +43,7 @@ object IdHelper {
         wallet: Wallet,
         fee: StdFee? = null
     ): TxResponse {
+        System.setProperty("javax.net.ssl.trustStoreType", "JKS")
         val msg = MsgSetDidDocument(didDocument)
         return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet, fee = fee)
     }
@@ -81,6 +82,7 @@ object IdHelper {
             signature = B64.getEncoder().encodeToString(signedSignatureHash)
         )
 
+
         val aesKey = KeysHelper.generateAesKey(128)
 
         // Build the proof and encrypt with AesGCM
@@ -99,7 +101,7 @@ object IdHelper {
             wallet.networkInfo.lcdUrl);
         val encryptedProofKey =
             EncryptionHelper.encryptWithRsa(aesKey.getEncoded(), rsaPubTkKey);
-    
+
         // Build the message and send the tx
         val msg = MsgRequestDidPowerUp(
             claimantDid = wallet.bech32Address,
