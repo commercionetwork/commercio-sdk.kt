@@ -33,6 +33,20 @@ object SignHelper {
     }
 
     /**
+     * Takes the given [data], converts it to an JSON object and signs its content
+     * using the given [wallet].
+     */
+    fun signSortedTxData(data: Any, wallet: Wallet): ByteArray {
+        val objectMapper = jacksonObjectMapper().apply {
+            configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, false)
+            configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, false)
+            setSerializationInclusion(JsonInclude.Include.NON_EMPTY)
+        }
+        val jsonSignData = objectMapper.writeValueAsString(data)
+        return wallet.signTxData(jsonSignData.toByteArray(Charsets.UTF_8))
+    }
+
+    /**
      * Takes the given [data], converts it to an alphabetically sorted JSON object and signs its content
      * using the given [wallet].
      */
