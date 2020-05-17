@@ -28,7 +28,8 @@ object DidDocumentHelper {
     fun fromWallet(
         wallet: Wallet,
         pubKeys: List<PublicKeyWrapper> = listOf(),
-        service: List<DidDocumentService>? = null ): DidDocument {
+        service: List<DidDocumentService>? = null
+    ): DidDocument {
 
         if (pubKeys.size < 2) {
             throw Exception("At least two keys are required")
@@ -38,23 +39,11 @@ object DidDocumentHelper {
             convertKey(wallet = wallet, index = index + 1, pubKeyWrapper = key)
         }
 
-     /*
-        // Get the authentication key
-        val authKeyId = "${wallet.bech32Address}#keys-1"
-        val authKey = DidDocumentPublicKey(
-            id = authKeyId,
-            type = DidDocumentPublicKey.Type.SECP256K1,
-            controller = wallet.bech32Address,
-            publicKeyPem = wallet.pubKeyAsHex
-        )
-     */
-
         // Compute the proof
         val proofContent = DidDocumentProofSignatureContent(
             context = "https://www.w3.org/ns/did/v1",
             id = wallet.bech32Address,
             publicKeys = keys
-            //authentication = listOf(authKeyId)
         )
 
         val verificationMethod = wallet.bech32PublicKey
@@ -73,50 +62,33 @@ object DidDocumentHelper {
     }
 
     /**
-     * Converts the given [pubKey] into a [DidDocumentPublicKey] placed at position [index],
+     * Converts the given [pubKeyWrapper] into a [DidDocumentPublicKey] placed at position [index],
      * @param [wallet] used to get the controller field of each [DidDocumentPublicKey].
      */
     private fun convertKey(pubKeyWrapper: PublicKeyWrapper, index: Int, wallet: Wallet): DidDocumentPublicKey {
         return DidDocumentPublicKey(
             id = "${wallet.bech32Address}#keys-$index",
             type = pubKeyWrapper.type,
-//            type = when (pubKey) {
-//                is RSAPublicKey -> DidDocumentPublicKey.Type.RSA
-//                is ECPublicKey -> DidDocumentPublicKey.Type.SECP256K1
-//                else -> DidDocumentPublicKey.Type.ED25519
-//            },
             controller = wallet.bech32Address,
-            publicKeyPem =  when (pubKeyWrapper.type) {
-            "RsaVerificationKey2018", "RsaSignatureKey2018" -> {
-"""-----BEGIN PUBLIC KEY-----
+            publicKeyPem = when (pubKeyWrapper.type) {
+                "RsaVerificationKey2018", "RsaSignatureKey2018" -> {
+                    """-----BEGIN PUBLIC KEY-----
 ${pubKeyWrapper.public.encoded.toBase64()}
 |-----END PUBLIC KEY-----""".trimMargin()
-}
-            "Secp256k1VerificationKey2018" -> {
-                // KeyFactory.getInstance("EC")
-//                @override
-//                String getEncoded() {
-//                    return base64.encode(this.pubKey.Q.getEncoded(false));
-//                }
-                pubKeyWrapper.public.encoded.toBase64()
+                }
+                "Secp256k1VerificationKey2018" -> {
+                    pubKeyWrapper.public.encoded.toBase64()
+                }
+                "Ed25519VerificationKey2018" -> {
+                    ""
+                }
+                else -> ""
             }
-            "Ed25519VerificationKey2018" -> {
-                //println("Ed25519 keys not supported yet")
-//                String getEncoded() {
-//                    final masterKey = ed25519.ED25519_HD_KEY.getMasterKeyFromSeed(this.Seed);
-//                    return base64.encode(ed25519.ED25519_HD_KEY.getBublickKey(masterKey.key));
-//                }
-                ""
-            }
-            else -> ""
-        }
-
-        //
         )
     }
 
     /**
-     * Computes the [DidDocumentProof] based on the given [authKeyid] and [content].
+     * Computes the [DidDocumentProof] based on the given [proofSignatureContent].
      */
     private fun computeProof(
         controller: String,

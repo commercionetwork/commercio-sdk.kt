@@ -17,24 +17,6 @@ data class DidDocumentPublicKey(
     @field:JsonProperty("publicKeyPem") val publicKeyPem: String
 ) {
 
-    /**
-     * Converts this key into a [PublicKey] instance.
-     * @return the [PublicKey] instance, or `null` if this key is not supported.
-     */
-//    fun toPublicKey(): PublicKey? {
-//        val bytes = publicKeyPem.readHex()
-//        val keyFactory = when (type) {
-//            Type.RSA -> KeyFactory.getInstance("RSA")
-//            Type.SECP256K1 -> KeyFactory.getInstance("EC")
-//            Type.ED25519 -> {
-//                println("Ed25519 keys not supported yet")
-//                return null
-//            }
-//        }
-//
-//        return keyFactory.generatePublic(PKCS8EncodedKeySpec(bytes))
-//    }
-
         fun toPublicKey(): PublicKey? {
         val bytes = publicKeyPem.readHex()
         val keyFactory = when (type) {
