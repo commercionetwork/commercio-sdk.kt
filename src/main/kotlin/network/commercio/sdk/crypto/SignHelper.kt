@@ -27,10 +27,23 @@ object SignHelper {
      * so that it can be properly signed and verified against an existing signature.
      */
     private val objectMapper = jacksonObjectMapper().apply {
-        configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, false)
-        configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, false)
+        configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true)
+        configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
         setSerializationInclusion(JsonInclude.Include.NON_EMPTY)
+    }
 
+    /**
+     * Takes the given [data], converts it to an JSON object and signs its content
+     * using the given [wallet].
+     */
+    fun signSortedTxData(data: Any, wallet: Wallet): ByteArray {
+        val objectMapper = jacksonObjectMapper().apply {
+            configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, false)
+            configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, false)
+            setSerializationInclusion(JsonInclude.Include.NON_EMPTY)
+        }
+        val jsonSignData = objectMapper.writeValueAsString(data)
+        return wallet.signTxData(jsonSignData.toByteArray(Charsets.UTF_8))
     }
 
     /**
@@ -39,9 +52,6 @@ object SignHelper {
      */
     fun signSorted(data: Any, wallet: Wallet): ByteArray {
         val jsonSignData = objectMapper.writeValueAsString(data)
-
-        print("\n\nIMPORTANTE\n\njsonSignData: ${jsonSignData} \n\n -- \n")
-        print("\n jsonSignData FIRMATO: ${wallet.sign(jsonSignData.toByteArray(Charsets.UTF_8))}")
         return wallet.sign(jsonSignData.toByteArray(Charsets.UTF_8))
     }
 

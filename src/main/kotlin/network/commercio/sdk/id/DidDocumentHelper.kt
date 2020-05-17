@@ -131,7 +131,7 @@ ${pubKeyWrapper.public.encoded.toBase64()}
             proofPurpose = proofPurpose,
             controller = controller,
             verificationMethod = verificationMethod,
-            signatureValue = SignHelper.signSorted(proofSignatureContent, wallet).toBase64()
+            signatureValue = SignHelper.signSortedTxData(proofSignatureContent, wallet).toBase64()
         )
     }
 
