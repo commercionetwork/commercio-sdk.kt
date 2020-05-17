@@ -44,7 +44,9 @@ data class CommercioDoc(
             @JsonProperty("sha-384")
             SHA384,
             @JsonProperty("sha-512")
-            SHA512
+            SHA512,
+            @JsonProperty("sha-256")
+            SHA256
         }
     }
 
