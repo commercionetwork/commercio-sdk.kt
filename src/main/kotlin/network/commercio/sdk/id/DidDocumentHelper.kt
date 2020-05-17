@@ -68,7 +68,7 @@ object DidDocumentHelper {
                 "RsaVerificationKey2018", "RsaSignatureKey2018" -> {
                     """-----BEGIN PUBLIC KEY-----
 ${pubKeyWrapper.public.encoded.toBase64()}
-|-----END PUBLIC KEY-----""".trimMargin()
+-----END PUBLIC KEY-----""".trimMargin()
                 }
                 "Secp256k1VerificationKey2018" -> {
                     pubKeyWrapper.public.encoded.toBase64()
