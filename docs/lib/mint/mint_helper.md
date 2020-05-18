@@ -3,7 +3,7 @@ Mint helper allows to easily perform all the operations related to the commercio
 # Provided operations
 1. Opens a new [CDP](../glossary.md) depositing the given `commercioTokenAmount`
 ```kotlin
-suspend fun openCdp(commercioTokenAmount: UInt, wallet: Wallet): TxResponse
+suspend fun openCdp(commercioTokenAmount: ULong, wallet: Wallet): TxResponse
 ```
 2. Closes the CDP having the given `timestamp`.
    This will allow the user to trade back the lent amount of pico Commercio Cash Credits (`uccc`) to get the
@@ -45,7 +45,7 @@ val userMnemonic = listOf(
 
 val userWallet = Wallet.derive(mnemonic = userMnemonic, networkInfo = info)
 
-val amount = 100_000.toUInt()
+val amount = 100_000.toULong()
 
 //Opening a cdp
 MintHelper.openCdp(commercioTokenAmount = amount, wallet = userWallet)

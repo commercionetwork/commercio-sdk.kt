@@ -1,5 +1,9 @@
 package network.commercio.sdk.crypto
 
+import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import network.commercio.sdk.entities.id.DidDocument
 import network.commercio.sdk.networking.Network
 import org.bouncycastle.util.encoders.Base64
 import java.security.KeyFactory
@@ -9,6 +13,8 @@ import java.security.cert.X509Certificate
 import java.security.spec.X509EncodedKeySpec
 import javax.crypto.Cipher
 import javax.crypto.SecretKey
+import javax.crypto.spec.SecretKeySpec
+import javax.crypto.spec.GCMParameterSpec
 
 /**
  * Allows to perform common encryption operations such as RSA/AES encryption and decryption.
@@ -17,19 +23,38 @@ object EncryptionHelper {
 
     private const val RSA_ALGORITHM = "RSA/ECB/PKCS1Padding"
     private const val AES_ALGORITHM = "AES"
+    private const val AES_ALGORITHM_GCM = "AES"
+
+    private val objectMapper = jacksonObjectMapper().apply {
+        configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+        setSerializationInclusion(JsonInclude.Include.ALWAYS)
+    }
 
     /**
      * Returns the RSA public key associated to the government that should be used when
      * encrypting the data that only it should see.
      */
-    suspend fun getGovernmentRsaPubKey(): PublicKey {
-        val response = Network.get<String>("http://localhost:8080/government/publicKey")
+    suspend fun getGovernmentRsaPubKey(lcdUrl: String): PublicKey {
+
+        val tumblerResponse = Network.get<Map<String, Any>>("$lcdUrl/government/tumbler")
+            ?: throw UnsupportedOperationException("Cannot get tumbler address")
+
+        val tumblerAddress = (tumblerResponse["result"] as Map<String, String>)["tumbler_address"]
+            ?: throw UnsupportedOperationException("Missing tumbler_address in response")
+
+        val responsePublicKeyPem = Network.get<Map<String, Any>>("$lcdUrl/identities/$tumblerAddress")
             ?: throw UnsupportedOperationException("Cannot get government RSA public key")
 
-        val cleaned = response
+        // TODO: get first RsaSignatureKey2018 not first pem key
+        val publicKeyPem = (((responsePublicKeyPem["result"] as Map<String, Any>)["did_document"] as Map<String, Any>) ["publicKey"] as List<Map<String, Any>>)[1].get("publicKeyPem") ?: throw UnsupportedOperationException("Missing publicKeyPem in response")
+
+        /*val publicKeyPem = (((responsePublicKeyPem["result"] as Map<String, Any>)["did_document"] as Map<String, Any>) ["publicKey"] as List<Map<String, Any>>)
+            .first().get("publicKeyPem") ?: throw UnsupportedOperationException("Missing publicKeyPem in response")*/
+
+        val cleaned = publicKeyPem.toString()
             .replace("\n", "")
-            .replace("-----BEGIN RSA PUBLIC KEY-----", "")
-            .replace("-----END RSA PUBLIC KEY-----", "")
+            .replace("-----BEGIN PUBLIC KEY-----", "")
+            .replace("-----END PUBLIC KEY-----", "")
 
         val keySpec = X509EncodedKeySpec(Base64.decode(cleaned))
         return KeyFactory.getInstance("RSA").generatePublic(keySpec)
@@ -60,8 +85,21 @@ object EncryptionHelper {
         }.doFinal(data)
     }
 
+   /**
+     * Encrypts the given [data] with AES-GCM using the specified [key].
+     */
+
+    fun encryptStringWithAesGCM(data: ByteArray, key: SecretKey): ByteArray {
+        val nonce = KeysHelper.generateNonce()
+        val gcmSpec = GCMParameterSpec(128, nonce) // 128 bit authentication tag
+        val ciphertext = Cipher.getInstance("AES/GCM/NoPadding").apply {
+            init(Cipher.ENCRYPT_MODE, key, gcmSpec)
+        }.doFinal(data)
+        return nonce + ciphertext
+    }
+
     /**
-     * Encrypts the given [data] with RSA and the specified key.
+     * Encrypts the given [data] with RSA and the specified [key].
      */
     fun encryptWithRsa(data: String, key: PublicKey): ByteArray {
         return encryptWithRsa(data.toByteArray(Charsets.UTF_8), key)

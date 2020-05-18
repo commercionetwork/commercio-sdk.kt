@@ -1,5 +1,7 @@
 package network.commercio.sdk.crypto
 
+import KeyPairWrapper
+import PublicKeyWrapper
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.bouncycastle.util.encoders.Hex
 import java.security.*
@@ -9,12 +11,27 @@ import java.security.spec.X509EncodedKeySpec
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.SecretKeySpec
+import javax.crypto.spec.GCMParameterSpec
+import java.security.SecureRandom
+import javax.crypto.Cipher
+
 
 
 /**
  * Allows to easily generate new keys either to be used with AES or RSA key.
  */
 object KeysHelper {
+    /**
+     * Be sure to use a SecureRandom!
+     */
+    val secureRandom = SecureRandom()
+
+    fun generateNonce(): ByteArray {
+        val result = ByteArray(96 / 8)
+        secureRandom.nextBytes(result)
+        return result
+    }
+
 
     /**
      * Generates a new random AES-256 secret key without any initializing vector.
@@ -30,19 +47,31 @@ object KeysHelper {
     }
 
     /**
+     * Generates a new random AES secret key with initializing vector.
+     */
+    fun generateAesKey(bytes: Int = 256): SecretKey {
+        return KeyGenerator.getInstance("AES").apply {
+            init(bytes)
+        }.generateKey()
+    }
+
+    /**
      * Generates a new RSA key pair having the given [bytes] length.
      * If no length is specified, the default is going to be 2048.
      */
-    fun generateRsaKeyPair(bytes: Int = 2048): KeyPair {
-        return KeyPairGenerator.getInstance("RSA").apply {
+    fun generateRsaKeyPair(bytes: Int = 2048, type: String="RsaVerificationKey2018"): KeyPairWrapper {
+        val keyPair: KeyPair = KeyPairGenerator.getInstance("RSA").apply {
             initialize(bytes)
         }.generateKeyPair()
+        return KeyPairWrapper(PublicKeyWrapper(public = keyPair.public, type = type),keyPair.private)
     }
 
-    fun generateEcKeyPair(): KeyPair {
-        return KeyPairGenerator.getInstance("EC", BouncyCastleProvider()).apply {
+
+    fun generateEcKeyPair(type: String="EcdsaSecp256k1VerificationKey2019"): KeyPairWrapper {
+        val keyPair= KeyPairGenerator.getInstance("EC", BouncyCastleProvider()).apply {
             initialize(ECGenParameterSpec("secp256k1"), SecureRandom())
         }.generateKeyPair()
+        return KeyPairWrapper(PublicKeyWrapper(public = keyPair.public, type = type),keyPair.private)
     }
 
     //TODO test these

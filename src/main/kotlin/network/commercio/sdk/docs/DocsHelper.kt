@@ -2,7 +2,6 @@ package network.commercio.sdk.docs
 
 import network.commercio.sacco.TxResponse
 import network.commercio.sacco.Wallet
-import network.commercio.sacco.models.types.StdCoin
 import network.commercio.sacco.models.types.StdFee
 import network.commercio.sdk.crypto.KeysHelper
 import network.commercio.sdk.entities.docs.CommercioDoc
@@ -28,14 +27,15 @@ object DocsHelper {
     @JvmOverloads
     suspend fun shareDocument(
         id: String,
-        contentUri: String,
+        contentUri: String ="",
         metadata: CommercioDoc.Metadata,
         recipients: List<Did>,
-        fees: List<StdCoin>,
         wallet: Wallet,
         checksum: CommercioDoc.Checksum? = null,
         aesKey: SecretKey = KeysHelper.generateAesKey(),
-        encryptedData: List<EncryptedData> = listOf()
+        encryptedData: List<EncryptedData> = listOf(),
+        doSign: CommercioDoc.CommercioDoSign? = null,
+        fee: StdFee? = null
     ): TxResponse {
 
         // Build a generic document
@@ -46,7 +46,8 @@ object DocsHelper {
             contentUri = contentUri,
             metadata = metadata,
             checksum = checksum,
-            encryptionData = null
+            encryptionData = null,
+            doSign = doSign
         )
 
         // Encrypt its contents, if necessary
@@ -60,10 +61,7 @@ object DocsHelper {
 
         return TxHelper.createSignAndSendTx(
             msgs = listOf(msg),
-            fee = StdFee(
-                gas = "200000",
-                amount = fees
-            ),
+            fee = fee,
             wallet = wallet
         )
     }

@@ -22,7 +22,7 @@ object MintHelper {
      */
     @Suppress("EXPERIMENTAL_API_USAGE")
     suspend fun openCdp(
-        commercioTokenAmount: UInt,
+        commercioTokenAmount: ULong,
         wallet: Wallet,
         fee: StdFee? = null
     ): TxResponse {
@@ -31,7 +31,7 @@ object MintHelper {
             depositAmount = listOf(
                 StdCoin(
                     denom = "ucommercio",
-                    amount = (commercioTokenAmount.toInt() * 1000000).toString()
+                    amount = commercioTokenAmount.toString()
                 )
             ),
             depositorDid = wallet.bech32Address

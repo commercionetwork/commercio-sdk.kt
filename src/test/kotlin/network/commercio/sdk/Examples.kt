@@ -1,5 +1,6 @@
 package network.commercio.sdk
 
+import KeyPairWrapper
 import kotlinx.coroutines.runBlocking
 import network.commercio.sacco.NetworkInfo
 import network.commercio.sacco.TxResponse
@@ -20,6 +21,8 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.security.KeyPair
 import java.util.*
+import java.security.interfaces.RSAPrivateKey
+
 
 /**
  * Contains a list of methods that illustrate how to use each and every method that is present inside the
@@ -66,9 +69,6 @@ class Examples {
         val ecKeyPair = KeysHelper.generateEcKeyPair()
         //createDidDocument(wallet = userWallet, rsaKeyPair = rsaKeyPair, ecKeyPair = ecKeyPair)
 
-        // --- Request the Did deposit
-        val depositAmount = listOf(StdCoin(denom = "ucommercio", amount = "10000"))
-        // postDepositRequest(amount = depositAmount, wallet = userWallet)
 
         // --- Request the Did power up
         val pairwiseMnemonic = listOf(
@@ -98,16 +98,16 @@ class Examples {
             "second"
         )
         val pairwiseWallet = Wallet.derive(mnemonic = pairwiseMnemonic, networkInfo = info)
-        // postPowerUpRequest(pairwiseDid = pairwiseWallet.bech32Address, amount = depositAmount, wallet = userWallet)
+        //postPowerUpRequest(pairwiseDid = pairwiseWallet.bech32Address, amount = depositAmount, wallet = userWallet, privateKey = privateKey)
 
     }
 
     @Test
     fun `CertificateHelper examples`() = runBlocking {
         val rsaKeyPair = KeysHelper.generateRsaKeyPair()
-        val exportedPublic = KeysHelper.exportPublicKeyHEX(rsaKeyPair.public, "RSA")
+        val exportedPublic = KeysHelper.exportPublicKeyHEX(rsaKeyPair.publicWrapper.public, "RSA")
         val exportedPrivate = KeysHelper.exportPrivateKeyHEX(rsaKeyPair.private, "RSA")
-        val cert = createX509Certificate(userWallet, rsaKeyPair)
+        val cert = createX509Certificate(userWallet, rsaKeyPair.toKeyPair())
         println(cert)
         println("Public: $exportedPublic")
         println("Private: $exportedPrivate")
@@ -122,35 +122,25 @@ class Examples {
      * Shows how to create a Did Document and associate it to an existing account Did.
      * Documentation: https://docs.commercio.network/x/id/tx/associate-a-did-document.html
      */
-    private suspend fun createDidDocument(wallet: Wallet, rsaKeyPair: KeyPair, ecKeyPair: KeyPair) {
-        val didDocument = DidDocumentHelper.fromWallet(wallet, listOf(rsaKeyPair.public, ecKeyPair.public))
+    private suspend fun createDidDocument(wallet: Wallet, rsaKeyPair: KeyPairWrapper, ecKeyPair: KeyPairWrapper) {
+        val didDocument = DidDocumentHelper.fromWallet(wallet, listOf(rsaKeyPair.publicWrapper, ecKeyPair.publicWrapper))
         val response = IdHelper.setDidDocument(didDocument, wallet)
         assertTrue(response is TxResponse.Successful)
     }
 
-    /**
-     * Shows how to post a request for a deposit that will be later read from the centralized APIs.
-     * Documentation: https://docs.commercio.network/x/id/tx/request-did-deposit.html
-     */
-    private suspend fun postDepositRequest(amount: List<StdCoin>, wallet: Wallet) {
-        val response = IdHelper.requestDidDeposit(
-            recipient = Did(wallet.bech32Address),
-            amount = amount,
-            wallet = wallet
-        )
-        assertTrue(response is TxResponse.Successful)
-    }
+
 
     /**
-     * Shows how to post a request for a deposit that will be later read from the centralized APIs.
-     * Documentation: https://docs.commercio.network/x/id/tx/request-did-deposit.html
+     * Shows how to request a pairwise Did power up. This request will later be read and handled by the centralized
+     * APIs that will send the funds to such account.
+     * Documentation: https://docs.commercio.network/x/id/tx/request-did-power-up.html
      */
-    private suspend fun postDepositRequest(amount: List<StdCoin>, wallet: Wallet, fee : StdFee) {
-        val response = IdHelper.requestDidDeposit(
-            recipient = Did(wallet.bech32Address),
+    private suspend fun postPowerUpRequest(pairwiseDid: String, amount: List<StdCoin>, wallet: Wallet, privateKey: RSAPrivateKey) {
+        val response = IdHelper.requestDidPowerUp(
+            pairwiseDid = Did(pairwiseDid),
             amount = amount,
             wallet = wallet,
-            fee = fee
+            privateKey = privateKey
         )
         assertTrue(response is TxResponse.Successful)
     }
@@ -160,25 +150,12 @@ class Examples {
      * APIs that will send the funds to such account.
      * Documentation: https://docs.commercio.network/x/id/tx/request-did-power-up.html
      */
-    private suspend fun postPowerUpRequest(pairwiseDid: String, amount: List<StdCoin>, wallet: Wallet) {
-        val response = IdHelper.requestDidPowerUp(
-            pairwiseDid = Did(pairwiseDid),
-            amount = amount,
-            wallet = wallet
-        )
-        assertTrue(response is TxResponse.Successful)
-    }
-
-    /**
-     * Shows how to request a pairwise Did power up. This request will later be read and handled by the centralized
-     * APIs that will send the funds to such account.
-     * Documentation: https://docs.commercio.network/x/id/tx/request-did-power-up.html
-     */
-    private suspend fun postPowerUpRequest(pairwiseDid: String, amount: List<StdCoin>, wallet: Wallet, fee : StdFee) {
+    private suspend fun postPowerUpRequest(pairwiseDid: String, amount: List<StdCoin>, wallet: Wallet, privateKey: RSAPrivateKey, fee : StdFee) {
         val response = IdHelper.requestDidPowerUp(
             pairwiseDid = Did(pairwiseDid),
             amount = amount,
             wallet = wallet,
+            privateKey = privateKey,
             fee = fee
         )
         assertTrue(response is TxResponse.Successful)
@@ -242,7 +219,6 @@ class Examples {
                 )
             ),
             recipients = recipients,
-            fees = listOf(StdCoin(denom = "ucommercio", amount = "10000")),
             wallet = wallet
         )
         assertTrue(response is TxResponse.Successful)
@@ -282,7 +258,7 @@ class Examples {
     fun `MintHelper examples`() = runBlocking {
 
         // --- Open CDP
-        // openCdp(amount = 100_000.toUInt(), wallet = userWallet)
+        // openCdp(amount = 100_000.toULong(), wallet = userWallet)
 
         // --- Close CDP
         // closeCdp(timestamp = 4, wallet = userWallet)
@@ -294,7 +270,7 @@ class Examples {
      * Please note that `uccc` are millionth of Commercio Cash Credits and thus to send one document you wil need
      * 10.000 `uccc`.
      */
-    private suspend fun openCdp(amount: UInt, wallet: Wallet) {
+    private suspend fun openCdp(amount: ULong, wallet: Wallet) {
         val response = MintHelper.openCdp(commercioTokenAmount = amount, wallet = wallet)
         assertTrue(response is TxResponse.Successful)
     }
@@ -305,7 +281,7 @@ class Examples {
      * Please note that `uccc` are millionth of Commercio Cash Credits and thus to send one document you wil need
      * 10.000 `uccc`.
      */
-    private suspend fun openCdp(amount: UInt, wallet: Wallet, fee : StdFee) {
+    private suspend fun openCdp(amount: ULong, wallet: Wallet, fee : StdFee) {
         val response = MintHelper.openCdp(
             commercioTokenAmount = amount,
             wallet = wallet,

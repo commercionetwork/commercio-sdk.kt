@@ -10,7 +10,6 @@ import network.commercio.sdk.entities.id.DidDocumentPublicKey
  */
 data class DidDocumentProofSignatureContent(
     @JsonProperty("@context") val context: String,
-    @JsonProperty("id") val did: String,
-    @JsonProperty("publicKey") val publicKeys: List<DidDocumentPublicKey>,
-    @JsonProperty("authentication") val authentication: List<String>
+    @JsonProperty("id") val id: String,
+    @JsonProperty("publicKey") val publicKeys: List<DidDocumentPublicKey>
 )

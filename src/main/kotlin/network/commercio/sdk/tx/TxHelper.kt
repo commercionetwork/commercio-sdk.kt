@@ -1,9 +1,14 @@
 package network.commercio.sdk.tx
 
+import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.databind.MapperFeature
+import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import network.commercio.sacco.*
 import network.commercio.sacco.models.types.StdCoin
 import network.commercio.sacco.models.types.StdFee
 import network.commercio.sacco.models.types.StdMsg
+import network.commercio.sdk.crypto.SignHelper
 
 /**
  * Allows to easily perform common transaction operations.
@@ -28,8 +33,10 @@ object TxHelper {
             null -> StdFee(gas = defaultGas, amount = listOf(StdCoin(denom = defaultDenom, amount = defaultAmount)))
             else -> fee
         }
+
         val stdTx = TxBuilder.buildStdTx(stdMsgs = msgs, fee = fees)
         val signedTx = TxSigner.signStdTx(stdTx = stdTx, wallet = wallet)
-        return TxSender.broadcastStdTx(stdTx = signedTx, wallet = wallet, mode = "block")
+        val broadcastedStdTx = TxSender.broadcastStdTx(stdTx = signedTx, wallet = wallet)
+        return broadcastedStdTx
     }
 }

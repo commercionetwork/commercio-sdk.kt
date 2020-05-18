@@ -12,6 +12,7 @@ import java.security.Security
 import java.security.Signature
 import java.security.interfaces.ECPublicKey
 import java.security.interfaces.RSAPublicKey
+import java.security.interfaces.RSAPrivateKey
 
 /**
  * Allows to easily perform signature-related operations.
@@ -33,12 +34,41 @@ object SignHelper {
     }
 
     /**
+     * Takes the given [data], converts it to an JSON object and signs its content
+     * using the given [wallet].
+     */
+    fun signSortedTxData(data: Any, wallet: Wallet): ByteArray {
+        val objectMapper = jacksonObjectMapper().apply {
+            configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, false)
+            configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, false)
+            setSerializationInclusion(JsonInclude.Include.NON_EMPTY)
+        }
+        val jsonSignData = objectMapper.writeValueAsString(data)
+        return wallet.signTxData(jsonSignData.toByteArray(Charsets.UTF_8))
+    }
+
+    /**
      * Takes the given [data], converts it to an alphabetically sorted JSON object and signs its content
      * using the given [wallet].
      */
     fun signSorted(data: Any, wallet: Wallet): ByteArray {
         val jsonSignData = objectMapper.writeValueAsString(data)
         return wallet.sign(jsonSignData.toByteArray(Charsets.UTF_8))
+    }
+
+    /**
+     * Sign in PKCS1 v 1.5 with private Key the payload
+     */
+    fun signPowerUpSignature(senderDid: String, pairwiseDid: String, timestamp: String, privateKey: RSAPrivateKey): ByteArray {
+        val concat = senderDid + pairwiseDid + timestamp
+        
+        val s = Signature.getInstance("SHA256WithRSA")
+        .apply {
+            initSign(privateKey)
+            update(concat.toByteArray(charset("UTF-8")))
+        }
+        val signature: ByteArray = s.sign()
+        return signature
     }
 
     /**
