@@ -45,4 +45,5 @@ object Network {
     suspend inline fun <reified T> get(url: String): T? = tryOrNull {
         client.get<T>(url)
     }
+
 }
