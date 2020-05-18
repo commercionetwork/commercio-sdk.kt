@@ -98,7 +98,7 @@ class Examples {
             "second"
         )
         val pairwiseWallet = Wallet.derive(mnemonic = pairwiseMnemonic, networkInfo = info)
-        // postPowerUpRequest(pairwiseDid = pairwiseWallet.bech32Address, amount = depositAmount, wallet = userWallet)
+        //postPowerUpRequest(pairwiseDid = pairwiseWallet.bech32Address, amount = depositAmount, wallet = userWallet, privateKey = privateKey)
 
     }
 

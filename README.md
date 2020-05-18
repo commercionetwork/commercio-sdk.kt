@@ -36,7 +36,6 @@ We highly suggest you checking it out to have a complete reference of the SDK.
 
 ### CommercioID
 - Create Did Document
-- Request deposit
 - Request power up
 - Create connection invitation
 - Verify connection invitation
