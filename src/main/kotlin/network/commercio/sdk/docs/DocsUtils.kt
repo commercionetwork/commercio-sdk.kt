@@ -64,7 +64,6 @@ internal suspend fun CommercioDoc.encryptField(
 
     // Get the recipients Did Documents
     val recipientsDidDocs = recipients.mapNotNull { IdHelper.getDidDocument(it, wallet) }
-    print("\nrecipientsDidDocs $recipientsDidDocs")
 
 
     // Get a list of al the Did Documents and the associated encryption key
