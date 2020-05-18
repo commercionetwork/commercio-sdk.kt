@@ -239,61 +239,61 @@ DqNPFV4qk2gvpDAQ5uvBuX0=
 
 
 
-//
-//
-//            print("\n-----------------------------------\nchapter4.2 ShareDoc\n-----------------------------------\n")
-//            print("\nnetworkInfo: $networkInfo\n")
-//
-//            val senderWallet = Wallet.derive(mnemonic = userMnemonic, networkInfo = networkInfo)
-//
-//            print("\nsenderWallet: $senderWallet\n")
-//
-//            val recipientWallet = Wallet.derive(mnemonic = userMnemonic1, networkInfo = networkInfo)
-//
-//            print("\nrecipientWallet: $recipientWallet\n")
-//
-//            val docRecipientDid = Did(recipientWallet.bech32Address)
-//            print("\ndocRecipientDid: $docRecipientDid\n")
-//
-//            val docId = UUID.randomUUID().toString()
-//
-//
-//            var checksum = CommercioDoc.Checksum(
-//                value = "bd29066606c7496d3e0bae11b1c7a3557ed0881535673e81c9a3ed4f",
-//                algorithm = CommercioDoc.Checksum.Algorithm.SHA224
-//            )
-//
-//            val doSign = CommercioDoc.CommercioDoSign(
-//                storageUri = "http://www.commercio.network",
-//                signerIstance = "did:com:1cc65t29yuwuc32ep2h9uqhnwrregfq230lf2rj",
-//                sdnData = listOf(
-//                    CommercioDoc.CommercioDoSign.CommercioSdnData.COMMON_NAME,
-//                    CommercioDoc.CommercioDoSign.CommercioSdnData.SURNAME
-//                ),
-//                vcrId = "xxxxx",
-//                certificateProfile = "xxxxx"
-//            )
-//
-//
-//            val response = DocsHelper.shareDocument(
-//                id = docId,
-//                contentUri = "https://example.com/document",
-//                metadata = CommercioDoc.Metadata(
-//                    contentUri = "https://example.com/document/metadata",
-//                    schema = CommercioDoc.Metadata.Schema(
-//                        uri = "https://example.com/custom/metadata/schema",
-//                        version = "1.0.0"
-//                    )
-//                ),
-//                recipients = listOf(docRecipientDid),
-//                fee = StdFee(gas = "200000", amount = listOf(StdCoin(denom = "ucommercio", amount = "10000"))),
-//                wallet = senderWallet,
-//                checksum = checksum,
-//                doSign = doSign
-//                , encryptedData = listOf(EncryptedData.METADATA_CONTENT_URI)
-//            )
-//
-//            print("\nresponse: $response\n")
+
+
+            print("\n-----------------------------------\nchapter4.2 ShareDoc\n-----------------------------------\n")
+            print("\nnetworkInfo: $networkInfo\n")
+
+            val senderWallet = Wallet.derive(mnemonic = userMnemonic, networkInfo = networkInfo)
+
+            print("\nsenderWallet: $senderWallet\n")
+
+            val recipientWallet = Wallet.derive(mnemonic = userMnemonic1, networkInfo = networkInfo)
+
+            print("\nrecipientWallet: $recipientWallet\n")
+
+            val docRecipientDid = Did(recipientWallet.bech32Address)
+            print("\ndocRecipientDid: $docRecipientDid\n")
+
+            val docId = UUID.randomUUID().toString()
+
+
+            var checksum = CommercioDoc.Checksum(
+                value = "bd29066606c7496d3e0bae11b1c7a3557ed0881535673e81c9a3ed4f",
+                algorithm = CommercioDoc.Checksum.Algorithm.SHA224
+            )
+
+            val doSign = CommercioDoc.CommercioDoSign(
+                storageUri = "http://www.commercio.network",
+                signerIstance = "did:com:1cc65t29yuwuc32ep2h9uqhnwrregfq230lf2rj",
+                sdnData = listOf(
+                    CommercioDoc.CommercioDoSign.CommercioSdnData.COMMON_NAME,
+                    CommercioDoc.CommercioDoSign.CommercioSdnData.SURNAME
+                ),
+                vcrId = "xxxxx",
+                certificateProfile = "xxxxx"
+            )
+
+
+            val response = DocsHelper.shareDocument(
+                id = docId,
+                contentUri = "https://example.com/document",
+                metadata = CommercioDoc.Metadata(
+                    contentUri = "https://example.com/document/metadata",
+                    schema = CommercioDoc.Metadata.Schema(
+                        uri = "https://example.com/custom/metadata/schema",
+                        version = "1.0.0"
+                    )
+                ),
+                recipients = listOf(docRecipientDid),
+                fee = StdFee(gas = "200000", amount = listOf(StdCoin(denom = "ucommercio", amount = "10000"))),
+                wallet = senderWallet,
+                checksum = checksum,
+                doSign = doSign
+                , encryptedData = listOf(EncryptedData.METADATA_CONTENT_URI)
+            )
+
+            print("\nresponse: $response\n")
 
 
 
