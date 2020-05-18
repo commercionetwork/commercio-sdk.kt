@@ -12,10 +12,10 @@ suspend fun shareDocument(
     contentUri: String,
     metadata: CommercioDoc.Metadata,
     recipients: List<Did>,
-    fees: List<StdCoin>,
+    fee: StdFee,
     wallet: Wallet,
     checksum: CommercioDoc.Checksum? = null,
-    aesKey: SecretKey = KeysHelper.generateAesKey(),
+    doSign: CommercioDoc.CommercioDoSign,
     encryptedData: List<EncryptedData> = listOf()
 ): TxResponse
 ```
@@ -130,7 +130,7 @@ suspend fun getReceivedReceipts(address: Did, wallet: Wallet)
             )
         ),
         recipients = listOf(recipientDid),
-        fees = listOf(StdCoin(denom = "ucommercio", amount = "10000")),
+        fee = StdFee(gas = "200000", amount = listOf(StdCoin(denom = "ucommercio", amount = "10000"))),
         wallet = senderWallet
     )
     
