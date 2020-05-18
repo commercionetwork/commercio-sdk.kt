@@ -4,15 +4,25 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import network.commercio.sdk.utils.readHex
+import org.bouncycastle.openssl.PEMParser
+import java.io.StringReader
 import java.security.KeyFactory
 import java.security.PublicKey
 import java.security.interfaces.RSAPublicKey
-import java.security.spec.PKCS8EncodedKeySpec
+import java.security.spec.*
+
 
 /**
  * Commercio network's did document is described here:
  * https://scw-gitlab.zotsell.com/Commercio.network/Cosmos-application/blob/master/Commercio%20Decentralized%20ID%20framework.md
  */
+
+
+data class DidDocumentWrapper(
+    @JsonProperty("owner") val owner: String,
+    @JsonProperty("did_document") val didDoc: DidDocument
+)
+
 
 data class DidDocument(
     @JsonProperty("@context") val context: String,
@@ -31,8 +41,13 @@ data class DidDocument(
         get() {
             // Find the encryption key
             return publicKeys.firstOrNull { it.type == "RsaVerificationKey2018" || it.type == "RsaSignatureKey2018" }?.let {
+
+                // TODO: fix
                 val pubKeySpec = PKCS8EncodedKeySpec(it.publicKeyPem.readHex())
                 KeyFactory.getInstance("RSA").generatePublic(pubKeySpec) as RSAPublicKey
+
+
+
             }
         }
 }

@@ -1,5 +1,6 @@
 package network.commercio.sdk.docs
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import network.commercio.sacco.Wallet
 import network.commercio.sdk.crypto.EncryptionHelper
 import network.commercio.sdk.entities.docs.CommercioDoc
@@ -8,15 +9,14 @@ import network.commercio.sdk.id.IdHelper
 import network.commercio.sdk.utils.toHex
 import javax.crypto.SecretKey
 
+
 enum class EncryptedData {
-    CONTENT,
-    CONTENT_URI,
-    METADATA_CONTENT_URI,
-    METADATA_SCHEMA_URI;
+    @JsonProperty("CONTENT_URI") CONTENT_URI,
+    @JsonProperty("METADATA_CONTENT_URI") METADATA_CONTENT_URI,
+    @JsonProperty("METADATA_SCHEMA_URI") METADATA_SCHEMA_URI;
 
     override fun toString(): String {
         return when (this) {
-            CONTENT -> "content"
             CONTENT_URI -> "content_uri"
             METADATA_CONTENT_URI -> "metadata.content_uri"
             METADATA_SCHEMA_URI -> "metadata.schema.uri"
@@ -61,8 +61,11 @@ internal suspend fun CommercioDoc.encryptField(
     // --- Keys creation
     // ---------------------
 
+
     // Get the recipients Did Documents
     val recipientsDidDocs = recipients.mapNotNull { IdHelper.getDidDocument(it, wallet) }
+    print("\nrecipientsDidDocs $recipientsDidDocs")
+
 
     // Get a list of al the Did Documents and the associated encryption key
     val keys = recipientsDidDocs
@@ -72,8 +75,9 @@ internal suspend fun CommercioDoc.encryptField(
         }
         .map { (didDoc, encKey) -> Pair(didDoc, encKey) }
 
+
     // Create the encryption key field
-    val encryptionKeys = keys.map { (didDoc, pubKey) ->
+    val encryptionKeys: List<CommercioDoc.EncryptionData.Key> = keys.map { (didDoc, pubKey) ->
         val encryptedAesKey = EncryptionHelper.encryptWithRsa(aesKey.encoded, pubKey)
         CommercioDoc.EncryptionData.Key(recipientDid = didDoc.id, value = encryptedAesKey.toHex())
     }

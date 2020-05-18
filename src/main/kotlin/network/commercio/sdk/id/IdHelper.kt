@@ -1,5 +1,7 @@
 package network.commercio.sdk.id
 
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import network.commercio.sacco.TxResponse
 import network.commercio.sacco.Wallet
@@ -13,7 +15,6 @@ import network.commercio.sdk.networking.Network
 import network.commercio.sdk.tx.TxHelper
 import network.commercio.sdk.utils.getTimeStamp
 import network.commercio.sdk.utils.readHex
-import org.bouncycastle.util.encoders.Base64
 import java.util.Base64 as B64
 import network.commercio.sdk.utils.toHex
 import network.commercio.sdk.utils.tryOrNull
@@ -21,6 +22,7 @@ import java.security.interfaces.RSAPrivateKey
 import javax.crypto.SecretKey
 import java.util.UUID
 import java.util.*
+
 
 /**
  * Allows to perform common operations related to CommercioID.
@@ -31,7 +33,8 @@ object IdHelper {
      * Returns the Did Document associated with the given [did], or `null` if no Did Document was found.
      */
     suspend fun getDidDocument(did: Did, wallet: Wallet): DidDocument? = tryOrNull {
-        Network.queryChain<DidDocument>(url = "${wallet.networkInfo.lcdUrl}/identities/${did.value}")
+        val result = Network.queryChain<Any>(url = "${wallet.networkInfo.lcdUrl}/identities/${did.value}")
+        return@tryOrNull jacksonObjectMapper().convertValue(result, DidDocumentWrapper::class.java).didDoc
     }
 
     /**
@@ -66,11 +69,11 @@ object IdHelper {
         val timestamp = Date().getTime().toString()
 
         // Build the signature Hash
-        val signedSignatureHash =  SignHelper.signPowerUpSignature(
-            senderDid =  wallet.bech32Address,
-            pairwiseDid =  pairwiseDid.value,
-            timestamp =  timestamp,
-            privateKey =  privateKey
+        val signedSignatureHash = SignHelper.signPowerUpSignature(
+            senderDid = wallet.bech32Address,
+            pairwiseDid = pairwiseDid.value,
+            timestamp = timestamp,
+            privateKey = privateKey
         )
 
         // Build the payload
@@ -90,7 +93,7 @@ object IdHelper {
         val encryptedProof = EncryptionHelper.encryptStringWithAesGCM(
             jacksonObjectMapper().writeValueAsString(payload).toByteArray(),
             aesKey
-          );
+        )
 
         // =================
         // Encrypt proof key
@@ -98,19 +101,20 @@ object IdHelper {
 
         // Encrypt the key using the Tumbler public RSA key
         val rsaPubTkKey = EncryptionHelper.getGovernmentRsaPubKey(
-            wallet.networkInfo.lcdUrl);
+            wallet.networkInfo.lcdUrl
+        )
         val encryptedProofKey =
-            EncryptionHelper.encryptWithRsa(aesKey.getEncoded(), rsaPubTkKey);
+            EncryptionHelper.encryptWithRsa(aesKey.getEncoded(), rsaPubTkKey)
 
         // Build the message and send the tx
         val msg = MsgRequestDidPowerUp(
             claimantDid = wallet.bech32Address,
             amount = amount,
             powerUpProof = B64.getEncoder().encodeToString(encryptedProof),
-            uuid =  UUID.randomUUID().toString(),
+            uuid = UUID.randomUUID().toString(),
             proofKey = B64.getEncoder().encodeToString(encryptedProofKey)
         )
-        
+
         return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet, fee = fee)
     }
 

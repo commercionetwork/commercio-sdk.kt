@@ -56,14 +56,17 @@ object DocsHelper {
             false -> document.encryptField(aesKey, encryptedData, recipients, wallet)
         }
 
+
         // Build the tx message
         val msg = MsgShareDocument(document = finalDoc)
 
-        return TxHelper.createSignAndSendTx(
+        val result= TxHelper.createSignAndSendTx(
             msgs = listOf(msg),
             fee = fee,
             wallet = wallet
         )
+
+        return result
     }
 
     /**
