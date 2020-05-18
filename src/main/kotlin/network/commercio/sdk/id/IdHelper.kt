@@ -1,7 +1,5 @@
 package network.commercio.sdk.id
 
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import network.commercio.sacco.TxResponse
 import network.commercio.sacco.Wallet
@@ -22,7 +20,6 @@ import java.security.interfaces.RSAPrivateKey
 import javax.crypto.SecretKey
 import java.util.UUID
 import java.util.*
-
 
 /**
  * Allows to perform common operations related to CommercioID.

@@ -3,9 +3,6 @@ package network.commercio.sdk.entities.id
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
-import network.commercio.sdk.utils.readHex
-import org.bouncycastle.openssl.PEMParser
-import java.io.StringReader
 import java.security.KeyFactory
 import java.security.PublicKey
 import java.security.interfaces.RSAPublicKey
@@ -42,13 +39,8 @@ data class DidDocument(
         get() {
             // Find the encryption key
             return publicKeys.firstOrNull { it.type == "RsaVerificationKey2018" || it.type == "RsaSignatureKey2018" }?.let {
-
-                // TODO: fix
                 val pubKeySpec = X509EncodedKeySpec(B64.getDecoder().decode(it.publicKeyPem.replace("\n", "").replace("-----BEGIN PUBLIC KEY-----", "").replace("-----END PUBLIC KEY-----", "")))
                 KeyFactory.getInstance("RSA").generatePublic(pubKeySpec) as RSAPublicKey
-
-
-
             }
         }
 }
