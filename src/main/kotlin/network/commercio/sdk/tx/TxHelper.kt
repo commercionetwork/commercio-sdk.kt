@@ -33,29 +33,10 @@ object TxHelper {
             null -> StdFee(gas = defaultGas, amount = listOf(StdCoin(denom = defaultDenom, amount = defaultAmount)))
             else -> fee
         }
-        ///
-        ///
-///
-        ///delete
-        val objectMapper = jacksonObjectMapper().apply {
-            configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true)
-            configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
-            setSerializationInclusion(JsonInclude.Include.NON_EMPTY)
-        }
 
-        print("\n\n\n")
-        print(objectMapper.writeValueAsString( msgs.first()))
-        print("\n\n\n")
-////delete
- //
-       ///
-        //
         val stdTx = TxBuilder.buildStdTx(stdMsgs = msgs, fee = fees)
-        print("\n\nstdTx: $stdTx\n\n")
         val signedTx = TxSigner.signStdTx(stdTx = stdTx, wallet = wallet)
-        print("\n\nsignedTx: $signedTx\n\n")
         val broadcastedStdTx = TxSender.broadcastStdTx(stdTx = signedTx, wallet = wallet)
-        print("\n\nbroadcastedStdTx: $broadcastedStdTx\n\n")
         return broadcastedStdTx
     }
 }

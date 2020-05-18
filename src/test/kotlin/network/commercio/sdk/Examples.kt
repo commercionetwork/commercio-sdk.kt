@@ -258,7 +258,7 @@ class Examples {
     fun `MintHelper examples`() = runBlocking {
 
         // --- Open CDP
-        // openCdp(amount = 100_000.toUInt(), wallet = userWallet)
+        // openCdp(amount = 100_000.toULong(), wallet = userWallet)
 
         // --- Close CDP
         // closeCdp(timestamp = 4, wallet = userWallet)
@@ -270,7 +270,7 @@ class Examples {
      * Please note that `uccc` are millionth of Commercio Cash Credits and thus to send one document you wil need
      * 10.000 `uccc`.
      */
-    private suspend fun openCdp(amount: UInt, wallet: Wallet) {
+    private suspend fun openCdp(amount: ULong, wallet: Wallet) {
         val response = MintHelper.openCdp(commercioTokenAmount = amount, wallet = wallet)
         assertTrue(response is TxResponse.Successful)
     }
@@ -281,7 +281,7 @@ class Examples {
      * Please note that `uccc` are millionth of Commercio Cash Credits and thus to send one document you wil need
      * 10.000 `uccc`.
      */
-    private suspend fun openCdp(amount: UInt, wallet: Wallet, fee : StdFee) {
+    private suspend fun openCdp(amount: ULong, wallet: Wallet, fee : StdFee) {
         val response = MintHelper.openCdp(
             commercioTokenAmount = amount,
             wallet = wallet,
