@@ -1,88 +1,58 @@
 # Membership helper
+
 Membership helper allows to easily perform all the operations related to the commercio.network `membership` module.
+
 ## Provided operations
+
 1. Sends a new transaction in order to invite the given `user`.
-```kotlin
-suspend fun inviteUser(user: Did, wallet: Wallet): TxResponse
-```
+
+    ```kotlin
+    suspend fun inviteUser(
+        user: Did,
+        wallet: Wallet,
+        fee: StdFee? = null
+    ): TxResponse
+    ```
+
 2. Buys the membership with the given `membershipType`.
-```kotlin
-suspend fun buyMembership(membershipType: MembershipType, wallet: Wallet)
-    : TxResponse
-```
+
+    ```kotlin
+    suspend fun buyMembership(
+        membershipType: MembershipType,
+        wallet: Wallet,
+        fee: StdFee? = null
+    ): TxResponse
+    ```
+
 ## Usage examples
+
 ```kotlin
-    val info = NetworkInfo(
-        bech32Hrp = "did:com:", 
-        lcdUrl = "http://localhost:1317"
-    )
+val info = NetworkInfo(
+    bech32Hrp = "did:com:",
+    lcdUrl = "http://localhost:1317"
+)
 
-    val userMnemonic = listOf(
-        "will",
-        "hard",
-        "topic",
-        "spray",
-        "beyond",
-        "ostrich",
-        "moral",
-        "morning",
-        "gas",
-        "loyal",
-        "couch",
-        "horn",
-        "boss",
-        "across",
-        "age",
-        "post",
-        "october",
-        "blur",
-        "piece",
-        "wheel",
-        "film",
-        "notable",
-        "word",
-        "man"
-    )
-    
-    val userWallet = Wallet.derive(mnemonic = userMnemonic, networkInfo = info)
-    
-    val newUserMnemonic = listOf(
-            "often",
-            "emerge",
-            "table",
-            "boat",
-            "add",
-            "crowd",
-            "obtain",
-            "creek",
-            "skill",
-            "flat",
-            "master",
-            "gift",
-            "provide",
-            "peasant",
-            "famous",
-            "blur",
-            "flight",
-            "lady",
-            "elephant",
-            "twenty",
-            "join",
-            "depth",
-            "laptop",
-            "arrest"
-        )
-        val newUserWallet = Wallet.derive(newUserMnemonic, info)
+val mnemonic = listOf("will", "hard", ..., "man")
+val wallet = Wallet.derive(
+  mnemonic = mnemonic,
+  networkInfo = info
+)
 
-        // Invite user
-        inviteUser(
-            user = Did(newUserWallet.bech32Address), 
-            wallet = userWallet
-        )
-        
-        // Buy a membership
-        buyMembership(
-            membershipType = MembershipType.GOLD, 
-            wallet = newUserWallet
-        )
+val newUserMnemonic = listOf("often", "emerge", ..., "arrest")
+val newUserWallet = Wallet.derive(
+  mnemonic = newUserMnemonic,
+  networkInfo = info
+)
+
+// Invite user
+inviteUser(
+    user = Did(newUserWallet.bech32Address),
+    wallet = wallet
+)
+
+// Buy a membership
+buyMembership(
+    membershipType = MembershipType.GOLD,
+    wallet = newUserWallet
+)
 ```
