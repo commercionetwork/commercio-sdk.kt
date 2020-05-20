@@ -36,7 +36,7 @@ Certificate helper allows to easily create X509 certificate from user's wallet.
 
   // Creating X509 self-signed certificate
   val certificate = CertificateHelper.x509certificateFromWallet(
-    userWallet.bech32Address, rsaKeyPair
+    userWallet.bech32Address, rsaKeyPair.toKeyPair()
   )
   
   // Getting the PEM encoded certificate
