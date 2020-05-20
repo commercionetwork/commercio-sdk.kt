@@ -36,7 +36,7 @@ val wallet = Wallet.derive(
   networkInfo = info
 )
 
-val amount = 100_000.toULong()
+val amount = 100.toULong()
 
 //Opening a cdp
 MintHelper.openCdp(
@@ -46,7 +46,7 @@ MintHelper.openCdp(
 
 //Closing a cdp
 MintHelper.closeCdp(
-  timestamp = timestamp,
+  timestamp = 1582228940,
   wallet = wallet
 )
 
