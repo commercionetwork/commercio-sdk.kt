@@ -82,7 +82,7 @@ Docs helper allows to easily perform all the operations related to the commercio
     val docId = UUID.randomUUID().toString()
 
     val checksum = CommercioDoc.Checksum(
-      value = "bd29066606c7496d3e0bae11b1c7a3557ed0881535673e81c9a3ed4f",
+      value = "42ef19e88fb5fd37571d21f4b83c8c1c3d082eb7463e84925dcf6895578bf289",
       algorithm = CommercioDoc.Checksum.Algorithm.SHA256
     )
 
