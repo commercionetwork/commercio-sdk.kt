@@ -45,13 +45,13 @@ val newUserWallet = Wallet.derive(
 )
 
 // Invite user
-inviteUser(
+MembershipHelper.inviteUser(
     user = Did(newUserWallet.bech32Address),
     wallet = wallet
 )
 
 // Buy a membership
-buyMembership(
+MembershipHelper.buyMembership(
     membershipType = MembershipType.GOLD,
     wallet = newUserWallet
 )
