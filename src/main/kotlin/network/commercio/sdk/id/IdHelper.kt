@@ -13,13 +13,14 @@ import network.commercio.sdk.networking.Network
 import network.commercio.sdk.tx.TxHelper
 import network.commercio.sdk.utils.getTimeStamp
 import network.commercio.sdk.utils.readHex
-import java.util.Base64 as B64
+import org.bouncycastle.util.encoders.Base64 as B64Bouncy
 import network.commercio.sdk.utils.toHex
 import network.commercio.sdk.utils.tryOrNull
+import java.nio.charset.Charset
 import java.security.interfaces.RSAPrivateKey
-import javax.crypto.SecretKey
+import java.util.Date
 import java.util.UUID
-import java.util.*
+import javax.crypto.SecretKey
 
 /**
  * Allows to perform common operations related to CommercioID.
@@ -74,12 +75,11 @@ object IdHelper {
         )
 
         // Build the payload
-        // TODO: USED java.util.Base64 INSTEAD org.bouncycastle.util.encoders.Base64. SHOULD BE USED bouncycastle
         val payload = DidPowerUpRequestPayload(
             senderDid = wallet.bech32Address,
             pairwiseDid = pairwiseDid.value,
             timestamp = timestamp,
-            signature = B64.getEncoder().encodeToString(signedSignatureHash)
+            signature = B64Bouncy.encode(signedSignatureHash).toString(Charset.defaultCharset())
         )
 
 
@@ -107,9 +107,9 @@ object IdHelper {
         val msg = MsgRequestDidPowerUp(
             claimantDid = wallet.bech32Address,
             amount = amount,
-            powerUpProof = B64.getEncoder().encodeToString(encryptedProof),
+            powerUpProof = B64Bouncy.encode(encryptedProof).toString(Charset.defaultCharset()),
             uuid = UUID.randomUUID().toString(),
-            proofKey = B64.getEncoder().encodeToString(encryptedProofKey)
+            proofKey = B64Bouncy.encode(encryptedProofKey).toString(Charset.defaultCharset())
         )
 
         return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet, fee = fee)
