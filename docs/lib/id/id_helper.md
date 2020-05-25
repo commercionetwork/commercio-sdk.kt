@@ -7,28 +7,25 @@ Id helper allows to easily perform all the operations related to the commercio.n
 suspend fun getDidDocument(did: Did, wallet: Wallet): DidDocument?
 ```
 2. Performs a transaction setting the specified `didDocument` as being associated with the
-   address present inside the specified `wallet`.
+   address present inside the specified `wallet`. Optionally a custom `fee` can be specified.
 ```kotlin
-suspend fun setDidDocument(didDocument: DidDocument, wallet: Wallet): TxResponse
-```
-3. Creates a new Did deposit request for the given `recipient` and of the given `amount`.
-   Signs everything that needs to be signed (i.e. the signature JSON inside the payload) with the
-   private key contained inside the given `wallet`.
-```kotlin
-suspend fun requestDidDeposit(
-    recipient: Did, 
-    amount: List<StdCoin>, 
-    wallet: Wallet
+suspend fun setDidDocument(        
+       didDocument: DidDocument,
+       wallet: Wallet,
+       fee: StdFee? = null
 ): TxResponse
 ```
-4. Creates a new Did power up request for the given `pairwiseDid` and of the given `amount`.
+3. Creates a new Did power up request for the given [pairwiseDid] and of the given [amount].
    Signs everything that needs to be signed (i.e. the signature JSON inside the payload) with the
-   private key contained inside the given `wallet`.
+   private key contained inside the given [wallet] and the client generated `signature private RSA key`.
+   Optionally a custom `fee` can be specified.
 ```kotlin
 suspend fun requestDidPowerUp(
-    pairwiseDid: Did, 
-    amount: List<StdCoin>, 
-    wallet: Wallet
+        pairwiseDid: Did,
+        amount: List<StdCoin>,
+        wallet: Wallet,
+        privateKey: RSAPrivateKey,
+        fee: StdFee? = null
 ): TxResponse
 ```
 ## Usage examples
@@ -68,28 +65,18 @@ suspend fun requestDidPowerUp(
     val userWallet = Wallet.derive(mnemonic = userMnemonic, networkInfo = info)
     
     // Create did document
-    val rsaKeyPair = KeysHelper.generateRsaKeyPair()
-    val ecKeyPair = KeysHelper.generateEcKeyPair()
+    val rsaVerificationKeyPair = KeysHelper.generateRsaKeyPair()
+    val rsaSignatureKeyPair = KeysHelper.generateRsaKeyPair(type = "RsaSignatureKey2018")
+
     val didDocument = DidDocumentHelper.fromWallet(
         wallet, 
-        listOf(rsaKeyPair.public, ecKeyPair.public)
+        listOf(rsaVerificationKeyPair.publicKey, rsaSignatureKeyPair.publicKey)
     )
     
     // Set the did document
     val response = IdHelper.setDidDocument(didDocument, userWallet)
     
-    
-    
-    // Request a did deposit
-    val depositAmount = listOf(StdCoin(denom = "ucommercio", amount = "10"))
-    
-    IdHelper.requestDidDeposit(
-        recipient = Did(userWallet.bech32Address),
-        amount = depositAmount,
-        wallet = userWallet
-    )
-    
-    // Request a did power up (only after you made a did deposit request)
+    // Request a did power up
     val pairwiseMnemonic = listOf(
             "push",
             "grace",
@@ -121,11 +108,13 @@ suspend fun requestDidPowerUp(
         mnemonic = pairwiseMnemonic, 
         networkInfo = info
     )
-        
+    
+    val depositAmount = listOf(StdCoin(denom = "ucommercio", amount = "100"))
      
     IdHelper.requestDidPowerUp(
         pairwiseDid = Did(pairwiseWallet.bech32Address),
         amount = depositAmount,
-        wallet = userWallet
+        wallet = userWallet,
+        privateKey = rsaSignatureKeyPair.privateKey
     )
 ```

@@ -52,7 +52,8 @@ object IdHelper {
     /**
      * Creates a new Did power up request for the given [pairwiseDid] and of the given [amount].
      * Signs everything that needs to be signed (i.e. the signature JSON inside the payload) with the
-     * private key contained inside the given [wallet].
+     * private key contained inside the given [wallet] and the client generated `signature private RSA key`.
+     * Optionally a custom `fee` can be specified.
      */
     suspend fun requestDidPowerUp(
         pairwiseDid: Did,
