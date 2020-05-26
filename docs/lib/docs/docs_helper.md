@@ -3,20 +3,22 @@ Docs helper allows to easily perform all the operations related to the commercio
 
 ## Provided operations
 
-1. Creates a new transaction that allows to share the document associated with the given `contentUri` and
-   having the given `metadata` and `checksum`.   
-   If `encryptedData` is specified, encrypts the proper data for the specified `recipients` and then sends the transaction to the blockchain.
+1. Creates a new transaction that allows to share the document associated with the given `metadata` and having the optional fields `contentUri`, `doSign`, `checksum`, `fee` and broadcasting `mode`.
+      If `encryptedData` is specified, encrypts the proper data and optional `aesKey` for the specified `recipients` and then sends the transaction to the blockchain.
+      
 ```kotlin
 suspend fun shareDocument(
-    id: String,
-    contentUri: String,
-    metadata: CommercioDoc.Metadata,
-    recipients: List<Did>,
-    fee: StdFee,
-    wallet: Wallet,
-    checksum: CommercioDoc.Checksum? = null,
-    doSign: CommercioDoc.CommercioDoSign,
-    encryptedData: List<EncryptedData> = listOf()
+     id: String,
+     metadata: CommercioDoc.Metadata,
+     recipients: List<Did>,
+     wallet: Wallet,
+     doSign: CommercioDoc.CommercioDoSign? = null,
+     checksum: CommercioDoc.Checksum? = null,
+     aesKey: SecretKey = KeysHelper.generateAesKey(),
+     encryptedData: List<EncryptedData> = listOf(),
+     fee: StdFee? = null,
+     contentUri: String = "",
+     mode: BroadcastingMode? = null
 ): TxResponse
 ```
 2. Returns the list of all the `CommercioDoc` that the specified `address` has sent.
@@ -28,14 +30,16 @@ suspend fun getSentDocuments(address: Did, wallet: Wallet): List<CommercioDoc>
 suspend fun getReceivedDocuments(address: Did, wallet: Wallet): List<CommercioDoc>
 ```
 4. Creates a new transaction which tells the `recipient` that the document having the specified `documentId` and
-   present inside the transaction with hash `txHash` has been properly seen.
+   present inside the transaction with hash `txHash` has been properly seen; optionally `proof` of reading, `fee` and broadcasting `mode`.
 ```kotlin
 suspend fun sendDocumentReceipt(
     recipient: Did,
     txHash: String,
     documentId: String,
     proof: String = "",
-    wallet: Wallet
+    wallet: Wallet,
+    fee: StdFee? = null,
+    mode: BroadcastingMode? = null
 ): TxResponse
 ```
 5. Returns the list of all the `CommercioDocReceipt` that have been sent from the given `address`.

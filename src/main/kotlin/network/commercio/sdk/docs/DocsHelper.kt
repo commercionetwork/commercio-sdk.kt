@@ -11,8 +11,10 @@ import network.commercio.sdk.entities.docs.MsgShareDocument
 import network.commercio.sdk.entities.id.Did
 import network.commercio.sdk.networking.Network
 import network.commercio.sdk.tx.TxHelper
+import network.commercio.sdk.tx.TxHelper.BroadcastingMode
 import java.util.*
 import javax.crypto.SecretKey
+
 /**
  * Allows to easily perform CommercioDOCS related operations
  */
@@ -25,15 +27,16 @@ object DocsHelper {
     @JvmOverloads
     suspend fun shareDocument(
         id: String,
-        contentUri: String = "",
         metadata: CommercioDoc.Metadata,
         recipients: List<Did>,
         wallet: Wallet,
+        doSign: CommercioDoc.CommercioDoSign? = null,
         checksum: CommercioDoc.Checksum? = null,
         aesKey: SecretKey = KeysHelper.generateAesKey(),
         encryptedData: List<EncryptedData> = listOf(),
-        doSign: CommercioDoc.CommercioDoSign? = null,
-        fee: StdFee? = null
+        fee: StdFee? = null,
+        contentUri: String = "",
+        mode: BroadcastingMode? = null
     ): TxResponse {
         // Build a generic document
         val document = CommercioDoc(
@@ -56,7 +59,8 @@ object DocsHelper {
         val result = TxHelper.createSignAndSendTx(
             msgs = listOf(msg),
             fee = fee,
-            wallet = wallet
+            wallet = wallet,
+            mode = mode
         )
         return result
     }
@@ -88,7 +92,8 @@ object DocsHelper {
         documentId: String,
         proof: String = "",
         wallet: Wallet,
-        fee: StdFee? = null
+        fee: StdFee? = null,
+        mode: BroadcastingMode? = null
     ): TxResponse {
         val msg = MsgSendDocumentReceipt(
             CommercioDocReceipt(
@@ -100,7 +105,7 @@ object DocsHelper {
                 senderDid = wallet.bech32Address
             )
         )
-        return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet, fee = fee)
+        return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet, fee = fee, mode = mode)
     }
     /**
      * Returns the list of all the [CommercioDocReceipt] that have been sent from the given [address].

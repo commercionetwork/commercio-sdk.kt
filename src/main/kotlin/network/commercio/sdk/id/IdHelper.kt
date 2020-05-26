@@ -11,16 +11,16 @@ import network.commercio.sdk.crypto.SignHelper
 import network.commercio.sdk.entities.id.*
 import network.commercio.sdk.networking.Network
 import network.commercio.sdk.tx.TxHelper
+import network.commercio.sdk.tx.TxHelper.BroadcastingMode
 import network.commercio.sdk.utils.getTimeStamp
 import network.commercio.sdk.utils.readHex
-import org.bouncycastle.util.encoders.Base64 as B64Bouncy
 import network.commercio.sdk.utils.toHex
 import network.commercio.sdk.utils.tryOrNull
 import java.nio.charset.Charset
 import java.security.interfaces.RSAPrivateKey
-import java.util.Date
-import java.util.UUID
+import java.util.*
 import javax.crypto.SecretKey
+import org.bouncycastle.util.encoders.Base64 as B64Bouncy
 
 /**
  * Allows to perform common operations related to CommercioID.
@@ -42,11 +42,12 @@ object IdHelper {
     suspend fun setDidDocument(
         didDocument: DidDocument,
         wallet: Wallet,
-        fee: StdFee? = null
+        fee: StdFee? = null,
+        mode: BroadcastingMode? = null
     ): TxResponse {
         System.setProperty("javax.net.ssl.trustStoreType", "JKS")
         val msg = MsgSetDidDocument(didDocument)
-        return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet, fee = fee)
+        return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet, fee = fee, mode = mode)
     }
 
     /**
@@ -60,8 +61,8 @@ object IdHelper {
         amount: List<StdCoin>,
         wallet: Wallet,
         privateKey: RSAPrivateKey,
-        fee: StdFee? = null
-
+        fee: StdFee? = null,
+        mode: BroadcastingMode? = null
     ): TxResponse {
         // Get the timestamp
         val timestamp =Date().getTime().toString()
@@ -112,7 +113,7 @@ object IdHelper {
             proofKey = B64Bouncy.encode(encryptedProofKey).toString(Charset.defaultCharset())
         )
 
-        return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet, fee = fee)
+        return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet, fee = fee, mode = mode)
     }
 
     /**

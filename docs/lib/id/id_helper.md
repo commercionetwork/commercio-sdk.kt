@@ -7,25 +7,27 @@ Id helper allows to easily perform all the operations related to the commercio.n
 suspend fun getDidDocument(did: Did, wallet: Wallet): DidDocument?
 ```
 2. Performs a transaction setting the specified `didDocument` as being associated with the
-   address present inside the specified `wallet`. Optionally a custom `fee` can be specified.
+   address present inside the specified `wallet`.  Optionally `fee` and broadcasting `mode` parameters can be specified.
 ```kotlin
 suspend fun setDidDocument(        
        didDocument: DidDocument,
-       wallet: Wallet,
-       fee: StdFee? = null
+        wallet: Wallet,
+        fee: StdFee? = null,
+        mode: BroadcastingMode? = null
 ): TxResponse
 ```
-3. Creates a new Did power up request for the given [pairwiseDid] and of the given [amount].
+3. Creates a new Did power up request from `wallet` address for the given `pairwiseDid` and of the given `amount`.  
    Signs everything that needs to be signed (i.e. the signature JSON inside the payload) with the
-   private key contained inside the given [wallet] and the client generated `signature private RSA key`.
-   Optionally a custom `fee` can be specified.
+   private key contained inside the given `wallet` and the `private key`.
+   Optionally `fee` and broadcasting `mode` parameters can be specified.
 ```kotlin
 suspend fun requestDidPowerUp(
         pairwiseDid: Did,
         amount: List<StdCoin>,
         wallet: Wallet,
         privateKey: RSAPrivateKey,
-        fee: StdFee? = null
+        fee: StdFee? = null,
+        mode: BroadcastingMode? = null
 ): TxResponse
 ```
 ## Usage examples

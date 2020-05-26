@@ -23,18 +23,36 @@ object TxHelper {
     suspend fun createSignAndSendTx(
         msgs: List<StdMsg>,
         wallet: Wallet,
-        fee: StdFee?= null,
-        mode: String="sync"
-
+        fee: StdFee? = null,
+        mode: BroadcastingMode? = null
     ): TxResponse {
-        val fees=  when(fee) {
+        val _fee=  when(fee) {
             null -> StdFee(gas = defaultGas, amount = listOf(StdCoin(denom = defaultDenom, amount = defaultAmount)))
             else -> fee
         }
 
-        val stdTx = TxBuilder.buildStdTx(stdMsgs = msgs, fee = fees)
+        val _mode=  when(mode) {
+            null -> BroadcastingMode.SYNC.toString()
+            else -> mode.toString()
+        }
+
+        val stdTx = TxBuilder.buildStdTx(stdMsgs = msgs, fee = _fee)
         val signedTx = TxSigner.signStdTx(stdTx = stdTx, wallet = wallet)
-        val broadcastedStdTx = TxSender.broadcastStdTx(stdTx = signedTx, wallet = wallet, mode = mode )
+        val broadcastedStdTx = TxSender.broadcastStdTx(stdTx = signedTx, wallet = wallet, mode = _mode )
         return broadcastedStdTx
+    }
+
+    enum class BroadcastingMode {
+        ASYNC,
+        BLOCK,
+        SYNC;
+
+        override fun toString(): String {
+            return when (this) {
+                ASYNC -> "async"
+                BLOCK -> "block"
+                SYNC -> "sync"
+            }
+        }
     }
 }

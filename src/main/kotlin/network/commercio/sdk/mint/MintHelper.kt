@@ -7,6 +7,7 @@ import network.commercio.sacco.models.types.StdFee
 import network.commercio.sdk.entities.mint.MsgCloseCdp
 import network.commercio.sdk.entities.mint.MsgOpenCdp
 import network.commercio.sdk.tx.TxHelper
+import network.commercio.sdk.tx.TxHelper.BroadcastingMode
 
 /**
  * Allows to easily perform CommercioMINT related transactions.
@@ -24,7 +25,8 @@ object MintHelper {
     suspend fun openCdp(
         commercioTokenAmount: ULong,
         wallet: Wallet,
-        fee: StdFee? = null
+        fee: StdFee? = null,
+        mode: BroadcastingMode? = null
     ): TxResponse {
 
         val msg = MsgOpenCdp(
@@ -36,7 +38,7 @@ object MintHelper {
             ),
             depositorDid = wallet.bech32Address
         )
-        return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet, fee = fee)
+        return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet, fee = fee, mode = mode)
     }
 
     /**
@@ -47,9 +49,10 @@ object MintHelper {
     suspend fun closeCdp(
         timestamp: Int,
         wallet: Wallet,
-        fee: StdFee? = null
+        fee: StdFee? = null,
+        mode: BroadcastingMode? = null
     ): TxResponse {
         val msg = MsgCloseCdp(timeStamp = timestamp, signerDid = wallet.bech32Address)
-        return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet, fee = fee)
+        return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet, fee = fee,  mode = mode)
     }
 }

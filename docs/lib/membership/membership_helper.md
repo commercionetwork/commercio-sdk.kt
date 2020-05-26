@@ -1,14 +1,23 @@
 # Membership helper
 Membership helper allows to easily perform all the operations related to the commercio.network `membership` module.
 ## Provided operations
-1. Sends a new transaction in order to invite the given `user`.
+1. Sends a new transaction in order to invite the given `userDid`. Optionally `fee` and broadcasting `mode` parameters can be specified.
 ```kotlin
-suspend fun inviteUser(user: Did, wallet: Wallet): TxResponse
+suspend fun inviteUser( 
+    user: Did,
+    wallet: Wallet,
+    fee: StdFee? = null,
+    mode: BroadcastingMode? = null
+): TxResponse
 ```
-2. Buys the membership with the given `membershipType`.
+2. Buys the membership with the given `membershipType`. Optionally `fee` and broadcasting `mode` parameters can be specified.
 ```kotlin
-suspend fun buyMembership(membershipType: MembershipType, wallet: Wallet)
-    : TxResponse
+suspend fun buyMembership(
+    membershipType: MembershipType,
+    wallet: Wallet,
+    fee: StdFee? = null,
+    mode: BroadcastingMode? = null
+): TxResponse
 ```
 ## Usage examples
 ```kotlin

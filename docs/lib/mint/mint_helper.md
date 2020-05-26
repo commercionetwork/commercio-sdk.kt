@@ -1,15 +1,23 @@
 # Mint helper
 Mint helper allows to easily perform all the operations related to the commercio.network `mint` module.
 # Provided operations
-1. Opens a new [CDP](../glossary.md) depositing the given `commercioTokenAmount`
+1. Opens a new CDP depositing the given `commercioTokenAmount`. Optionally `fee` and broadcasting `mode` parameters can be specified.
 ```kotlin
-suspend fun openCdp(commercioTokenAmount: ULong, wallet: Wallet): TxResponse
+suspend fun openCdp(
+    commercioTokenAmount: ULong,
+    wallet: Wallet,
+    fee: StdFee? = null,
+    mode: BroadcastingMode? = null
+): TxResponse
 ```
-2. Closes the CDP having the given `timestamp`.
-   This will allow the user to trade back the lent amount of pico Commercio Cash Credits (`uccc`) to get the
-   deposited amount of pico Commercio Tokens (`ucommercio`)
+2. Closes the CDP having the given `timestamp`. Optionally `fee` and broadcasting `mode` parameters can be specified.
 ```kotlin
-suspend fun closeCdp(timestamp: Int, wallet: Wallet): TxResponse
+suspend fun closeCdp(
+    timestamp: Int,
+    wallet: Wallet,
+    fee: StdFee? = null,
+    mode: BroadcastingMode? = null
+): TxResponse
 ```
 
 ## Usage examples
