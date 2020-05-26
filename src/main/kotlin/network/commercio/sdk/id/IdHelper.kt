@@ -18,11 +18,9 @@ import network.commercio.sdk.utils.toHex
 import network.commercio.sdk.utils.tryOrNull
 import java.nio.charset.Charset
 import java.security.interfaces.RSAPrivateKey
-import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.UUID
 import javax.crypto.SecretKey
-import network.commercio.sdk.utils.getTimeStamp
 
 /**
  * Allows to perform common operations related to CommercioID.
