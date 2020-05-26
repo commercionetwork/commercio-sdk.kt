@@ -4,9 +4,9 @@ Keys helper allows to easily generate new RSA or AES keys.
 ## Provided operations
 Below you can find the keys helper's provided operations with some examples
 
-1. Generates a new random AES-256 secret key without any initializing vector.
+1. Generates a new random AES-256 secret key with initializing vector.
 ```kotlin
-fun generateAesKey(): SecretKey
+fun generateAesKey(bytes: Int = 256): SecretKey
 ```
 2. Generates a secret aes key from the given `bytes`.
 ```kotlin
