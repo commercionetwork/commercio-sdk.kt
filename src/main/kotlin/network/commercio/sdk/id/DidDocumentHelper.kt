@@ -9,12 +9,6 @@ import network.commercio.sdk.entities.id.DidDocumentProof
 import network.commercio.sdk.entities.id.DidDocumentPublicKey
 import network.commercio.sdk.entities.id.DidDocumentService
 import network.commercio.sdk.utils.getTimeStamp
-import network.commercio.sdk.utils.toHex
-import org.bouncycastle.asn1.ASN1Integer
-import org.bouncycastle.asn1.ASN1Sequence
-import org.bouncycastle.util.encoders.Base64
-import java.io.ByteArrayOutputStream
-import java.security.KeyFactory
 
 /**
  * Allows to perform common Did Document related operations.

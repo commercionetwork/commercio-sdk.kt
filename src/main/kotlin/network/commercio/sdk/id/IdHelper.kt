@@ -18,9 +18,11 @@ import network.commercio.sdk.utils.toHex
 import network.commercio.sdk.utils.tryOrNull
 import java.nio.charset.Charset
 import java.security.interfaces.RSAPrivateKey
+import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.UUID
 import javax.crypto.SecretKey
+import network.commercio.sdk.utils.getTimeStamp
 
 /**
  * Allows to perform common operations related to CommercioID.
@@ -64,8 +66,7 @@ object IdHelper {
 
     ): TxResponse {
         // Get the timestamp
-        // TODO: CONTROL IT BECAUSE IT SHOULD BE SETTING TO UTC
-        val timestamp = Date().getTime().toString()
+        val timestamp =Date().getTime().toString()
 
         // Build the signature Hash
         val signedSignatureHash = SignHelper.signPowerUpSignature(
