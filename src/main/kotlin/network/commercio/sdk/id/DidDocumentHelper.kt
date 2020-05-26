@@ -88,7 +88,7 @@ ${Base64.encode(pubKeyWrapper.public.encoded).toString(Charset.defaultCharset())
     ): DidDocumentProof {
         return DidDocumentProof(
             type = "EcdsaSecp256k1VerificationKey2019",
-            iso8601CreationTimeStamp = getTimeStamp(),
+            timeStamp = getTimeStamp(),
             proofPurpose = proofPurpose,
             controller = controller,
             verificationMethod = verificationMethod,
