@@ -46,7 +46,6 @@ Directly from [Did Specifications](https://w3c.github.io/did-core/):
       "publicKeyHex": "02b97c30de767f084ce3080168ee293053ba33b235d7116a3263d29f1450936b71"
     }
   ],
-  "authentication": ["did:com:14zk9u8894eg7fhgw0dsesnqzmlrx85ga9rvnjc#keys-1"],
   "service": [
     {
       "id": "did:com:14zk9u8894eg7fhgw0dsesnqzmlrx85ga9rvnjc#openid",
@@ -62,7 +61,9 @@ Directly from [Did Specifications](https://w3c.github.io/did-core/):
   "proof": {
     "type": "LinkedDataSignature2015",
     "created": "2016-02-08T16:02:20Z",
-    "creator": "did:com:14zk9u8894eg7fhgw0dsesnqzmlrx85ga9rvnjc#keys-1",
+    "proofPurpose": "authentication",
+    "controller": "did:com:14zk9u8894eg7fhgw0dsesnqzmlrx85ga9rvnjc",
+    "verificationMethod": "did:com:pub1addwnpepq20w6zkfdncmkqnlmrktzjsfqu2dk0v9qduzm7wrpr8hzk9wl4zwyjnjarv",
     "signatureValue": "QNB13Y7Q9...1tzjn4w=="
   }
 }
@@ -73,10 +74,9 @@ Inside the SDK it is an object of type `DidDocument`:
 ```kotlin
 data class DidDocument(
     @JsonProperty("@context") val context: String,
-    @JsonProperty("id") val did: String,
+    @JsonProperty("id") val id: String,
     @JsonProperty("publicKey") val publicKeys: List<DidDocumentPublicKey>,
-    @JsonProperty("authentication") val authentication: List<String>,
     @JsonProperty("proof") val proof: DidDocumentProof,
-    @JsonProperty("service") val services: List<DidDocumentService>?
+    @JsonProperty("service") @JsonInclude(JsonInclude.Include.NON_NULL) val service: List<DidDocumentService>?
 ) 
 ```
