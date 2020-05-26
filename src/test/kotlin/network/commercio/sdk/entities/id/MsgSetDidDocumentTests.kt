@@ -40,8 +40,15 @@ class MsgSetDidDocumentTests {
         )
         val chain = NetworkInfo(bech32Hrp = "did:com:", lcdUrl = "")
         val wallet = Wallet.derive(mnemonic = mnemonic, networkInfo = chain)
-        val keys = KeysHelper.generateRsaKeyPair()
-        val didDocument = DidDocumentHelper.fromWallet(wallet, listOf(keys.publicWrapper,keys.publicWrapper))
+
+        val rsaVerificationKeyPair = KeysHelper.generateRsaKeyPair()
+        val rsaSignatureKeyPair = KeysHelper.generateRsaKeyPair(type = "RsaSignatureKey2018")
+
+        val didDocument = DidDocumentHelper.fromWallet(
+            wallet,
+            listOf(rsaVerificationKeyPair.publicWrapper, rsaSignatureKeyPair.publicWrapper)
+        )
+
         val msg = MsgSetDidDocument(didDocument)
         assertNotNull(msg.value)
     }
