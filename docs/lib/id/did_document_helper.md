@@ -3,9 +3,14 @@ Did Document Helper allows to perform common Did Document related operations.
 
 
 ## Provided Operations
-1. Creates a [DidDocument](../glossary.md) from the given `wallet` and optional `pubKeys`.
+1. Creates a [DidDocument](../glossary.md) from the given `wallet` and the `pubKeys`. 
+Optionally the list `service` can be specified.
 ```kotlin
-fun fromWallet(wallet: Wallet, pubKeys: List<PublicKey> = listOf()): DidDocument
+fun fromWallet(
+        wallet: Wallet,
+        pubKeys: List<PublicKeyWrapper> = listOf(),
+        service: List<DidDocumentService>? = null
+    ): DidDocument
 ```
 ## Usage examples
 ```kotlin
@@ -43,10 +48,13 @@ fun fromWallet(wallet: Wallet, pubKeys: List<PublicKey> = listOf()): DidDocument
     
     val wallet = Wallet.derive(mnemonic = userMnemonic, networkInfo = info)
     
-    val rsaKeyPair = KeysHelper.generateRsaKeyPair()
-    val ecKeyPair = KeysHelper.generateEcKeyPair()
+    // --- Generate keys
+    val rsaVerificationKeyPair = KeysHelper.generateRsaKeyPair()
+    val rsaSignatureKeyPair = KeysHelper.generateRsaKeyPair(type = "RsaSignatureKey2018")
+
+    // --- Create Did Document
     val didDocument = DidDocumentHelper.fromWallet(
-        wallet, 
-        listOf(rsaKeyPair.public, ecKeyPair.public)
+        wallet,
+        listOf(rsaVerificationKeyPair.publicWrapper, rsaSignatureKeyPair.publicWrapper)
     )
 ```
