@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import network.commercio.sdk.entities.id.DidDocument
+import network.commercio.sdk.entities.id.DidDocumentWrapper
 import network.commercio.sdk.networking.Network
 import org.bouncycastle.util.encoders.Base64
 import java.security.KeyFactory
@@ -42,16 +43,14 @@ object EncryptionHelper {
         val tumblerAddress = (tumblerResponse["result"] as Map<String, String>)["tumbler_address"]
             ?: throw UnsupportedOperationException("Missing tumbler_address in response")
 
-        val responsePublicKeyPem = Network.get<Map<String, Any>>("$lcdUrl/identities/$tumblerAddress")
+        val responsePublicKeyPem = Network.queryChain<Any>("$lcdUrl/identities/$tumblerAddress")
             ?: throw UnsupportedOperationException("Cannot get government RSA public key")
 
-        // TODO: get first RsaSignatureKey2018 not first pem key
-        val publicKeyPem = (((responsePublicKeyPem["result"] as Map<String, Any>)["did_document"] as Map<String, Any>) ["publicKey"] as List<Map<String, Any>>)[1].get("publicKeyPem") ?: throw UnsupportedOperationException("Missing publicKeyPem in response")
+        // get first RsaSignatureKey2018
+        val publicKeyPem = (jacksonObjectMapper().convertValue(responsePublicKeyPem, DidDocumentWrapper::class.java).didDoc.publicKeys)
+            .filter { it.type=="RsaSignatureKey2018" }.first().publicKeyPem
 
-        /*val publicKeyPem = (((responsePublicKeyPem["result"] as Map<String, Any>)["did_document"] as Map<String, Any>) ["publicKey"] as List<Map<String, Any>>)
-            .first().get("publicKeyPem") ?: throw UnsupportedOperationException("Missing publicKeyPem in response")*/
-
-        val cleaned = publicKeyPem.toString()
+        val cleaned = publicKeyPem
             .replace("\n", "")
             .replace("-----BEGIN PUBLIC KEY-----", "")
             .replace("-----END PUBLIC KEY-----", "")
@@ -88,7 +87,6 @@ object EncryptionHelper {
    /**
      * Encrypts the given [data] with AES-GCM using the specified [key].
      */
-
     fun encryptStringWithAesGCM(data: ByteArray, key: SecretKey): ByteArray {
         val nonce = KeysHelper.generateNonce()
         val gcmSpec = GCMParameterSpec(128, nonce) // 128 bit authentication tag
