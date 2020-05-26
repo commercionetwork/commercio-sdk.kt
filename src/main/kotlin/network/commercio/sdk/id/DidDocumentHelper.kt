@@ -2,13 +2,14 @@ package network.commercio.sdk.id
 
 import PublicKeyWrapper
 import network.commercio.sacco.Wallet
-import network.commercio.sacco.encoding.toBase64
+import org.bouncycastle.util.encoders.Base64
 import network.commercio.sdk.crypto.SignHelper
 import network.commercio.sdk.entities.id.DidDocument
 import network.commercio.sdk.entities.id.DidDocumentProof
 import network.commercio.sdk.entities.id.DidDocumentPublicKey
 import network.commercio.sdk.entities.id.DidDocumentService
 import network.commercio.sdk.utils.getTimeStamp
+import java.nio.charset.Charset
 
 /**
  * Allows to perform common Did Document related operations.
@@ -61,11 +62,11 @@ object DidDocumentHelper {
             publicKeyPem = when (pubKeyWrapper.type) {
                 "RsaVerificationKey2018", "RsaSignatureKey2018" -> {
                     """-----BEGIN PUBLIC KEY-----
-${pubKeyWrapper.public.encoded.toBase64()}
+${Base64.encode(pubKeyWrapper.public.encoded).toString(Charset.defaultCharset())}
 -----END PUBLIC KEY-----""".trimMargin()
                 }
                 "Secp256k1VerificationKey2018" -> {
-                    pubKeyWrapper.public.encoded.toBase64()
+                    Base64.encode(pubKeyWrapper.public.encoded).toString(Charset.defaultCharset())
                 }
                 "Ed25519VerificationKey2018" -> {
                     ""
@@ -91,7 +92,7 @@ ${pubKeyWrapper.public.encoded.toBase64()}
             proofPurpose = proofPurpose,
             controller = controller,
             verificationMethod = verificationMethod,
-            signatureValue = SignHelper.signSortedTxData(proofSignatureContent, wallet).toBase64()
+            signatureValue = Base64.encode(SignHelper.signSortedTxData(proofSignatureContent, wallet)).toString(Charset.defaultCharset())
         )
     }
 }
