@@ -17,11 +17,12 @@ import network.commercio.sdk.id.DidDocumentHelper
 import network.commercio.sdk.id.IdHelper
 import network.commercio.sdk.membership.MembershipHelper
 import network.commercio.sdk.mint.MintHelper
+import network.commercio.sdk.tx.TxHelper
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.security.KeyPair
-import java.util.*
 import java.security.interfaces.RSAPrivateKey
+import java.util.*
 
 
 /**
@@ -64,10 +65,14 @@ class Examples {
     @Test
     fun `IdHelper examples`() = runBlocking {
 
+        // --- Optional
+        val fee = StdFee(gas = "200000", amount = listOf(StdCoin(denom = "ucommercio", amount = "10000")))
+        val mode = TxHelper.BroadcastingMode.BLOCK
+
         // --- Set the Did Document
-        val rsaKeyPair = KeysHelper.generateRsaKeyPair()
-        val ecKeyPair = KeysHelper.generateEcKeyPair()
-        //createDidDocument(wallet = userWallet, rsaKeyPair = rsaKeyPair, ecKeyPair = ecKeyPair)
+        val rsaVerificationKeyPair = KeysHelper.generateRsaKeyPair()
+        val rsaSignatureKeyPair = KeysHelper.generateRsaKeyPair(type = "RsaSignatureKey2018")
+//        createDidDocument(wallet = userWallet, rsaVerificationKeyPair= rsaVerificationKeyPair ,rsaSignatureKeyPair= rsaSignatureKeyPair, fee = fee, mode = mode)
 
 
         // --- Request the Did power up
@@ -98,7 +103,7 @@ class Examples {
             "second"
         )
         val pairwiseWallet = Wallet.derive(mnemonic = pairwiseMnemonic, networkInfo = info)
-        //postPowerUpRequest(pairwiseDid = pairwiseWallet.bech32Address, amount = depositAmount, wallet = userWallet, privateKey = privateKey)
+//        postPowerUpRequest(pairwiseDid = pairwiseWallet.bech32Address, amount = depositAmount, wallet = userWallet, privateKey = privateKey, fee = fee, mode = mode)
 
     }
 
@@ -122,25 +127,13 @@ class Examples {
      * Shows how to create a Did Document and associate it to an existing account Did.
      * Documentation: https://docs.commercio.network/x/id/tx/associate-a-did-document.html
      */
-    private suspend fun createDidDocument(wallet: Wallet, rsaKeyPair: KeyPairWrapper, ecKeyPair: KeyPairWrapper) {
-        val didDocument = DidDocumentHelper.fromWallet(wallet, listOf(rsaKeyPair.publicWrapper, ecKeyPair.publicWrapper))
-        val response = IdHelper.setDidDocument(didDocument, wallet)
-        assertTrue(response is TxResponse.Successful)
-    }
-
-
-
-    /**
-     * Shows how to request a pairwise Did power up. This request will later be read and handled by the centralized
-     * APIs that will send the funds to such account.
-     * Documentation: https://docs.commercio.network/x/id/tx/request-did-power-up.html
-     */
-    private suspend fun postPowerUpRequest(pairwiseDid: String, amount: List<StdCoin>, wallet: Wallet, privateKey: RSAPrivateKey) {
-        val response = IdHelper.requestDidPowerUp(
-            pairwiseDid = Did(pairwiseDid),
-            amount = amount,
+    private suspend fun createDidDocument(wallet: Wallet, rsaVerificationKeyPair: KeyPairWrapper, rsaSignatureKeyPair: KeyPairWrapper, fee: StdFee, mode: TxHelper.BroadcastingMode) {
+        val didDocument = DidDocumentHelper.fromWallet(wallet, listOf(rsaVerificationKeyPair.publicWrapper, rsaSignatureKeyPair.publicWrapper))
+        val response = IdHelper.setDidDocument(
+            didDocument = didDocument,
             wallet = wallet,
-            privateKey = privateKey
+            fee = fee,
+            mode = mode
         )
         assertTrue(response is TxResponse.Successful)
     }
@@ -150,16 +143,18 @@ class Examples {
      * APIs that will send the funds to such account.
      * Documentation: https://docs.commercio.network/x/id/tx/request-did-power-up.html
      */
-    private suspend fun postPowerUpRequest(pairwiseDid: String, amount: List<StdCoin>, wallet: Wallet, privateKey: RSAPrivateKey, fee : StdFee) {
+    private suspend fun postPowerUpRequest(pairwiseDid: String, amount: List<StdCoin>, wallet: Wallet, privateKey: RSAPrivateKey, fee: StdFee, mode: TxHelper.BroadcastingMode) {
         val response = IdHelper.requestDidPowerUp(
             pairwiseDid = Did(pairwiseDid),
             amount = amount,
             wallet = wallet,
             privateKey = privateKey,
-            fee = fee
+            fee = fee,
+            mode = mode
         )
         assertTrue(response is TxResponse.Successful)
     }
+
 
     @Test
     fun `DocsHelper examples`() = runBlocking {
@@ -191,22 +186,24 @@ class Examples {
         )
         val recipientWallet = Wallet.derive(recipientMnemonic, info)
 
+        // --- Optional
+        val fee = StdFee(gas = "200000", amount = listOf(StdCoin(denom = "ucommercio", amount = "10000")))
+        val mode = TxHelper.BroadcastingMode.BLOCK
+
         // --- Share a document
         val docRecipientDid = Did(recipientWallet.bech32Address)
-        // val (docId, txHash) = shareDocument(recipients = listOf(docRecipientDid), wallet = userWallet)
+        // val (docId, txHash) = shareDocument(recipients = listOf(docRecipientDid), wallet = userWallet, fee = fee, mode = mode)
 
         // --- Share receipt
         val receiptRecipientDid = Did(userWallet.bech32Address)
-        // sendDocumentReceipt(docId = docId, txHash = txHash, recipient = receiptRecipientDid, wallet = recipientWallet)
-        val fee = StdFee(gas = "400000", amount = listOf(StdCoin(denom = "ucommercio", amount = "10000")))
-        // sendDocumentReceipt(docId = docId, txHash = txHash, recipient = receiptRecipientDid, wallet = recipientWallet, fee = fee)
+        // sendDocumentReceipt(docId = docId, txHash = txHash, recipient = receiptRecipientDid, wallet = recipientWallet, fee = fee, mode = mode)
     }
 
     /**
      * Shows how to share a document to the given recipients.
      * Documentation: https://docs.commercio.network/x/docs/tx/send-document.html
      */
-    private suspend fun shareDocument(recipients: List<Did>, wallet: Wallet): Pair<String, String> {
+    private suspend fun shareDocument(recipients: List<Did>, wallet: Wallet, fee: StdFee, mode: TxHelper.BroadcastingMode): Pair<String, String> {
         val docId = UUID.randomUUID().toString()
         val response = DocsHelper.shareDocument(
             id = docId,
@@ -219,37 +216,27 @@ class Examples {
                 )
             ),
             recipients = recipients,
-            wallet = wallet
+            wallet = wallet,
+            fee = fee,
+            mode = mode
         )
         assertTrue(response is TxResponse.Successful)
         return docId to (response as TxResponse.Successful).txHash
     }
 
-    /**
-     * Shows how to send a document receipt to the specified [recipient] for the given [docId] present
-     * inside the transaction having the given [txHash].
-     */
-    private suspend fun sendDocumentReceipt(docId: String, txHash: String, recipient: Did, wallet: Wallet) {
-        val response = DocsHelper.sendDocumentReceipt(
-            recipient = recipient,
-            txHash = txHash,
-            documentId = docId,
-            wallet = wallet
-        )
-        assertTrue(response is TxResponse.Successful)
-    }
 
     /**
      * Shows how to send a document receipt to the specified [recipient] for the given [docId] present
      * inside the transaction having the given [txHash].
      */
-    private suspend fun sendDocumentReceipt(docId: String, txHash: String, recipient: Did, wallet: Wallet, fee : StdFee) {
+    private suspend fun sendDocumentReceipt(docId: String, txHash: String, recipient: Did, wallet: Wallet, fee : StdFee, mode: TxHelper.BroadcastingMode) {
         val response = DocsHelper.sendDocumentReceipt(
             recipient = recipient,
             txHash = txHash,
             documentId = docId,
             wallet = wallet,
-            fee = fee
+            fee = fee,
+            mode = mode
         )
         assertTrue(response is TxResponse.Successful)
     }
@@ -257,35 +244,29 @@ class Examples {
     @Test
     fun `MintHelper examples`() = runBlocking {
 
+        // --- Optional
+        val fee = StdFee(gas = "200000", amount = listOf(StdCoin(denom = "ucommercio", amount = "10000")))
+        val mode = TxHelper.BroadcastingMode.BLOCK
+
         // --- Open CDP
-        // openCdp(amount = 100_000.toULong(), wallet = userWallet)
+        val commercioTokenAmount = 100000000.toULong()
+        // openCdp(amount = commercioTokenAmount, wallet = userWallet, fee = fee, mode = mode)
 
         // --- Close CDP
-        // closeCdp(timestamp = 4, wallet = userWallet)
+        // closeCdp(timestamp = 4, wallet = userWallet, fee = fee, mode = mode)
     }
+
 
     /**
      * Shows how to open a new Collateralized Debt Position in order to get half the specified [amount] of
-     * Commercio Cash Credits millionth parts (`uccc`).
-     * Please note that `uccc` are millionth of Commercio Cash Credits and thus to send one document you wil need
-     * 10.000 `uccc`.
+     * pico Commercio Cash Credits (`uccc`).
      */
-    private suspend fun openCdp(amount: ULong, wallet: Wallet) {
-        val response = MintHelper.openCdp(commercioTokenAmount = amount, wallet = wallet)
-        assertTrue(response is TxResponse.Successful)
-    }
-
-    /**
-     * Shows how to open a new Collateralized Debt Position in order to get half the specified [amount] of
-     * Commercio Cash Credits millionth parts (`uccc`).
-     * Please note that `uccc` are millionth of Commercio Cash Credits and thus to send one document you wil need
-     * 10.000 `uccc`.
-     */
-    private suspend fun openCdp(amount: ULong, wallet: Wallet, fee : StdFee) {
+    private suspend fun openCdp(amount: ULong, wallet: Wallet, fee : StdFee, mode: TxHelper.BroadcastingMode) {
         val response = MintHelper.openCdp(
             commercioTokenAmount = amount,
             wallet = wallet,
-            fee = fee
+            fee = fee,
+            mode = mode
         )
         assertTrue(response is TxResponse.Successful)
     }
@@ -295,21 +276,12 @@ class Examples {
      * to get back the amount of pico Commercio Tokens (`ucommercio`) giving back the lent pico Commercio
      * Cash Credits (`uccc`).
      */
-    private suspend fun closeCdp(timestamp: Int, wallet: Wallet) {
-        val response = MintHelper.closeCdp(timestamp = timestamp, wallet = wallet)
-        assertTrue(response is TxResponse.Successful)
-    }
-
-    /**
-     * Shows how to close a Collateralized Debt Position in order to allow the user controlling the given [wallet]
-     * to get back the amount of pico Commercio Tokens (`ucommercio`) giving back the lent pico Commercio
-     * Cash Credits (`uccc`).
-     */
-    private suspend fun closeCdp(timestamp: Int, wallet: Wallet, fee : StdFee) {
+    private suspend fun closeCdp(timestamp: Int, wallet: Wallet, fee : StdFee, mode: TxHelper.BroadcastingMode) {
         val response = MintHelper.closeCdp(
             timestamp = timestamp,
             wallet = wallet,
-            fee = fee
+            fee = fee,
+            mode = mode
         )
         assertTrue(response is TxResponse.Successful)
     }
@@ -344,38 +316,23 @@ class Examples {
         )
         val newUserWallet = Wallet.derive(newUserMnemonic, info)
 
+        // --- Optional
+        val fee = StdFee(gas = "200000", amount = listOf(StdCoin(denom = "ucommercio", amount = "10000")))
+        val mode = TxHelper.BroadcastingMode.BLOCK
+
         // --- Invite user
-        // inviteUser(user = Did(newUserWallet.bech32Address), wallet = userWallet)
+        // inviteUser(user = Did(newUserWallet.bech32Address), wallet = userWallet, fee = fee, mode = mode)
 
         // --- Buy a membership
-        // buyMembership(membershipType = MembershipType.GOLD, wallet = newUserWallet)
+        // buyMembership(membershipType = MembershipType.GOLD, wallet = newUserWallet, fee = fee, mode = mode)
     }
 
     /**
      * Shows how to perform a transaction to invite a user.
      * Note that in order to invite a user, you must already have a membership.
      */
-    private suspend fun inviteUser(user: Did, wallet: Wallet) {
-        val response = MembershipHelper.inviteUser(user, wallet)
-        assertTrue(response is TxResponse.Successful)
-    }
-
-    /**
-     * Shows how to perform a transaction to invite a user.
-     * Note that in order to invite a user, you must already have a membership.
-     */
-    private suspend fun inviteUser(user: Did, wallet: Wallet, fee : StdFee) {
-        val response = MembershipHelper.inviteUser(user, wallet, fee)
-        assertTrue(response is TxResponse.Successful)
-    }
-
-
-    /**
-     * Shows how to perform the transaction that allows the owner of the given [wallet] to buy a membership
-     * of the specified [membershipType].
-     */
-    private suspend fun buyMembership(membershipType: MembershipType, wallet: Wallet) {
-        val response = MembershipHelper.buyMembership(membershipType, wallet)
+    private suspend fun inviteUser(user: Did, wallet: Wallet, fee : StdFee, mode: TxHelper.BroadcastingMode) {
+        val response = MembershipHelper.inviteUser(user, wallet, fee, mode)
         assertTrue(response is TxResponse.Successful)
     }
 
@@ -383,8 +340,8 @@ class Examples {
      * Shows how to perform the transaction that allows the owner of the given [wallet] to buy a membership
      * of the specified [membershipType].
      */
-    private suspend fun buyMembership(membershipType: MembershipType, wallet: Wallet, fee : StdFee) {
-        val response = MembershipHelper.buyMembership(membershipType, wallet, fee)
+    private suspend fun buyMembership(membershipType: MembershipType, wallet: Wallet, fee : StdFee, mode: TxHelper.BroadcastingMode) {
+        val response = MembershipHelper.buyMembership(membershipType, wallet, fee, mode)
         assertTrue(response is TxResponse.Successful)
     }
 }

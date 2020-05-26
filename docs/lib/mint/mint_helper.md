@@ -53,7 +53,7 @@ val userMnemonic = listOf(
 
 val userWallet = Wallet.derive(mnemonic = userMnemonic, networkInfo = info)
 
-val amount = 100_000.toULong()
+val amount = 100000000.toULong()
 
 //Opening a cdp
 MintHelper.openCdp(commercioTokenAmount = amount, wallet = userWallet)
