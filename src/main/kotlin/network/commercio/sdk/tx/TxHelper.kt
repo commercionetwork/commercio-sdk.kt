@@ -10,7 +10,7 @@ import network.commercio.sacco.models.types.StdMsg
  */
 object TxHelper {
 
-    private val defaultGas="200000"
+    private val defaultGas = "100000"
     private val defaultDenom = "ucommercio"
     private val defaultAmount = "10000"
 
@@ -26,19 +26,31 @@ object TxHelper {
         fee: StdFee? = null,
         mode: BroadcastingMode? = null
     ): TxResponse {
-        val _fee=  when(fee) {
-            null -> StdFee(gas = defaultGas, amount = listOf(StdCoin(denom = defaultDenom, amount = defaultAmount)))
+
+        val _fee = when (fee) {
+            null -> {
+                val gas = when (msgs.size > 1) {
+                    true -> (defaultGas.toLong() * msgs.size).toString()
+                    else -> defaultGas
+                }
+
+                val amount = when (msgs.size > 1) {
+                    true -> (defaultAmount.toLong() * msgs.size).toString()
+                    else -> defaultAmount
+                }
+                StdFee(gas = gas, amount = listOf(StdCoin(denom = defaultDenom, amount = amount)))
+            }
             else -> fee
         }
 
-        val _mode=  when(mode) {
+        val _mode = when (mode) {
             null -> BroadcastingMode.SYNC.toString()
             else -> mode.toString()
         }
 
         val stdTx = TxBuilder.buildStdTx(stdMsgs = msgs, fee = _fee)
         val signedTx = TxSigner.signStdTx(stdTx = stdTx, wallet = wallet)
-        val broadcastedStdTx = TxSender.broadcastStdTx(stdTx = signedTx, wallet = wallet, mode = _mode )
+        val broadcastedStdTx = TxSender.broadcastStdTx(stdTx = signedTx, wallet = wallet, mode = _mode)
         return broadcastedStdTx
     }
 
