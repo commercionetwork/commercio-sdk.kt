@@ -27,6 +27,10 @@ import org.bouncycastle.util.encoders.Base64 as B64Bouncy
  */
 object IdHelper {
 
+    init {
+        System.setProperty("javax.net.ssl.trustStoreType", "JKS")
+    }
+
     /**
      * Returns the Did Document associated with the given [did], or `null` if no Did Document was found.
      */
@@ -45,9 +49,22 @@ object IdHelper {
         fee: StdFee? = null,
         mode: BroadcastingMode? = null
     ): TxResponse {
-        System.setProperty("javax.net.ssl.trustStoreType", "JKS")
         val msg = MsgSetDidDocument(didDocument)
         return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet, fee = fee, mode = mode)
+    }
+
+    /**
+     * Performs a transaction setting the specified list of [didDocuments] as being associated with the
+     * address present inside the specified [wallet].
+     */
+    suspend fun setDidDocumentList(
+        didDocuments: List<DidDocument>,
+        wallet: Wallet,
+        fee: StdFee? = null,
+        mode: BroadcastingMode? = null
+    ): TxResponse {
+        val msgs = didDocuments.map { MsgSetDidDocument(it) }
+        return TxHelper.createSignAndSendTx(msgs = msgs, wallet = wallet, fee = fee, mode = mode)
     }
 
     /**
