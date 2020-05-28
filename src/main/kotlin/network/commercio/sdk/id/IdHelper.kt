@@ -16,11 +16,8 @@ import network.commercio.sdk.utils.getTimeStamp
 import network.commercio.sdk.utils.readHex
 import network.commercio.sdk.utils.toHex
 import network.commercio.sdk.utils.tryOrNull
-import java.nio.charset.Charset
 import java.security.interfaces.RSAPrivateKey
-import java.util.*
 import javax.crypto.SecretKey
-import org.bouncycastle.util.encoders.Base64 as B64Bouncy
 
 /**
  * Allows to perform common operations related to CommercioID.
@@ -81,56 +78,49 @@ object IdHelper {
         fee: StdFee? = null,
         mode: BroadcastingMode? = null
     ): TxResponse {
-        // Get the timestamp
-        val timestamp =Date().getTime().toString()
 
-        // Build the signature Hash
-        val signedSignatureHash = SignHelper.signPowerUpSignature(
-            senderDid = wallet.bech32Address,
-            pairwiseDid = pairwiseDid.value,
-            timestamp = timestamp,
+        val requestDidPowerUp= RequestDidPowerUpHelper.fromWallet(
+            wallet = wallet,
+            pairwiseDid = pairwiseDid,
+            amount = amount,
             privateKey = privateKey
         )
 
-        // Build the payload
-        val payload = DidPowerUpRequestPayload(
-            senderDid = wallet.bech32Address,
-            pairwiseDid = pairwiseDid.value,
-            timestamp = timestamp,
-            signature = B64Bouncy.encode(signedSignatureHash).toString(Charset.defaultCharset())
-        )
-
-
-        val aesKey = KeysHelper.generateAesKey(128)
-
-        // Build the proof and encrypt with AesGCM
-        // AES KEY IS 128 BIT: JAVA LIMITATION
-        val encryptedProof = EncryptionHelper.encryptStringWithAesGCM(
-            jacksonObjectMapper().writeValueAsString(payload).toByteArray(),
-            aesKey
-        )
-
-        // =================
-        // Encrypt proof key
-        // =================
-
-        // Encrypt the key using the Tumbler public RSA key
-        val rsaPubTkKey = EncryptionHelper.getGovernmentRsaPubKey(
-            wallet.networkInfo.lcdUrl
-        )
-        val encryptedProofKey =
-            EncryptionHelper.encryptWithRsa(aesKey.getEncoded(), rsaPubTkKey)
-
         // Build the message and send the tx
         val msg = MsgRequestDidPowerUp(
-            claimantDid = wallet.bech32Address,
-            amount = amount,
-            powerUpProof = B64Bouncy.encode(encryptedProof).toString(Charset.defaultCharset()),
-            uuid = UUID.randomUUID().toString(),
-            proofKey = B64Bouncy.encode(encryptedProofKey).toString(Charset.defaultCharset())
+            claimantDid = requestDidPowerUp.claimantDid,
+            amount = requestDidPowerUp.amount,
+            powerUpProof = requestDidPowerUp.powerUpProof,
+            uuid = requestDidPowerUp.uuid,
+            proofKey = requestDidPowerUp.proofKey
         )
 
         return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet, fee = fee, mode = mode)
+    }
+
+    /**
+     *  Performs a transaction setting the specified list of RequestDidPowerUp in the given [requestDidPowerUps].
+     * Optionally a custom `fee` can be specified.
+     */
+    suspend fun requestDidPowerUpList(
+        requestDidPowerUps: List<RequestDidPowerUp>,
+        wallet: Wallet,
+        fee: StdFee? = null,
+        mode: BroadcastingMode? = null
+    ): TxResponse {
+
+        // Build the message and send the tx
+        val msgs = requestDidPowerUps.map {
+            MsgRequestDidPowerUp(
+                claimantDid = it.claimantDid,
+                amount = it.amount,
+                powerUpProof = it.powerUpProof,
+                uuid = it.uuid,
+                proofKey = it.proofKey
+            )
+        }
+
+        return TxHelper.createSignAndSendTx(msgs = msgs, wallet = wallet, fee = fee, mode = mode)
     }
 
     /**
