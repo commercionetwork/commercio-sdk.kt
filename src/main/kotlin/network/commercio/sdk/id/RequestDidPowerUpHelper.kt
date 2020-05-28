@@ -14,7 +14,7 @@ import java.security.interfaces.RSAPrivateKey
 import java.util.*
 
 /**
- * Allows to perform common Did Document related operations.
+ * Allows to easily build RequestDidPowerUp
  */
 object RequestDidPowerUpHelper {
 

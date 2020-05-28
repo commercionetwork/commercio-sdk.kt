@@ -14,6 +14,10 @@ import network.commercio.sdk.tx.TxHelper.BroadcastingMode
  */
 object MintHelper {
 
+    init {
+        System.setProperty("javax.net.ssl.trustStoreType", "JKS")
+    }
+
     /**
      * Opens a new CDP depositing the given [commercioTokenAmount].
      * This will allows the user controlling the given [wallet] to receive half the [commercioTokenAmount] of

@@ -1,4 +1,5 @@
 package network.commercio.sdk.docs
+
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import network.commercio.sacco.TxResponse
 import network.commercio.sacco.Wallet
@@ -19,6 +20,11 @@ import javax.crypto.SecretKey
  * Allows to easily perform CommercioDOCS related operations
  */
 object DocsHelper {
+
+    init {
+        System.setProperty("javax.net.ssl.trustStoreType", "JKS")
+    }
+
     /**
      * Creates a new transaction that allows to share the document associated with the given [contentUri] and
      * having the given [metadata] and [checksum]. If [encryptedData] is specified, encrypts the proper data for
@@ -38,24 +44,22 @@ object DocsHelper {
         contentUri: String = "",
         mode: BroadcastingMode? = null
     ): TxResponse {
-        // Build a generic document
-        val document = CommercioDoc(
-            senderDid = wallet.bech32Address,
-            recipientsDids = recipients.map { it.value },
-            uuid = id,
-            contentUri = contentUri,
+
+        // Build CommercioDoc
+        val commercioDoc = CommercioDocHelper.fromWallet(
+            id = id,
             metadata = metadata,
+            recipients = recipients,
+            wallet = wallet,
+            doSign = doSign,
             checksum = checksum,
-            encryptionData = null,
-            doSign = doSign
+            aesKey = aesKey,
+            encryptedData = encryptedData,
+            contentUri = contentUri
         )
-        // Encrypt its contents, if necessary
-        val finalDoc = when (encryptedData.isEmpty()) {
-            true -> document
-            false -> document.encryptField(aesKey, encryptedData, recipients, wallet)
-        }
+
         // Build the tx message
-        val msg = MsgShareDocument(document = finalDoc)
+        val msg = MsgShareDocument(document = commercioDoc)
         val result = TxHelper.createSignAndSendTx(
             msgs = listOf(msg),
             fee = fee,
@@ -64,6 +68,32 @@ object DocsHelper {
         )
         return result
     }
+
+    /**
+     * Creates a new transaction that allows to share the list of CommercioDoc in the given [commercioDocs]
+     */
+    @JvmOverloads
+    suspend fun shareDocumentsList(
+        commercioDocs: List<CommercioDoc>,
+        wallet: Wallet,
+        fee: StdFee? = null,
+        mode: BroadcastingMode? = null
+    ): TxResponse {
+
+        // Build the tx message
+        val msgs = commercioDocs.map {
+            MsgShareDocument(document = it)
+        }
+
+        val result = TxHelper.createSignAndSendTx(
+            msgs = msgs,
+            fee = fee,
+            wallet = wallet,
+            mode = mode
+        )
+        return result
+    }
+
     /**
      * Returns the list of all the [CommercioDoc] that the specified [address] has sent.
      */
@@ -72,14 +102,16 @@ object DocsHelper {
         val docsToConvert = Network.queryChain<List<Any>>(queryUrl) ?: listOf()
         return docsToConvert.map { jacksonObjectMapper().convertValue(it, CommercioDoc::class.java) }
     }
+
     /**
      * Returns the list of all the [CommercioDoc] that the specified [address] has received.
      */
     suspend fun getReceivedDocuments(address: Did, wallet: Wallet): List<CommercioDoc> {
         val queryUrl = "${wallet.networkInfo.lcdUrl}/docs/${address.value}/received"
         val docsToConvert = Network.queryChain<List<Any>>(queryUrl) ?: listOf()
-        return  docsToConvert.map { jacksonObjectMapper().convertValue(it, CommercioDoc::class.java) }
+        return docsToConvert.map { jacksonObjectMapper().convertValue(it, CommercioDoc::class.java) }
     }
+
     /**
      * Creates a new transaction which tells the [recipient] that the document having the specified [documentId] and
      * present inside the transaction with hash [txHash] has been properly seen.
@@ -107,6 +139,7 @@ object DocsHelper {
         )
         return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet, fee = fee, mode = mode)
     }
+
     /**
      * Returns the list of all the [CommercioDocReceipt] that have been sent from the given [address].
      */
@@ -115,6 +148,7 @@ object DocsHelper {
         val receiptsToConvert = Network.queryChain<List<Any>>(queryUrl) ?: listOf()
         return receiptsToConvert.map { jacksonObjectMapper().convertValue(it, CommercioDocReceipt::class.java) }
     }
+
     /**
      * Returns the list of all the [CommercioDocReceipt] that have been received from the given [address].
      */

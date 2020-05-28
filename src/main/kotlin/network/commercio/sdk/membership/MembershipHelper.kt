@@ -15,6 +15,10 @@ import network.commercio.sdk.tx.TxHelper.BroadcastingMode
  */
 object MembershipHelper {
 
+    init {
+        System.setProperty("javax.net.ssl.trustStoreType", "JKS")
+    }
+
     /**
      * Sends a new transaction in order to invite the given [user].
      */
