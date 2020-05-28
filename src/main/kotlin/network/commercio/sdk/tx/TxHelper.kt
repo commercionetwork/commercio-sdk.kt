@@ -10,7 +10,7 @@ import network.commercio.sacco.models.types.StdMsg
  */
 object TxHelper {
 
-    private val defaultGas = "100000"
+    private val defaultGas = "200000"
     private val defaultDenom = "ucommercio"
     private val defaultAmount = "10000"
 
