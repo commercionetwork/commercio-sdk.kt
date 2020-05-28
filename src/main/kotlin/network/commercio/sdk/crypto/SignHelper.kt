@@ -21,7 +21,6 @@ object SignHelper {
 
     init {
         Security.insertProviderAt(BouncyCastleProvider(), 1)
-        System.setProperty("javax.net.ssl.trustStoreType", "JKS")
     }
 
     /**
