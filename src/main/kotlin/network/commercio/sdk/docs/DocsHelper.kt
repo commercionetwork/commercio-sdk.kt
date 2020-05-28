@@ -13,7 +13,6 @@ import network.commercio.sdk.entities.id.Did
 import network.commercio.sdk.networking.Network
 import network.commercio.sdk.tx.TxHelper
 import network.commercio.sdk.tx.TxHelper.BroadcastingMode
-import java.util.*
 import javax.crypto.SecretKey
 
 /**
@@ -60,13 +59,7 @@ object DocsHelper {
 
         // Build the tx message
         val msg = MsgShareDocument(document = commercioDoc)
-        val result = TxHelper.createSignAndSendTx(
-            msgs = listOf(msg),
-            fee = fee,
-            wallet = wallet,
-            mode = mode
-        )
-        return result
+        return TxHelper.createSignAndSendTx(msgs = listOf(msg), fee = fee, wallet = wallet, mode = mode)
     }
 
     /**
@@ -81,17 +74,8 @@ object DocsHelper {
     ): TxResponse {
 
         // Build the tx message
-        val msgs = commercioDocs.map {
-            MsgShareDocument(document = it)
-        }
-
-        val result = TxHelper.createSignAndSendTx(
-            msgs = msgs,
-            fee = fee,
-            wallet = wallet,
-            mode = mode
-        )
-        return result
+        val msgs = commercioDocs.map { MsgShareDocument(document = it) }
+        return TxHelper.createSignAndSendTx(msgs = msgs, fee = fee, wallet = wallet, mode = mode)
     }
 
     /**
@@ -127,18 +111,33 @@ object DocsHelper {
         fee: StdFee? = null,
         mode: BroadcastingMode? = null
     ): TxResponse {
-        val msg = MsgSendDocumentReceipt(
-            CommercioDocReceipt(
-                uuid = UUID.randomUUID().toString(),
-                recipientDid = recipient.value,
-                txHash = txHash,
-                documentUuid = documentId,
-                proof = proof,
-                senderDid = wallet.bech32Address
-            )
+
+        val commercioDocReceipt = CommercioDocReceiptHelper.fromWallet(
+            wallet = wallet,
+            recipient = recipient,
+            txHash = txHash,
+            documentId = documentId,
+            proof = proof
         )
+
+        val msg = MsgSendDocumentReceipt(commercioDocReceipt)
         return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet, fee = fee, mode = mode)
     }
+
+    /**
+     * Creates a new transaction with the list of CommercioDocReceipt given
+     */
+    @JvmOverloads
+    suspend fun sendDocumentReceiptsList(
+        commercioDocReceipts: List<CommercioDocReceipt>,
+        wallet: Wallet,
+        fee: StdFee? = null,
+        mode: BroadcastingMode? = null
+    ): TxResponse {
+        val msgs = commercioDocReceipts.map { MsgSendDocumentReceipt(it) }
+        return TxHelper.createSignAndSendTx(msgs = msgs, wallet = wallet, fee = fee, mode = mode)
+    }
+
 
     /**
      * Returns the list of all the [CommercioDocReceipt] that have been sent from the given [address].

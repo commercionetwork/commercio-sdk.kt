@@ -102,7 +102,7 @@ object IdHelper {
      *  Performs a transaction setting the specified list of RequestDidPowerUp in the given [requestDidPowerUps].
      * Optionally a custom `fee` can be specified.
      */
-    suspend fun requestDidPowerUpList(
+    suspend fun requestDidPowerUpsList(
         requestDidPowerUps: List<RequestDidPowerUp>,
         wallet: Wallet,
         fee: StdFee? = null,
