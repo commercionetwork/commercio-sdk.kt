@@ -53,7 +53,6 @@ DqNPFV4qk2gvpDAQ5uvBuX0=
         val privateKey = RSAKeyParser.parseRSAPrivateKeyFromPem(privateKeyPem)
         assertEquals(privateExponent, privateKey.privateExponent.toString())
         assertEquals(modulus, privateKey.modulus.toString())
-        assertEquals(null, privateKey.params)
         assertEquals("RSA", privateKey.algorithm)
         assertEquals("PKCS#8", privateKey.format)
     }
