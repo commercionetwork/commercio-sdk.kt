@@ -54,7 +54,7 @@ object IdHelper {
      * Performs a transaction setting the specified list of [didDocuments] as being associated with the
      * address present inside the specified [wallet].
      */
-    suspend fun setDidDocumentList(
+    suspend fun setDidDocumentsList(
         didDocuments: List<DidDocument>,
         wallet: Wallet,
         fee: StdFee? = null,

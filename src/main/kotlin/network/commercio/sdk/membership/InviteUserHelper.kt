@@ -10,14 +10,14 @@ import network.commercio.sdk.entities.membership.InviteUser
 object InviteUserHelper {
 
     /**
-     * Creates an InviteUser from the given [wallet] and [user].
+     * Creates an InviteUser from the given [wallet] and [recipientDid].
      */
     fun fromWallet(
         wallet: Wallet,
-        user: Did
+        recipientDid: Did
     ): InviteUser {
         return InviteUser(
-            recipientDid = user.value,
+            recipientDid = recipientDid.value,
             senderDid = wallet.bech32Address
         )
     }
