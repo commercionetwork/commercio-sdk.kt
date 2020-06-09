@@ -22,7 +22,6 @@ class CommercioDocHelperTest {
     val mnemonic = mnemonicString.split(" ")
     val wallet = Wallet.derive(mnemonic, info)
 
-    val senderDid = wallet.bech32Address
     val recipientDids = listOf(Did(wallet.bech32Address), Did(wallet.bech32Address))
     val uuid = UUID.randomUUID().toString()
 

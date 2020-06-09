@@ -14,20 +14,21 @@ import org.kethereum.bip39.wordlists.WORDLIST_ENGLISH
 class BuyMembershipHelperTest {
     @Test
     fun `BuyMembershipHelper fromWallet create correctly BuyMembership`() = runBlocking {
-        val chain = NetworkInfo(bech32Hrp = "did:com:", lcdUrl = "")
+        val networkInfo = NetworkInfo(bech32Hrp = "did:com:", lcdUrl = "")
 
         val newUserMnemonic = generateMnemonic(strength = 256, wordList = WORDLIST_ENGLISH).split(" ")
-        val newUserWallet = Wallet.derive(newUserMnemonic, chain)
+        val newUserWallet = Wallet.derive(newUserMnemonic, networkInfo)
 
-        val buyMembership1: BuyMembership = BuyMembership(
+        val expectedBuyMembership = BuyMembership(
             membershipType = MembershipType.GOLD,
             buyerDid = newUserWallet.bech32Address
         )
 
-        val buyMembership2 = BuyMembershipHelper.fromWallet(newUserWallet, MembershipType.GOLD)
+        val buyMembership = BuyMembershipHelper.fromWallet(
+            wallet = newUserWallet,
+            membershipType = MembershipType.GOLD
+        )
 
-        print(buyMembership1)
-        print(buyMembership2)
-        Assert.assertEquals(buyMembership1.toString(), buyMembership2.toString())
+        Assert.assertEquals(expectedBuyMembership.toString(), buyMembership.toString())
     }
 }
