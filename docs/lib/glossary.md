@@ -80,3 +80,42 @@ data class DidDocument(
     @JsonProperty("service") @JsonInclude(JsonInclude.Include.NON_NULL) val service: List<DidDocumentService>?
 ) 
 ```
+
+
+## Did Power Up Request
+
+Directly from [Commercio.network Documentation](https://docs.commercio.network/x/id/#requesting-a-did-power-up):
+> A Did Power Up is the expression we use when referring to the willingness of a user to move a specified amount of tokens from external centralized entity to one of his private pairwise Did, making them able to send documents (which indeed require the user to spend some tokens as fees).
+
+:::tip Did Power Up Request example
+
+  ```json
+  {
+    "claimant":"address that sent funds to the centralized entity before",
+    "amount":[
+        {
+          "denom":"ucommercio",
+          "amount":"amount to transfer to the pairwise did, integer"
+        }
+    ],
+    "proof":"proof string",
+    "id":"randomly-generated UUID v4",
+    "proof_key":"proof encryption key"
+  }
+  ```
+
+:::
+
+### MsgRequestDidPowerUp in SDK
+
+Inside the SDK it is an object of type `MsgRequestDidPowerUp`
+
+```kotlin
+data class MsgRequestDidPowerUp(
+    private val claimantDid: String,
+    private val amount: List<StdCoin>,
+    private val powerUpProof: String,
+    private val uuid: String,
+    private val proofKey: String
+)
+```
