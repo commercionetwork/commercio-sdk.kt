@@ -49,7 +49,7 @@ object RequestDidPowerUpHelper {
             signature = Base64.encode(signedSignatureHash).toString(Charset.defaultCharset())
         )
 
-        val aesKey = KeysHelper.generateAesKey(128)
+        val aesKey = KeysHelper.generateAesKey(256)
 
         // Build the proof and encrypt with AesGCM
         // AES KEY IS 128 BIT: JAVA LIMITATION

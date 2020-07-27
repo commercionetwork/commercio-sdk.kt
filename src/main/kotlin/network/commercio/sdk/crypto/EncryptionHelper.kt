@@ -79,13 +79,13 @@ object EncryptionHelper {
      * Encrypts the given [data] with AES-GCM using the specified [key].
      */
     fun encryptStringWithAesGCM(data: ByteArray, key: SecretKey): ByteArray {
-        val nonce = KeysHelper.generateNonce()
-        val gcmSpec = GCMParameterSpec(128, nonce) // 128 bit authentication tag
-        val ciphertext = Cipher.getInstance("AES/GCM/NoPadding").apply {
-            init(Cipher.ENCRYPT_MODE, key, gcmSpec)
-        }.doFinal(data)
-        return nonce + ciphertext
-    }
+       val nonce = KeysHelper.generateNonce()
+       val gcmSpec = GCMParameterSpec(256, nonce) // 256 bit authentication tag
+       val ciphertext = Cipher.getInstance("AES/GCM/NoPadding").apply {
+           init(Cipher.ENCRYPT_MODE, key, gcmSpec)
+       }.doFinal(data)
+       return nonce + ciphertext
+   }
 
     /**
      * Encrypts the given [data] with RSA and the specified [key].
