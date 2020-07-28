@@ -80,7 +80,7 @@ object EncryptionHelper {
      */
     fun encryptStringWithAesGCM(data: ByteArray, key: SecretKey): ByteArray {
        val nonce = KeysHelper.generateNonce()
-       val gcmSpec = GCMParameterSpec(256, nonce) // 256 bit authentication tag
+       val gcmSpec = GCMParameterSpec(128, nonce) // 128 bit authentication tag
        val ciphertext = Cipher.getInstance("AES/GCM/NoPadding").apply {
            init(Cipher.ENCRYPT_MODE, key, gcmSpec)
        }.doFinal(data)
