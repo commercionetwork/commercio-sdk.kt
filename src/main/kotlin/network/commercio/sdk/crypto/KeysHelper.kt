@@ -32,16 +32,6 @@ object KeysHelper {
         return result
     }
 
-
-    /**
-     * Generates a new random AES-256 secret key without any initializing vector.
-     */
-    fun generateAesKey(): SecretKey {
-        return KeyGenerator.getInstance("AES").apply {
-            init(256)
-        }.generateKey()
-    }
-
     fun recoverAesKey(bytes: ByteArray): SecretKey {
         return SecretKeySpec(bytes, "AES")
     }

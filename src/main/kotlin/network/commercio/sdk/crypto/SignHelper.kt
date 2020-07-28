@@ -11,8 +11,8 @@ import java.security.PublicKey
 import java.security.Security
 import java.security.Signature
 import java.security.interfaces.ECPublicKey
-import java.security.interfaces.RSAPublicKey
 import java.security.interfaces.RSAPrivateKey
+import java.security.interfaces.RSAPublicKey
 
 /**
  * Allows to easily perform signature-related operations.

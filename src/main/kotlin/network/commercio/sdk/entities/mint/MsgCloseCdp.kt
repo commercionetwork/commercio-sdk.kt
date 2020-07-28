@@ -7,11 +7,10 @@ import network.commercio.sacco.models.types.StdMsg
  * Collateralized Debt position to get back the Commercio Tokens that have been locked with it.
  */
 data class MsgCloseCdp(
-    private val signerDid: String,
-    private val timeStamp: Int
+    private val closeCdp: CloseCdp
 ) : StdMsg(
     type = "commercio/MsgCloseCdp", value = mapOf(
-        "signer" to signerDid,
-        "cdp_timestamp" to timeStamp.toString()
+        "signer" to closeCdp.signerDid,
+        "cdp_timestamp" to closeCdp.timeStamp.toString()
     )
 )

@@ -11,20 +11,22 @@ import network.commercio.sdk.crypto.SignHelper
 import network.commercio.sdk.entities.id.*
 import network.commercio.sdk.networking.Network
 import network.commercio.sdk.tx.TxHelper
+import network.commercio.sdk.tx.TxHelper.BroadcastingMode
 import network.commercio.sdk.utils.getTimeStamp
 import network.commercio.sdk.utils.readHex
-import java.util.Base64 as B64
 import network.commercio.sdk.utils.toHex
 import network.commercio.sdk.utils.tryOrNull
 import java.security.interfaces.RSAPrivateKey
 import javax.crypto.SecretKey
-import java.util.UUID
-import java.util.*
 
 /**
  * Allows to perform common operations related to CommercioID.
  */
 object IdHelper {
+
+    init {
+        System.setProperty("javax.net.ssl.trustStoreType", "JKS")
+    }
 
     /**
      * Returns the Did Document associated with the given [did], or `null` if no Did Document was found.
@@ -41,78 +43,84 @@ object IdHelper {
     suspend fun setDidDocument(
         didDocument: DidDocument,
         wallet: Wallet,
-        fee: StdFee? = null
+        fee: StdFee? = null,
+        mode: BroadcastingMode? = null
     ): TxResponse {
-        System.setProperty("javax.net.ssl.trustStoreType", "JKS")
         val msg = MsgSetDidDocument(didDocument)
-        return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet, fee = fee)
+        return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet, fee = fee, mode = mode)
+    }
+
+    /**
+     * Performs a transaction setting the specified list of [didDocuments] as being associated with the
+     * address present inside the specified [wallet].
+     */
+    suspend fun setDidDocumentsList(
+        didDocuments: List<DidDocument>,
+        wallet: Wallet,
+        fee: StdFee? = null,
+        mode: BroadcastingMode? = null
+    ): TxResponse {
+        val msgs = didDocuments.map { MsgSetDidDocument(it) }
+        return TxHelper.createSignAndSendTx(msgs = msgs, wallet = wallet, fee = fee, mode = mode)
     }
 
     /**
      * Creates a new Did power up request for the given [pairwiseDid] and of the given [amount].
      * Signs everything that needs to be signed (i.e. the signature JSON inside the payload) with the
-     * private key contained inside the given [wallet].
+     * private key contained inside the given [wallet] and the client generated `signature private RSA key`.
+     * Optionally a custom `fee` can be specified.
      */
     suspend fun requestDidPowerUp(
         pairwiseDid: Did,
         amount: List<StdCoin>,
         wallet: Wallet,
         privateKey: RSAPrivateKey,
-        fee: StdFee? = null
-
+        fee: StdFee? = null,
+        mode: BroadcastingMode? = null
     ): TxResponse {
-        // Get the timestamp
-        // TODO: CONTROL IT BECAUSE IT SHOULD BE SETTING TO UTC
-        val timestamp = Date().getTime().toString()
 
-        // Build the signature Hash
-        val signedSignatureHash = SignHelper.signPowerUpSignature(
-            senderDid = wallet.bech32Address,
-            pairwiseDid = pairwiseDid.value,
-            timestamp = timestamp,
+        val requestDidPowerUp= RequestDidPowerUpHelper.fromWallet(
+            wallet = wallet,
+            pairwiseDid = pairwiseDid,
+            amount = amount,
             privateKey = privateKey
         )
 
-        // Build the payload
-        // TODO: USED java.util.Base64 INSTEAD org.bouncycastle.util.encoders.Base64. SHOULD BE USED bouncycastle
-        val payload = DidPowerUpRequestPayload(
-            senderDid = wallet.bech32Address,
-            pairwiseDid = pairwiseDid.value,
-            timestamp = timestamp,
-            signature = B64.getEncoder().encodeToString(signedSignatureHash)
-        )
-
-
-        val aesKey = KeysHelper.generateAesKey(128)
-
-        // Build the proof and encrypt with AesGCM
-        // AES KEY IS 128 BIT: JAVA LIMITATION
-        val encryptedProof = EncryptionHelper.encryptStringWithAesGCM(
-            jacksonObjectMapper().writeValueAsString(payload).toByteArray(),
-            aesKey
-        )
-
-        // =================
-        // Encrypt proof key
-        // =================
-
-        // Encrypt the key using the Tumbler public RSA key
-        val rsaPubTkKey = EncryptionHelper.getGovernmentRsaPubKey(
-            wallet.networkInfo.lcdUrl
-        )
-        val encryptedProofKey =
-            EncryptionHelper.encryptWithRsa(aesKey.getEncoded(), rsaPubTkKey)
-
         // Build the message and send the tx
         val msg = MsgRequestDidPowerUp(
-            claimantDid = wallet.bech32Address,
-            amount = amount,
-            powerUpProof = B64.getEncoder().encodeToString(encryptedProof),
-            uuid = UUID.randomUUID().toString(),
-            proofKey = B64.getEncoder().encodeToString(encryptedProofKey)
+            claimantDid = requestDidPowerUp.claimantDid,
+            amount = requestDidPowerUp.amount,
+            powerUpProof = requestDidPowerUp.powerUpProof,
+            uuid = requestDidPowerUp.uuid,
+            proofKey = requestDidPowerUp.proofKey
         )
 
-        return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet, fee = fee)
+        return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet, fee = fee, mode = mode)
+    }
+
+    /**
+     *  Performs a transaction setting the specified list of RequestDidPowerUp in the given [requestDidPowerUps].
+     * Optionally a custom `fee` can be specified.
+     */
+    suspend fun requestDidPowerUpsList(
+        requestDidPowerUps: List<RequestDidPowerUp>,
+        wallet: Wallet,
+        fee: StdFee? = null,
+        mode: BroadcastingMode? = null
+    ): TxResponse {
+
+        // Build the message and send the tx
+        val msgs = requestDidPowerUps.map {
+            MsgRequestDidPowerUp(
+                claimantDid = it.claimantDid,
+                amount = it.amount,
+                powerUpProof = it.powerUpProof,
+                uuid = it.uuid,
+                proofKey = it.proofKey
+            )
+        }
+
+        return TxHelper.createSignAndSendTx(msgs = msgs, wallet = wallet, fee = fee, mode = mode)
     }
 
     /**

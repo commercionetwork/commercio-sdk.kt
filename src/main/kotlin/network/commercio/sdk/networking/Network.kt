@@ -19,6 +19,7 @@ object Network {
      * Notes. Internal for testing.
      */
     val client: HttpClient by lazy {
+        System.setProperty("javax.net.ssl.trustStoreType", "JKS")
         HttpClient(OkHttp) {
             engine {
                 val loggingInterceptor = HttpLoggingInterceptor()

@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class DidDocumentProof(
     @JsonProperty("type") val type: String,
-    @JsonProperty("created") val iso8601CreationTimeStamp: String,
+    @JsonProperty("created") val timeStamp: String,
     @JsonProperty("proofPurpose") val proofPurpose: String,
     @JsonProperty("controller") val controller: String,
     @JsonProperty("verificationMethod")  val verificationMethod: String,

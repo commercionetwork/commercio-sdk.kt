@@ -1,6 +1,5 @@
 package network.commercio.sdk.entities.mint
 
-import network.commercio.sacco.models.types.StdCoin
 import network.commercio.sacco.models.types.StdMsg
 
 /**
@@ -8,11 +7,10 @@ import network.commercio.sacco.models.types.StdMsg
  * allows to transform the user's Commercio Token into Commercio Cash Credits.
  */
 data class MsgOpenCdp(
-    private val depositAmount: List<StdCoin>,
-    private val depositorDid: String
+    private val openCdp: OpenCdp
 ) : StdMsg(
     type = "commercio/MsgOpenCdp", value = mapOf(
-        "deposit_amount" to depositAmount,
-        "depositor" to depositorDid
+        "deposit_amount" to openCdp.depositAmount,
+        "depositor" to openCdp.depositorDid
     )
 )
