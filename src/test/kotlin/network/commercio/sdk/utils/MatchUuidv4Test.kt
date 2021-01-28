@@ -20,5 +20,6 @@ class MatchUuidv4Test {
     @Test
     fun `Valid uuid v4 should return true`() {
         Assert.assertEquals(matchUuidv4("e21fd7bf-fd58-40ca-be2d-f50d29189276"), true)
+
     }
 }
