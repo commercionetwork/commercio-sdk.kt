@@ -39,6 +39,6 @@ class MsgShareDocumentTests {
         )
 
         val expected = readResource("msgs/MsgShareDocument.json")
-        //assertEquals(expected, msgObjectMapper.writeValueAsString(msg)) // todo fix
+        assertEquals(expected, msgObjectMapper.writeValueAsString(msg))
     }
 }
