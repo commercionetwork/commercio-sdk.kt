@@ -28,7 +28,7 @@ class CommercioDocReceiptHelperTest {
 
         val uuid = UUID.randomUUID().toString()
         val txHash = "txHash"
-        val documentId = "documentId"
+        val documentId = UUID.randomUUID().toString()
 
         val expectedDocReceipt = CommercioDocReceipt(
             senderDid = wallet.bech32Address,
@@ -44,6 +44,7 @@ class CommercioDocReceiptHelperTest {
             txHash = txHash,
             documentId = documentId
         )
+
 
         assertNotEquals(commercioDocReceipt.uuid, expectedDocReceipt.uuid)
         assertEquals(commercioDocReceipt.senderDid, expectedDocReceipt.senderDid)
