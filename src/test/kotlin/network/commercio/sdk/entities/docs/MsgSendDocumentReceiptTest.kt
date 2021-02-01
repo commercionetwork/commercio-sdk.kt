@@ -5,6 +5,7 @@ import network.commercio.sdk.readResource
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
+
 class MsgSendDocumentReceiptTest {
 
     @Test
