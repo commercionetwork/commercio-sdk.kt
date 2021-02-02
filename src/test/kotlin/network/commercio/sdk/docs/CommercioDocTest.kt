@@ -46,7 +46,7 @@ class CommercioDocTest {
 
     val correctCommercioEncryptionData = CommercioDoc.EncryptionData(
         keys = listOf(correctCommercioDocEncryptionDataKey),
-        encryptedData = listOf("encryptedData") // todo fix value?
+        encryptedData = listOf("encryptedData")
     )
 
     val correctCommercioDoc = CommercioDoc(
@@ -265,18 +265,36 @@ class CommercioDocTest {
         jsonWithContentUri.putAll(jsonMinimal)
         jsonWithContentUri["content_uri"] = correctCommercioDoc.contentUri
 
+        val checksumMap = mutableMapOf<String, Any>()
+        checksumMap["algorithm"] = CommercioDoc.Checksum.Algorithm.MD5
+        checksumMap["value"] = correctCommercioDocChecksum.value
+
         val jsonWithChecksum = mutableMapOf<String, Any>()
         jsonWithChecksum.putAll(jsonMinimal)
-        jsonWithChecksum["checksum"] = correctCommercioDoc.checksum.toString()
+        jsonWithChecksum["checksum"] = checksumMap
+
+        val encryptionDataKeyMap = mutableMapOf<String, Any>()
+        encryptionDataKeyMap["recipient"] = correctCommercioDocEncryptionDataKey.recipientDid
+        encryptionDataKeyMap["value"] = correctCommercioDocEncryptionDataKey.value
+
+        val encryptionDataMap = mutableMapOf<String, Any>()
+        encryptionDataMap["keys"] = listOf(encryptionDataKeyMap)
+        encryptionDataMap["encrypted_data"] = listOf("encryptedData")
 
         val jsonWithEncryptionData = mutableMapOf<String, Any>()
         jsonWithEncryptionData.putAll(jsonMinimal)
-        jsonWithEncryptionData["encryption_data"] = correctCommercioDoc.encryptionData.toString()
+        jsonWithEncryptionData["encryption_data"] = encryptionDataMap
 
+        val doSignMap = mutableMapOf<String, Any>()
+        doSignMap["storage_uri"] = correctCommercioDoSign.storageUri
+        doSignMap["signer_instance"] = correctCommercioDoSign.signerIstance
+        doSignMap["vcr_id"] = correctCommercioDoSign.vcrId
+        doSignMap["certificate_profile"] = correctCommercioDoSign.certificateProfile
+        doSignMap["sdn_data"] = listOf(CommercioDoc.CommercioDoSign.CommercioSdnData.COMMON_NAME)
 
         val jsonWithDoSign = mutableMapOf<String, Any>()
         jsonWithDoSign.putAll(jsonMinimal)
-        jsonWithDoSign["do_sign"] = correctCommercioDoc.doSign.toString()
+        jsonWithDoSign["do_sign"] = doSignMap
 
         val minimalDoc = CommercioDoc(
             uuid = correctCommercioDoc.uuid,
@@ -482,7 +500,6 @@ class CommercioDocTest {
         minimalJson["vcr_id"] = correctCommercioDoSign.vcrId
         minimalJson["certificate_profile"] = correctCommercioDoSign.certificateProfile
 
-
         val minimalCommercioDoSign = CommercioDoc.CommercioDoSign(
             storageUri = correctCommercioDoSign.storageUri,
             signerIstance = correctCommercioDoSign.signerIstance,
@@ -495,46 +512,4 @@ class CommercioDocTest {
             jacksonObjectMapper().convertValue(minimalJson, CommercioDoc.CommercioDoSign::class.java)
         )
     }
-
-
-    // CommercioEncryptedData  // NO 963
-
-
-    /*
-     val correctCommercioDocMetadataSchema = CommercioDoc.Metadata.Schema(
-        uri = "http=//uri.url",
-        version = "1"
-    )
-     */
-
-
-    //579
-
-
-// riga 473
-
-
 }
-
-
-/*
-
-data class CommercioDoc(
-    @JsonProperty("sender") val senderDid= String,
-    @JsonProperty("recipients") val recipientsDids= List<String>,
-    @JsonProperty("uuid") val uuid= String,
-    @JsonProperty("content_uri") @JsonInclude(JsonInclude.Include.NON_EMPTY) val contentUri= String = "",
-    @JsonProperty("metadata") val metadata= Metadata,
-    @JsonProperty("checksum") val checksum= Checksum? = null,
-    @JsonProperty("encryption_data") @JsonInclude(JsonInclude.Include.NON_EMPTY) val encryptionData= EncryptionData? = null,
-    @JsonProperty("do_sign") @JsonInclude(JsonInclude.Include.NON_EMPTY) val doSign= CommercioDoSign? = null
-) {
-
-    init {
-        require(matchBech32Format(senderDid)) { "sender requires a valid Bech32 format" }
-        require(recipientsDids.isNotEmpty() && recipientsDids.all { matchBech32Format(it) }
-        ) { "recipients must contains a non empty list of string in Bech32 format" }
-        require(matchUuidv4(uuid)) { "uuid requires a valid UUID v4 format" }
-        require(contentUri.isNullOrEmpty() || getStringBytes(contentUri) <= 512) { "contentUri must have a valid length" }
-    }
- */
