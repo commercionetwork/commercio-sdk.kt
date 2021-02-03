@@ -7,6 +7,29 @@ import network.commercio.sdk.utils.matchBech32Format
 import network.commercio.sdk.utils.matchUuidv4
 
 
+// For more information see:
+/// https://docs.commercio.network/x/docs/#supported-encrypted-data
+
+enum class EncryptedData {
+    @JsonProperty("content")
+    CONTENT,
+    @JsonProperty("content_uri")
+    CONTENT_URI,
+    @JsonProperty("metadata.content_uri")
+    METADATA_CONTENT_URI,
+    @JsonProperty("metadata.schema.uri")
+    METADATA_SCHEMA_URI;
+
+    override fun toString(): String {
+        return when (this) {
+            CONTENT -> "content"
+            CONTENT_URI -> "content_uri"
+            METADATA_CONTENT_URI -> "metadata.content_uri"
+            METADATA_SCHEMA_URI -> "metadata.schema.uri"
+        }
+    }
+}
+
 /**
  * Contains all the data related to a document that is sent to the chain when a user wants to share
  * a document with another user.
@@ -83,8 +106,47 @@ data class CommercioDoc(
 
     data class EncryptionData(
         @JsonProperty("keys") val keys: List<Key>,
-        @JsonProperty("encrypted_data") val encryptedData: List<String>
+        @JsonProperty("encrypted_data") val encryptedData: List<EncryptedData>
     ) {
+        // todo remove
+/*
+        // For more information see:
+        // https://docs.commercio.network/x/docs/#supported-encrypted-data
+        enum class CommercioEncryptedData {
+            // Special identifier, references the document's file contents. Means that
+            // the `aes_key` has been used to encrypt a file exchanged by other means of
+            // communication.
+            @JsonProperty("content")
+            CONTENT,
+
+            // The value of the field `content_uri` must be encrypted.
+            @JsonProperty("content_uri")
+            CONTENT_URI,
+
+            // The value of the field `content_uri` inside the `metadata` must be
+            // encrypted.
+            @JsonProperty("metadata.content_uri")
+            METADATA_CONTENT_URI,
+
+            // The value of the field `uri` inside the `schema` inside `metadata` must be
+            // encrypted.
+            @JsonProperty("metadata.schema.uri")
+            METADATA_SCHEMA_URI;
+
+            override fun toString(): String {
+                when (this) {
+                    CONTENT -> { return "content"
+                    }
+                    CONTENT_URI -> { return "content_uri"
+                    }
+                    METADATA_CONTENT_URI -> { return "metadata.content_uri"
+                    }
+                    METADATA_SCHEMA_URI -> { return "metadata.schema.uri"
+                    }
+                }
+            }
+        }
+*/
 
         data class Key(
             @JsonProperty("recipient") val recipientDid: String,

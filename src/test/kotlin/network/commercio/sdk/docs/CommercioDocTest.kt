@@ -4,6 +4,7 @@ package network.commercio.sdk.docs
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import junit.framework.Assert.assertEquals
 import network.commercio.sdk.entities.docs.CommercioDoc
+import network.commercio.sdk.entities.docs.EncryptedData
 import org.junit.Test
 
 
@@ -46,7 +47,7 @@ class CommercioDocTest {
 
     val correctCommercioEncryptionData = CommercioDoc.EncryptionData(
         keys = listOf(correctCommercioDocEncryptionDataKey),
-        encryptedData = listOf("encryptedData")
+        encryptedData = listOf(EncryptedData.CONTENT_URI)
     )
 
     val correctCommercioDoc = CommercioDoc(
@@ -58,7 +59,7 @@ class CommercioDocTest {
         checksum = correctCommercioDocChecksum,
         doSign = correctCommercioDoSign,
         encryptionData = correctCommercioEncryptionData
-    );
+    )
 
     // SENDER
 
@@ -279,7 +280,7 @@ class CommercioDocTest {
 
         val encryptionDataMap = mutableMapOf<String, Any>()
         encryptionDataMap["keys"] = listOf(encryptionDataKeyMap)
-        encryptionDataMap["encrypted_data"] = listOf("encryptedData")
+        encryptionDataMap["encrypted_data"] = listOf(EncryptedData.CONTENT_URI)
 
         val jsonWithEncryptionData = mutableMapOf<String, Any>()
         jsonWithEncryptionData.putAll(jsonMinimal)

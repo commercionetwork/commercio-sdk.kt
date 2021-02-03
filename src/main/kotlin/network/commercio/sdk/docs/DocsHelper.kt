@@ -7,6 +7,7 @@ import network.commercio.sacco.models.types.StdFee
 import network.commercio.sdk.crypto.KeysHelper
 import network.commercio.sdk.entities.docs.CommercioDoc
 import network.commercio.sdk.entities.docs.CommercioDocReceipt
+import network.commercio.sdk.entities.docs.EncryptedData
 import network.commercio.sdk.entities.docs.MsgSendDocumentReceipt
 import network.commercio.sdk.entities.docs.MsgShareDocument
 import network.commercio.sdk.entities.id.Did

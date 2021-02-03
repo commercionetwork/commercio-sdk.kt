@@ -3,6 +3,7 @@ package network.commercio.sdk.docs
 import network.commercio.sacco.Wallet
 import network.commercio.sdk.crypto.KeysHelper
 import network.commercio.sdk.entities.docs.CommercioDoc
+import network.commercio.sdk.entities.docs.EncryptedData
 import network.commercio.sdk.entities.id.Did
 import javax.crypto.SecretKey
 

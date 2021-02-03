@@ -1,28 +1,14 @@
 package network.commercio.sdk.docs
 
-import com.fasterxml.jackson.annotation.JsonProperty
 import network.commercio.sacco.Wallet
 import network.commercio.sdk.crypto.EncryptionHelper
 import network.commercio.sdk.entities.docs.CommercioDoc
+import network.commercio.sdk.entities.docs.EncryptedData
 import network.commercio.sdk.entities.id.Did
 import network.commercio.sdk.id.IdHelper
 import network.commercio.sdk.utils.toHex
 import javax.crypto.SecretKey
 
-
-enum class EncryptedData {
-    @JsonProperty("CONTENT_URI") CONTENT_URI,
-    @JsonProperty("METADATA_CONTENT_URI") METADATA_CONTENT_URI,
-    @JsonProperty("METADATA_SCHEMA_URI") METADATA_SCHEMA_URI;
-
-    override fun toString(): String {
-        return when (this) {
-            CONTENT_URI -> "content_uri"
-            METADATA_CONTENT_URI -> "metadata.content_uri"
-            METADATA_SCHEMA_URI -> "metadata.schema.uri"
-        }
-    }
-}
 
 /**
  * Transforms [this] document into one having the proper fields encrypted as specified inside the [encryptedData] list.
@@ -92,7 +78,7 @@ internal suspend fun CommercioDoc.encryptField(
         ),
         encryptionData = CommercioDoc.EncryptionData(
             keys = encryptionKeys,
-            encryptedData = encryptedData.map { it.toString() }
+            encryptedData = encryptedData.map { it }
         )
     )
 }
