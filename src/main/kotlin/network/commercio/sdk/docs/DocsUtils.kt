@@ -15,6 +15,9 @@ import javax.crypto.SecretKey
  * All the fields will be encrypted using the specified [aesKey]. This key will later be encrypted for each and every
  * Did specified into the [recipients] list.
  * The overall encrypted data will be put inside the proper document field.
+ * Throws [ArgumentError] if:
+ * Is provided [CommercioEncryptedData.CONTENT_URI] without a valid [contentUri].
+ *Is provided [CommercioEncryptedData.METADATA_SCHEMA_URI] without a  [schema].
  */
 internal suspend fun CommercioDoc.encryptField(
     aesKey: SecretKey,
@@ -29,7 +32,10 @@ internal suspend fun CommercioDoc.encryptField(
 
     // Encrypt the contents
     val encryptedContentUri = when (encryptedData.contains(EncryptedData.CONTENT_URI)) {
-        true -> EncryptionHelper.encryptWithAes(contentUri, aesKey).toHex()
+        true -> {
+            require(!contentUri.isNullOrBlank()) { "Document contentUri field can not be null or empty if the encryptedData arguments contains EncryptedData.CONTENT_URI" }
+            EncryptionHelper.encryptWithAes(contentUri, aesKey).toHex()
+        }
         false -> null
     }
 
@@ -39,7 +45,10 @@ internal suspend fun CommercioDoc.encryptField(
     }
 
     val encryptedMetadataSchemaUri = when (encryptedData.contains(EncryptedData.METADATA_SCHEMA_URI)) {
-        true -> metadata.schema?.uri?.let { EncryptionHelper.encryptWithAes(it, aesKey).toHex() }
+        true -> {
+            requireNotNull(metadata.schema?.uri) { "Document metadata.schema field can not be null if the encryptedData arguments contains CommercioEncryptedData.METADATA_SCHEMA_URI" }
+            metadata.schema?.uri?.let { EncryptionHelper.encryptWithAes(it, aesKey).toHex() }
+        }
         false -> null
     }
 
@@ -78,7 +87,7 @@ internal suspend fun CommercioDoc.encryptField(
         ),
         encryptionData = CommercioDoc.EncryptionData(
             keys = encryptionKeys,
-            encryptedData = encryptedData.map { it }
+            encryptedData = encryptedData.map { it }.toList()
         )
     )
 }
