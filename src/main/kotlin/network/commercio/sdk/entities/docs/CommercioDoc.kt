@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import network.commercio.sdk.utils.getStringBytes
 import network.commercio.sdk.utils.matchBech32Format
 import network.commercio.sdk.utils.matchUuidv4
+import network.commercio.sdk.entities.docs.CommercioDoc.CommercioDoSign.CommercioSdnData
 
 
 // For more information see:
@@ -13,10 +14,13 @@ import network.commercio.sdk.utils.matchUuidv4
 enum class EncryptedData {
     @JsonProperty("content")
     CONTENT,
+
     @JsonProperty("content_uri")
     CONTENT_URI,
+
     @JsonProperty("metadata.content_uri")
     METADATA_CONTENT_URI,
+
     @JsonProperty("metadata.schema.uri")
     METADATA_SCHEMA_URI;
 
@@ -51,6 +55,27 @@ data class CommercioDoc(
         ) { "recipients must contains a non empty list of string in Bech32 format" }
         require(matchUuidv4(uuid)) { "uuid requires a valid UUID v4 format" }
         require(contentUri.isNullOrEmpty() || getStringBytes(contentUri) <= 512) { "contentUri must have a valid length" }
+        require(
+            _checksumMustBePresentIfDoSign(
+                checksum,
+                doSign
+            )
+        ) { "when doSign is provided then also the checksum field is required" }
+    }
+
+    /**
+     * Return [true] if the fields [doSign] and [checksum] are both not null if the
+     * first is specified.
+     */
+
+    fun _checksumMustBePresentIfDoSign(
+        checksum: CommercioDoc.Checksum?,
+        doSign: CommercioDoc.CommercioDoSign?
+    ): Boolean {
+        if (doSign != null) {
+            return checksum != null
+        }
+        return true;
     }
 
 
@@ -108,45 +133,6 @@ data class CommercioDoc(
         @JsonProperty("keys") val keys: List<Key>,
         @JsonProperty("encrypted_data") val encryptedData: List<EncryptedData>
     ) {
-        // todo remove
-/*
-        // For more information see:
-        // https://docs.commercio.network/x/docs/#supported-encrypted-data
-        enum class CommercioEncryptedData {
-            // Special identifier, references the document's file contents. Means that
-            // the `aes_key` has been used to encrypt a file exchanged by other means of
-            // communication.
-            @JsonProperty("content")
-            CONTENT,
-
-            // The value of the field `content_uri` must be encrypted.
-            @JsonProperty("content_uri")
-            CONTENT_URI,
-
-            // The value of the field `content_uri` inside the `metadata` must be
-            // encrypted.
-            @JsonProperty("metadata.content_uri")
-            METADATA_CONTENT_URI,
-
-            // The value of the field `uri` inside the `schema` inside `metadata` must be
-            // encrypted.
-            @JsonProperty("metadata.schema.uri")
-            METADATA_SCHEMA_URI;
-
-            override fun toString(): String {
-                when (this) {
-                    CONTENT -> { return "content"
-                    }
-                    CONTENT_URI -> { return "content_uri"
-                    }
-                    METADATA_CONTENT_URI -> { return "metadata.content_uri"
-                    }
-                    METADATA_SCHEMA_URI -> { return "metadata.schema.uri"
-                    }
-                }
-            }
-        }
-*/
 
         data class Key(
             @JsonProperty("recipient") val recipientDid: String,
@@ -168,7 +154,9 @@ data class CommercioDoc(
         init {
             require(getStringBytes(vcrId) <= 64) { "do_sign.vcr_id must have a valid length" }
             require(getStringBytes(certificateProfile) <= 32) { "do_sign.certificate_profile must have a valid length" }
+            require(sdnData == null || sdnData?.isNotEmpty()) { "do_sign.sdn_data must be not empty" }
         }
+
 
         enum class CommercioSdnData {
             @JsonProperty("common_name")

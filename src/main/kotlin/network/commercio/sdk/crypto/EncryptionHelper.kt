@@ -35,7 +35,7 @@ object EncryptionHelper {
             ?: throw UnsupportedOperationException("Missing tumbler_address in response")
 
         val responsePublicKeyPem = Network.queryChain<Any>("$lcdUrl/identities/$tumblerAddress")
-            ?: throw UnsupportedOperationException("Cannot get government RSA public key")
+            ?: throw UnsupportedOperationException("Cannot get tumbler RSA public key")
 
         // get first RsaSignatureKey2018
         val publicKeyPem = (jacksonObjectMapper().convertValue(responsePublicKeyPem, DidDocumentWrapper::class.java).didDoc.publicKeys)

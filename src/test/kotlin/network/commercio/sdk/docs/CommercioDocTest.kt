@@ -254,6 +254,46 @@ class CommercioDocTest {
     // PROPS
 
     @Test
+    fun `fromJson should behave correctly`() {
+
+        val fullCommercioDocObjSerialized = jacksonObjectMapper().writeValueAsString(correctCommercioDoc)
+        val fullJson =
+            """{"sender":"did=com=1acdefg","recipients":["did=com=1acdefg"],"uuid":"c510755c-c27d-4348-bf4c-f6050fc6935c","content_uri":"content-uri","metadata":{"content_uri":"content-uri","schema":{"uri":"http=//uri.url","version":"1"},"schema_type":"schemaType"},"checksum":{"value":"value","algorithm":"md5"},"encryption_data":{"keys":[{"recipient":"did=com=1acdefg","value":"value"}],"encrypted_data":["content_uri"]},"do_sign":{"storage_uri":"http=//do.sign","signer_instance":"signer","vcr_id":"vcrId","certificate_profile":"profile","sdn_data":["common_name"]}}"""
+        assertEquals(fullCommercioDocObjSerialized, fullJson)
+
+        val minimalDocChecksumNull = CommercioDoc(
+            uuid = correctCommercioDoc.uuid,
+            senderDid = correctCommercioDoc.senderDid,
+            recipientsDids = correctCommercioDoc.recipientsDids,
+            metadata = correctCommercioDoc.metadata
+        )
+
+        val minimalDocChecksumNullSerialized = jacksonObjectMapper().writeValueAsString(minimalDocChecksumNull)
+        val minimalDocChecksumNullJson =
+            """{"sender":"did=com=1acdefg","recipients":["did=com=1acdefg"],"uuid":"c510755c-c27d-4348-bf4c-f6050fc6935c","metadata":{"content_uri":"content-uri","schema":{"uri":"http=//uri.url","version":"1"},"schema_type":"schemaType"},"checksum":null}""".trimMargin()
+        assertEquals(minimalDocChecksumNullSerialized, minimalDocChecksumNullJson)
+
+        val minimalDocSdnDataNull = CommercioDoc(
+            uuid = correctCommercioDoc.uuid,
+            senderDid = correctCommercioDoc.senderDid,
+            recipientsDids = correctCommercioDoc.recipientsDids,
+            metadata = correctCommercioDoc.metadata,
+            doSign = CommercioDoc.CommercioDoSign(
+                storageUri = correctCommercioDoc.doSign!!.storageUri,
+                signerIstance = correctCommercioDoc.doSign!!.signerIstance,
+                vcrId = correctCommercioDoc.doSign!!.vcrId,
+                certificateProfile = correctCommercioDoc.doSign!!.certificateProfile
+            ),
+            checksum = correctCommercioDoc.checksum
+        )
+
+        val minimalDocSdnDataNullSerialized = jacksonObjectMapper().writeValueAsString(minimalDocSdnDataNull)
+        val minimalDocSdnDataNullJson =
+            """{"sender":"did=com=1acdefg","recipients":["did=com=1acdefg"],"uuid":"c510755c-c27d-4348-bf4c-f6050fc6935c","metadata":{"content_uri":"content-uri","schema":{"uri":"http=//uri.url","version":"1"},"schema_type":"schemaType"},"checksum":{"value":"value","algorithm":"md5"},"do_sign":{"storage_uri":"http=//do.sign","signer_instance":"signer","vcr_id":"vcrId","certificate_profile":"profile","sdn_data":null}}""".trimMargin()
+        assertEquals(minimalDocSdnDataNullSerialized, minimalDocSdnDataNullJson)
+    }
+
+    @Test
     fun `convertValue from map to CommercioDoc should behave correctly`() {
 
         val jsonMinimal = mutableMapOf<String, Any>()
@@ -296,6 +336,7 @@ class CommercioDocTest {
         val jsonWithDoSign = mutableMapOf<String, Any>()
         jsonWithDoSign.putAll(jsonMinimal)
         jsonWithDoSign["do_sign"] = doSignMap
+        jsonWithDoSign["checksum"] = checksumMap
 
         val minimalDoc = CommercioDoc(
             uuid = correctCommercioDoc.uuid,
@@ -305,6 +346,8 @@ class CommercioDocTest {
         )
 
         assertEquals(minimalDoc, jacksonObjectMapper().convertValue(jsonMinimal, CommercioDoc::class.java))
+        assertEquals(minimalDoc.checksum, null)
+        assertEquals(minimalDoc.doSign, null)
 
         val docWithContentUri = CommercioDoc(
             uuid = correctCommercioDoc.uuid,
@@ -342,7 +385,8 @@ class CommercioDocTest {
             senderDid = correctCommercioDoc.senderDid,
             recipientsDids = correctCommercioDoc.recipientsDids,
             metadata = correctCommercioDoc.metadata,
-            doSign = correctCommercioDoc.doSign
+            doSign = correctCommercioDoc.doSign,
+            checksum = correctCommercioDoc.checksum
         )
         assertEquals(docWithDoSign, jacksonObjectMapper().convertValue(jsonWithDoSign, CommercioDoc::class.java))
 

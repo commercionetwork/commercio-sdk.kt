@@ -46,7 +46,7 @@ fun getStringBytes(str: String?): Int {
 }
 
 /**
- * Returns true if a string [uuid] has a Uuid-v4 format, false otherwise
+ * Returns true if a string [uuid] has a Uuid-v4 format, false otherwise.
  */
 fun matchUuidv4(uuid: String): Boolean {
     val regex =
@@ -56,7 +56,8 @@ fun matchUuidv4(uuid: String): Boolean {
 
 /**
  * Returns true if the provided [str] is a valid bech32 string, false otherwise.
- * See: https://en.bitcoin.it/wiki/Bech32
+ * Use only a basic regex.
+ * In progress: missing checksum check.
  */
 fun matchBech32Format(str: String): Boolean {
     if (str.length < 8 || str.length > 90) {
