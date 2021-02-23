@@ -42,7 +42,8 @@ class CommercioDocReceiptHelperTest {
             wallet = wallet,
             recipient = Did(wallet.bech32Address),
             txHash = txHash,
-            documentId = documentId
+            documentId = documentId,
+            proof = ""
         )
 
         assertNotEquals(commercioDocReceipt.uuid, expectedDocReceipt.uuid)
@@ -60,7 +61,8 @@ class CommercioDocReceiptHelperTest {
             wallet = wallet,
             recipient = Did(wallet.bech32Address),
             txHash = "",
-            documentId = "doc invalid uuid"
+            documentId = "doc invalid uuid",
+            proof = ""
         )
     }
 
@@ -71,7 +73,8 @@ class CommercioDocReceiptHelperTest {
             wallet = wallet,
             recipient = Did("doc invalid uuid"),
             txHash = "",
-            documentId = UUID.randomUUID().toString()
+            documentId = UUID.randomUUID().toString(),
+            proof = ""
         )
     }
 }

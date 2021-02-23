@@ -17,7 +17,7 @@ import javax.crypto.SecretKey
  * The overall encrypted data will be put inside the proper document field.
  * Throws [ArgumentError] if:
  * Is provided [CommercioEncryptedData.CONTENT_URI] without a valid [contentUri].
- *Is provided [CommercioEncryptedData.METADATA_SCHEMA_URI] without a  [schema].
+ * Is provided [CommercioEncryptedData.METADATA_SCHEMA_URI] without a  [schema].
  */
 internal suspend fun CommercioDoc.encryptField(
     aesKey: SecretKey,

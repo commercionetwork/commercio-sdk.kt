@@ -7,7 +7,6 @@ import org.junit.Test
 
 class CommercioDocReceiptTest {
 
-
     val correctDid = "did=com=1acdefg"
     val correctUuid = "c510755c-c27d-4348-bf4c-f6050fc6935c"
     val correctCommercioDocReceipt = CommercioDocReceipt(
@@ -280,5 +279,34 @@ class CommercioDocReceiptTest {
         )
     }
 
+    // PROPS
 
+    @Test
+    fun `fromJson should behave correctly and proof will be omitted if empty`() {
+
+        val docWithDefaultProof = CommercioDocReceipt(
+            uuid = correctUuid,
+            senderDid = correctDid,
+            recipientDid = correctDid,
+            txHash = "txHash",
+            documentUuid = correctUuid
+        )
+
+        val docWithSimulatedDefaultProof = CommercioDocReceipt(
+            uuid = correctUuid,
+            senderDid = correctDid,
+            recipientDid = correctDid,
+            txHash = "txHash",
+            documentUuid = correctUuid,
+            proof = ""
+        )
+
+        val objSerializedDefault = jacksonObjectMapper().writeValueAsString(docWithDefaultProof)
+        val objSerializedSimulated = jacksonObjectMapper().writeValueAsString(docWithSimulatedDefaultProof)
+
+        val jsonWithDefaultProof =
+            """{"uuid":"c510755c-c27d-4348-bf4c-f6050fc6935c","sender":"did=com=1acdefg","recipient":"did=com=1acdefg","tx_hash":"txHash","document_uuid":"c510755c-c27d-4348-bf4c-f6050fc6935c"}"""
+        assertEquals(objSerializedDefault, jsonWithDefaultProof)
+        assertEquals(objSerializedSimulated, jsonWithDefaultProof)
+    }
 }

@@ -2,9 +2,9 @@ package network.commercio.sdk.docs
 
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import junit.framework.Assert.assertEquals
 import network.commercio.sdk.entities.docs.CommercioDoc
 import network.commercio.sdk.entities.docs.EncryptedData
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 

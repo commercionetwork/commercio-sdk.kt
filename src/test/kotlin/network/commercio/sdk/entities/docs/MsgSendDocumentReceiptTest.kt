@@ -22,5 +22,7 @@ class MsgSendDocumentReceiptTest {
 
         val expected = readResource("msgs/MsgSendDocumentReceipt.json")
         assertEquals(expected, msgObjectMapper.writeValueAsString(msg))
+
+        assertEquals(msg.type, "commercio/MsgSendDocumentReceipt")
     }
 }

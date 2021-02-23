@@ -5,34 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import network.commercio.sdk.utils.getStringBytes
 import network.commercio.sdk.utils.matchBech32Format
 import network.commercio.sdk.utils.matchUuidv4
-import network.commercio.sdk.entities.docs.CommercioDoc.CommercioDoSign.CommercioSdnData
-
-
-// For more information see:
-/// https://docs.commercio.network/x/docs/#supported-encrypted-data
-
-enum class EncryptedData {
-    @JsonProperty("content")
-    CONTENT,
-
-    @JsonProperty("content_uri")
-    CONTENT_URI,
-
-    @JsonProperty("metadata.content_uri")
-    METADATA_CONTENT_URI,
-
-    @JsonProperty("metadata.schema.uri")
-    METADATA_SCHEMA_URI;
-
-    override fun toString(): String {
-        return when (this) {
-            CONTENT -> "content"
-            CONTENT_URI -> "content_uri"
-            METADATA_CONTENT_URI -> "metadata.content_uri"
-            METADATA_SCHEMA_URI -> "metadata.schema.uri"
-        }
-    }
-}
 
 /**
  * Contains all the data related to a document that is sent to the chain when a user wants to share
@@ -54,7 +26,7 @@ data class CommercioDoc(
         require(recipientsDids.isNotEmpty() && recipientsDids.all { matchBech32Format(it) }
         ) { "recipients must contains a non empty list of string in Bech32 format" }
         require(matchUuidv4(uuid)) { "uuid requires a valid UUID v4 format" }
-        require(contentUri.isNullOrEmpty() || getStringBytes(contentUri) <= 512) { "contentUri must have a valid length" }
+        require(getStringBytes(contentUri) <= 512) { "contentUri must have a valid length" }
         require(
             _checksumMustBePresentIfDoSign(
                 checksum,
@@ -88,7 +60,7 @@ data class CommercioDoc(
         init {
             require(getStringBytes(contentUri) <= 512) { "metadata.content_uri must have a valid length" }
             require(
-                !schemaType.isNullOrEmpty() && getStringBytes(schemaType) <= 512 || schema != null
+                schemaType.isNotEmpty() && getStringBytes(schemaType) <= 512 || schema != null
             ) { "schemaType must have a valid length or schema must not be null" }
         }
 
@@ -97,8 +69,8 @@ data class CommercioDoc(
             @JsonProperty("version") val version: String
         ) {
             init {
-                require(getStringBytes(uri) <= 512) { "metadata.schema.uri must have a valid length" }
-                require(getStringBytes(version) <= 32) { "metadata.schema.version must have a valid length" }
+                require(uri.isNotEmpty() && getStringBytes(uri) <= 512) { "metadata.schema.uri must have a valid length" }
+                require(version.isNotEmpty() && getStringBytes(version) <= 32) { "metadata.schema.version must have a valid length" }
             }
         }
     }
@@ -107,6 +79,9 @@ data class CommercioDoc(
         @JsonProperty("value") val value: String,
         @JsonProperty("algorithm") val algorithm: Algorithm
     ) {
+        init {
+            require(value.isNotEmpty()) { "checksum.value must not be empty" }
+        }
 
         enum class Algorithm {
             @JsonProperty("md5")
@@ -176,6 +151,39 @@ data class CommercioDoc(
 
             @JsonProperty("country")
             COUNTRY;
+        }
+    }
+}
+
+/**
+ * For more information see:
+ * https://docs.commercio.network/x/docs/#supported-encrypted-data
+ */
+
+enum class EncryptedData {
+    /**
+     * Special identifier, references the document's file contents. Means that
+     * the `aes_key` has been used to encrypt a file exchanged by other means of
+     * communication.
+     */
+    @JsonProperty("content")
+    CONTENT,
+
+    @JsonProperty("content_uri")
+    CONTENT_URI,
+
+    @JsonProperty("metadata.content_uri")
+    METADATA_CONTENT_URI,
+
+    @JsonProperty("metadata.schema.uri")
+    METADATA_SCHEMA_URI;
+
+    override fun toString(): String {
+        return when (this) {
+            CONTENT -> "content"
+            CONTENT_URI -> "content_uri"
+            METADATA_CONTENT_URI -> "metadata.content_uri"
+            METADATA_SCHEMA_URI -> "metadata.schema.uri"
         }
     }
 }

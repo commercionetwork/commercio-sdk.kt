@@ -26,9 +26,14 @@ object DocsHelper {
     }
 
     /**
-     * Creates a new transaction that allows to share the document associated with the given [contentUri] and
-     * having the given [metadata] and [checksum]. If [encryptedData] is specified, encrypts the proper data for
+     * Creates a new transaction that allows to share the document associated
+     * with the given [metadata] and having the optional [contentUri], [doSign],
+     * [checksum], [fee] and broadcasting [mode].
+     *
+     * If [encryptedData] is specified then encrypts the proper data for
      * the specified [recipients] and then sends the transaction to the blockchain.
+     *
+     * If [doSign] is specified then the field [checksum] must be also provided.
      */
     @JvmOverloads
     suspend fun shareDocument(
