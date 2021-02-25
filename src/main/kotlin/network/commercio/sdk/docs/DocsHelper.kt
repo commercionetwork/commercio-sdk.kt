@@ -1,6 +1,7 @@
 package network.commercio.sdk.docs
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import network.commercio.sacco.NetworkInfo
 import network.commercio.sacco.TxResponse
 import network.commercio.sacco.Wallet
 import network.commercio.sacco.models.types.StdFee
@@ -87,8 +88,8 @@ object DocsHelper {
     /**
      * Returns the list of all the [CommercioDoc] that the specified [address] has sent.
      */
-    suspend fun getSentDocuments(address: Did, wallet: Wallet): List<CommercioDoc> {
-        val queryUrl = "${wallet.networkInfo.lcdUrl}/docs/${address.value}/sent"
+    suspend fun getSentDocuments(address: String, networkInfo: NetworkInfo): List<CommercioDoc> {
+        val queryUrl = "${networkInfo.lcdUrl}/docs/$address/sent"
         val docsToConvert = Network.queryChain<List<Any>>(queryUrl) ?: listOf()
         return docsToConvert.map { jacksonObjectMapper().convertValue(it, CommercioDoc::class.java) }
     }
@@ -96,8 +97,8 @@ object DocsHelper {
     /**
      * Returns the list of all the [CommercioDoc] that the specified [address] has received.
      */
-    suspend fun getReceivedDocuments(address: Did, wallet: Wallet): List<CommercioDoc> {
-        val queryUrl = "${wallet.networkInfo.lcdUrl}/docs/${address.value}/received"
+    suspend fun getReceivedDocuments(address: String, networkInfo: NetworkInfo): List<CommercioDoc> {
+        val queryUrl = "${networkInfo.lcdUrl}/docs/$address/received"
         val docsToConvert = Network.queryChain<List<Any>>(queryUrl) ?: listOf()
         return docsToConvert.map { jacksonObjectMapper().convertValue(it, CommercioDoc::class.java) }
     }
@@ -148,8 +149,8 @@ object DocsHelper {
     /**
      * Returns the list of all the [CommercioDocReceipt] that have been sent from the given [address].
      */
-    suspend fun getSentReceipts(address: Did, wallet: Wallet): List<CommercioDocReceipt> {
-        val queryUrl = "${wallet.networkInfo.lcdUrl}/receipts/${address.value}/sent"
+    suspend fun getSentReceipts(address: String, networkInfo: NetworkInfo): List<CommercioDocReceipt> {
+        val queryUrl = "${networkInfo.lcdUrl}/receipts/$address/sent"
         val receiptsToConvert = Network.queryChain<List<Any>>(queryUrl) ?: listOf()
         return receiptsToConvert.map { jacksonObjectMapper().convertValue(it, CommercioDocReceipt::class.java) }
     }
@@ -157,8 +158,8 @@ object DocsHelper {
     /**
      * Returns the list of all the [CommercioDocReceipt] that have been received from the given [address].
      */
-    suspend fun getReceivedReceipts(address: Did, wallet: Wallet): List<CommercioDocReceipt> {
-        val queryUrl = "${wallet.networkInfo.lcdUrl}/receipts/${address.value}/received"
+    suspend fun getReceivedReceipts(address: String, networkInfo: NetworkInfo): List<CommercioDocReceipt> {
+        val queryUrl = "${networkInfo.lcdUrl}/receipts/$address/received"
         val receiptsToConvert = Network.queryChain<List<Any>>(queryUrl) ?: listOf()
         return receiptsToConvert.map { jacksonObjectMapper().convertValue(it, CommercioDocReceipt::class.java) }
     }
