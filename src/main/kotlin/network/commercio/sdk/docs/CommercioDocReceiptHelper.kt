@@ -28,7 +28,7 @@ object CommercioDocReceiptHelper {
         recipient: Did,
         txHash: String,
         documentId: String,
-        proof: String,
+        proof: String = "",
         wallet: Wallet
     ): CommercioDocReceipt {
         // Build CommercioDocReceipt
