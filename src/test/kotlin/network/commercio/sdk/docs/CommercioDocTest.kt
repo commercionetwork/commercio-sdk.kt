@@ -270,7 +270,7 @@ class CommercioDocTest {
 
         val minimalDocChecksumNullSerialized = jacksonObjectMapper().writeValueAsString(minimalDocChecksumNull)
         val minimalDocChecksumNullJson =
-            """{"sender":"did=com=1acdefg","recipients":["did=com=1acdefg"],"uuid":"c510755c-c27d-4348-bf4c-f6050fc6935c","metadata":{"content_uri":"content-uri","schema":{"uri":"http=//uri.url","version":"1"},"schema_type":"schemaType"},"checksum":null}""".trimMargin()
+            """{"sender":"did=com=1acdefg","recipients":["did=com=1acdefg"],"uuid":"c510755c-c27d-4348-bf4c-f6050fc6935c","metadata":{"content_uri":"content-uri","schema":{"uri":"http=//uri.url","version":"1"},"schema_type":"schemaType"}}""".trimMargin()
         assertEquals(minimalDocChecksumNullSerialized, minimalDocChecksumNullJson)
 
         val minimalDocSdnDataNull = CommercioDoc(

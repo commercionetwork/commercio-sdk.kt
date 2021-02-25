@@ -16,7 +16,7 @@ data class CommercioDoc(
     @JsonProperty("uuid") val uuid: String,
     @JsonProperty("content_uri") @JsonInclude(JsonInclude.Include.NON_EMPTY) val contentUri: String = "",
     @JsonProperty("metadata") val metadata: Metadata,
-    @JsonProperty("checksum") val checksum: Checksum? = null,
+    @JsonProperty("checksum") @JsonInclude(JsonInclude.Include.NON_NULL) val checksum: Checksum? = null,
     @JsonProperty("encryption_data") @JsonInclude(JsonInclude.Include.NON_EMPTY) val encryptionData: EncryptionData? = null,
     @JsonProperty("do_sign") @JsonInclude(JsonInclude.Include.NON_EMPTY) val doSign: CommercioDoSign? = null
 ) {
