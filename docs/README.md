@@ -35,9 +35,9 @@ Here's the helpers' list:
   - [`DidDocumentHelper`](lib/id/did_document_helper.md)
   - [`RequestDidPowerUpHelper`](lib/id/request_did_power_up_helper.md)
 - **Docs:**
-  - [`DocsHelper`](lib/docs/docs_helper.md)
-  - [`CommercioDocHelper`](lib/docs/commercio_doc_helper.md)
-  - [`CommercioDocReceiptHelper`](lib/docs/commercio_doc_receipt_helper.md)
+  - [`DocsHelper`](lib/docs/docs_helper.md)  // ok, done
+  - [`CommercioDocHelper`](lib/docs/commercio_doc_helper.md) // ok, done
+  - [`CommercioDocReceiptHelper`](lib/docs/commercio_doc_receipt_helper.md) // ok, done
 - **CommercioMint:**
   - [`MintHelper`](lib/mint/mint_helper.md)
   - [`MintCccHelper`](lib/mint/mint_ccc_helper.md)  // todo replace open_cdp_helper
