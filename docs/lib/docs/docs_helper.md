@@ -38,11 +38,11 @@ Docs helper allows to easily perform all the operations related to the commercio
 
 3. Returns the list of all the `CommercioDoc` that the specified `address` has sent.
     ```kotlin
-    suspend fun getSentDocuments(address: Did, wallet: Wallet): List<CommercioDoc>
+    suspend fun getSentDocuments(address: String, networkInfo: NetworkInfo): List<CommercioDoc>
     ```
 4. Returns the list of all the `CommercioDoc` that the specified `address` has received.
     ```kotlin
-    suspend fun getReceivedDocuments(address: Did, wallet: Wallet): List<CommercioDoc>
+    suspend fun getReceivedDocuments(address: String, networkInfo: NetworkInfo): List<CommercioDoc>
     ```
 5. Creates a new transaction which tells the `recipient` that the document having the specified `documentId` and present
    inside the transaction with hash `txHash` has been properly seen; optionally `proof` of reading, `fee` and
@@ -71,13 +71,11 @@ Docs helper allows to easily perform all the operations related to the commercio
 
 7. Returns the list of all the `CommercioDocReceipt` that have been sent from the given `address`.
     ```kotlin
-    suspend fun getSentReceipts(address: Did, wallet: Wallet)
-        : List<CommercioDocReceipt>
+    suspend fun getSentReceipts(address: String, networkInfo: NetworkInfo): List<CommercioDocReceipt>
     ```
 8. Returns the list of all the `CommercioDocReceipt` that have been received from the given `address`
     ```kotlin
-    suspend fun getReceivedReceipts(address: Did, wallet: Wallet)
-        : List<CommercioDocReceipt>
+    suspend fun getReceivedReceipts(address: String, networkInfo: NetworkInfo): List<CommercioDocReceipt>
     ```
 ## Usage examples
 ```kotlin
@@ -168,16 +166,45 @@ Docs helper allows to easily perform all the operations related to the commercio
         )
         
         val txHash = (response as TxResponse.Successful).txHash
-        
-        // --- Send receipt
-        DocsHelper.sendDocumentReceipt(
-            recipient = recipientDid,
-            txHash = txHash,
-            documentId = docId,
-            wallet = recipientWallet
-        )
-    } catch (e: Exception){
-        throw e
+
+       // --- Send receipt
+       DocsHelper.sendDocumentReceipt(
+          recipient = recipientDid,
+          txHash = txHash,
+          documentId = docId,
+          wallet = recipientWallet
+       )
+    } catch (e: Exception) {
+       throw e
     }
+
+// --- getSentDocuments
+val sentDocs = DocsHelper.getSentDocuments(
+   address = senderWallet.bech32Address,
+   networkInfo = networkInfo
+)
+print("\nsentDocs: $sentDocs\n\n")
+
+// --- getReceivedDocuments
+val receivedDocs = DocsHelper.getReceivedDocuments(
+   address = recipientWallet.bech32Address,
+   networkInfo = networkInfo
+)
+print("\nreceivedDocs: $receivedDocs\n\n")
+
+// --- getSentReceipts
+val sentReceipts = DocsHelper.getSentReceipts(
+   address = senderWallet.bech32Address,
+   networkInfo = networkInfo
+)
+print("\nsentReceipts: $sentReceipts\n")
+
+
+// --- getReceivedReceipts
+val receivedReceipts = DocsHelper.getReceivedReceipts(
+   address = recipientWallet.bech32Address,
+   networkInfo = networkInfo
+)
+print("\nreceivedReceipts: $receivedReceipts\n")
 ```
 
