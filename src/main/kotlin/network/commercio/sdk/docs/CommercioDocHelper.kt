@@ -14,8 +14,11 @@ import javax.crypto.SecretKey
 object CommercioDocHelper {
 
     /**
-     * Creates a new CommercioDoc that allows to share the document associated with the given [contentUri] and
-     * having the given [metadata] and [checksum].
+     * Creates a new CommercioDoc that allows to share the document associated with
+     * the given [wallet], the list of recipients [recipients],
+     * an unique document [id] (UUID v4 format) and document [metadata]
+     *
+     * Optionally [contentUri], [checksum], [doSign], [encryptedData], [aesKey] can be provided.
      *
      * If [encryptedData] is specified, encrypts the proper data for
      * the specified [recipients] and then sends the transaction to the blockchain.
