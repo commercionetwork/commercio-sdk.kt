@@ -4,14 +4,16 @@ import kotlinx.coroutines.runBlocking
 import network.commercio.sacco.NetworkInfo
 import network.commercio.sacco.Wallet
 import network.commercio.sacco.models.types.StdCoin
-import network.commercio.sdk.entities.mint.OpenCdp
+import network.commercio.sdk.entities.mint.BurnCcc
+
 import org.junit.Assert
 import org.junit.Test
+import java.util.*
 
 
-class OpenCdpHelperTest {
+class BurnCccHelperTest {
     @Test
-    fun `OpenCdpHelper fromWallet create correctly OpenCdp`() = runBlocking {
+    fun `BurnCccHelper fromWallet create correctly BurnCcc`() = runBlocking {
         val networkInfo = NetworkInfo(bech32Hrp = "did:com:", lcdUrl = "")
 
         val mnemonicString =
@@ -19,18 +21,21 @@ class OpenCdpHelperTest {
         val mnemonic = mnemonicString.split(" ")
         val wallet = Wallet.derive(mnemonic, networkInfo)
 
-        val depositAmount = listOf(StdCoin(denom = "commercio", amount = "10"))
+        val amount = StdCoin(denom = "uccc", amount = "10")
+        val id = UUID.randomUUID().toString()
 
-        val expectedOpenCdp = OpenCdpHelper.fromWallet(
+        val expectedBurnCcc = BurnCccHelper.fromWallet(
             wallet = wallet,
-            amount = depositAmount
+            amount = amount,
+            id = id
         )
 
-        val openCdp = OpenCdp(
-            depositAmount = depositAmount,
-            depositorDid = wallet.bech32Address
+        val burnCcc = BurnCcc(
+            signerDid = wallet.bech32Address,
+            amount = amount,
+            id = id
         )
 
-        Assert.assertEquals(expectedOpenCdp.toString(), openCdp.toString())
+        Assert.assertEquals(expectedBurnCcc.toString(), burnCcc.toString())
     }
 }

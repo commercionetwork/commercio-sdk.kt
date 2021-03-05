@@ -13,10 +13,14 @@ import network.commercio.sdk.docs.DocsHelper
 import network.commercio.sdk.entities.docs.CommercioDoc
 import network.commercio.sdk.entities.id.Did
 import network.commercio.sdk.entities.membership.MembershipType
+import network.commercio.sdk.entities.mint.BurnCcc
+import network.commercio.sdk.entities.mint.MintCcc
 import network.commercio.sdk.id.DidDocumentHelper
 import network.commercio.sdk.id.IdHelper
 import network.commercio.sdk.membership.MembershipHelper
 import network.commercio.sdk.mint.MintHelper
+import network.commercio.sdk.mint.MintHelper.burnCccsList
+import network.commercio.sdk.mint.MintHelper.mintCccsList
 import network.commercio.sdk.tx.TxHelper
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -244,26 +248,36 @@ class Examples {
     @Test
     fun `MintHelper examples`() = runBlocking {
 
+        val did = userWallet.bech32Address
+        val amount = StdCoin(denom = "ucommercio", amount = "100000")
+
         // --- Optional
         val fee = StdFee(gas = "200000", amount = listOf(StdCoin(denom = "ucommercio", amount = "10000")))
         val mode = TxHelper.BroadcastingMode.BLOCK
 
-        // --- Open CDP
-        val commercioTokenAmount = 100000000.toULong()
-        // openCdp(amount = commercioTokenAmount, wallet = userWallet, fee = fee, mode = mode)
+        // --- MintCcc
+        val mintCccs = MintCcc(depositAmount = listOf(amount), depositorDid = did, id = UUID.randomUUID().toString())
+        //mintCccsList(mintCccs = listOf(mintCccs), wallet = userWallet, fee = fee, mode = mode)
 
-        // --- Close CDP
-        // closeCdp(timestamp = 4, wallet = userWallet, fee = fee, mode = mode)
+        // todo add getExchangeTradePositions
+
+        // --- BurnCcc
+        val burnCccs = BurnCcc(amount = amount, signerDid = did, id = UUID.randomUUID().toString())
+        //burnCccsList(burnCccs = listOf(burnCccs), wallet = userWallet, fee = fee, mode = mode)
     }
 
 
     /**
-     * Shows how to open a new Collateralized Debt Position in order to get half the specified [amount] of
-     * pico Commercio Cash Credits (`uccc`).
+     * Shows how to mint Commercio Cash Credit (CCC).
      */
-    private suspend fun openCdp(amount: ULong, wallet: Wallet, fee : StdFee, mode: TxHelper.BroadcastingMode) {
-        val response = MintHelper.openCdp(
-            commercioTokenAmount = amount,
+    private suspend fun mintCccsList(
+        mintCccs: List<MintCcc>,
+        wallet: Wallet,
+        fee: StdFee,
+        mode: TxHelper.BroadcastingMode
+    ) {
+        val response = MintHelper.mintCccsList(
+            mintCccs = mintCccs,
             wallet = wallet,
             fee = fee,
             mode = mode
@@ -272,13 +286,16 @@ class Examples {
     }
 
     /**
-     * Shows how to close a Collateralized Debt Position in order to allow the user controlling the given [wallet]
-     * to get back the amount of pico Commercio Tokens (`ucommercio`) giving back the lent pico Commercio
-     * Cash Credits (`uccc`).
+     * Shows how to burn previously minted Commercio Cash Credit (CCC).
      */
-    private suspend fun closeCdp(timestamp: Int, wallet: Wallet, fee : StdFee, mode: TxHelper.BroadcastingMode) {
-        val response = MintHelper.closeCdp(
-            timestamp = timestamp,
+    private suspend fun burnCccsList(
+        burnCccs: List<BurnCcc>,
+        wallet: Wallet,
+        fee: StdFee,
+        mode: TxHelper.BroadcastingMode
+    ) {
+        val response = MintHelper.burnCccsList(
+            burnCccs = burnCccs,
             wallet = wallet,
             fee = fee,
             mode = mode
