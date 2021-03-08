@@ -39,9 +39,9 @@ Here's the helpers' list:
   - [`CommercioDocHelper`](lib/docs/commercio_doc_helper.md) // ok, done
   - [`CommercioDocReceiptHelper`](lib/docs/commercio_doc_receipt_helper.md) // ok, done
 - **CommercioMint:**
-  - [`MintHelper`](lib/mint/mint_helper.md)
-  - [`MintCccHelper`](lib/mint/mint_ccc_helper.md)  // todo replace open_cdp_helper
-  - [`BurnCccHelper`](lib/mint/burn_ccc_helper.md)  // todo replace close_cdp_helper
+  - [`MintHelper`](lib/mint/mint_helper.md) // ok, done
+  - [`MintCccHelper`](lib/mint/mint_ccc_helper.md)   // ok, done
+  - [`BurnCccHelper`](lib/mint/burn_ccc_helper.md)   // ok, done
 - **CommercioKyc:**
   - [`KycHelper`](lib/kyc/kyc_helper.md) // todo add
   - [`BuyMembershipHelper`](lib/kyc/buy_membership_helper.md)  // todo add (ex membership)
