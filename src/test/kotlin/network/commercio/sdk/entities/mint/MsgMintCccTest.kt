@@ -8,7 +8,6 @@ import network.commercio.sdk.entities.msgObjectMapper
 import network.commercio.sdk.mint.MintCccHelper
 import org.junit.Assert
 import org.junit.Test
-import java.util.*
 
 class MsgMintCccTest {
 
@@ -44,7 +43,7 @@ class MsgMintCccTest {
         val wallet = Wallet.derive(mnemonic = mnemonic, networkInfo = chain)
 
         val depositAmount = listOf(StdCoin(denom = "uccc", amount = "10"))
-        val id = UUID.randomUUID().toString()
+        val id = "897fa3a9-512f-4a3a-a6b6-d7f84d06751b"
 
         val mintCcc1 = MintCcc(
             depositorDid = wallet.bech32Address,
@@ -68,9 +67,9 @@ class MsgMintCccTest {
         print(msgObjectMapper.writeValueAsString(msg1))
 
         val jsonResult =
-            """{"type":"commercio/MsgMintCCC","value":{"deposit_amount":[{"denom":"uccc","amount":"10"}],"depositor":"did:com:1gkfhddf8hxj38x74zjxla072wyppej7xv9psfg","id":"897fa3a9-512f-4a3a-a6b6-d7f84d06751b"}}"""
+            """{"type":"commercio/MsgMintCCC","value":{"deposit_amount":[{"amount":"10","denom":"uccc"}],"depositor":"did:com:1gkfhddf8hxj38x74zjxla072wyppej7xv9psfg","id":"897fa3a9-512f-4a3a-a6b6-d7f84d06751b"}}"""
 
-        //Assert.assertEquals(jsonResult, msgObjectMapper.writeValueAsString(msg1))
-        //Assert.assertEquals(jsonResult, msgObjectMapper.writeValueAsString(msg2))
+        Assert.assertEquals(jsonResult, msgObjectMapper.writeValueAsString(msg1))
+        Assert.assertEquals(jsonResult, msgObjectMapper.writeValueAsString(msg2))
     }
 }
