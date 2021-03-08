@@ -8,7 +8,7 @@ import network.commercio.sdk.utils.matchUuidv4
  * Contains the data to mint CCC.
  */
 data class MintCcc(
-    val depositAmount: List<StdCoin>, // ?????? list or not
+    val depositAmount: List<StdCoin>,
     val depositorDid: String,
     val id: String
 ) {
