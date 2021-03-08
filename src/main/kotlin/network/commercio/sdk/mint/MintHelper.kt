@@ -1,12 +1,15 @@
 package network.commercio.sdk.mint
 
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import network.commercio.sacco.TxResponse
 import network.commercio.sacco.Wallet
 import network.commercio.sacco.models.types.StdFee
 import network.commercio.sdk.entities.mint.BurnCcc
+import network.commercio.sdk.entities.mint.ExchangeTradePosition
 import network.commercio.sdk.entities.mint.MintCcc
 import network.commercio.sdk.entities.mint.MsgBurnCcc
 import network.commercio.sdk.entities.mint.MsgMintCcc
+import network.commercio.sdk.networking.Network
 import network.commercio.sdk.tx.TxHelper
 import network.commercio.sdk.tx.TxHelper.BroadcastingMode
 
@@ -47,5 +50,18 @@ object MintHelper {
     ): TxResponse {
         val msgs = burnCccs.map { MsgBurnCcc(it) }
         return TxHelper.createSignAndSendTx(msgs = msgs, wallet = wallet, fee = fee, mode = mode)
+    }
+
+    /**
+     * Returns the list of all the [ExchangeTradePosition]
+     * that the specified wallet has minted.
+     */
+    suspend fun getExchangeTradePositions(
+        wallet: Wallet
+    ): List<ExchangeTradePosition> {
+        val url = "${wallet.networkInfo.lcdUrl}/commerciomint/etps/${wallet.bech32Address}"
+        val result = Network.queryChain<Any>(url) as List<*>
+        val response = result.map { jacksonObjectMapper().convertValue(it, ExchangeTradePosition::class.java) }.toList()
+        return response
     }
 }
