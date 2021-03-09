@@ -11,8 +11,6 @@ import network.commercio.sdk.kyc.BuyMembershipHelper
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Test
-import org.kethereum.bip39.generateMnemonic
-import org.kethereum.bip39.wordlists.WORDLIST_ENGLISH
 
 class BuyMembershipTest {
 

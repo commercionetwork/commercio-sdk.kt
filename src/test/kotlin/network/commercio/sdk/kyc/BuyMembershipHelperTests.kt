@@ -18,20 +18,18 @@ class BuyMembershipHelperTest {
 
         val newUserMnemonic = generateMnemonic(strength = 256, wordList = WORDLIST_ENGLISH).split(" ")
         val newUserWallet = Wallet.derive(newUserMnemonic, networkInfo)
-
-        val mnemonicTsp = generateMnemonic(strength = 256, wordList = WORDLIST_ENGLISH).split(" ")
-        val walletTsp = Wallet.derive(newUserMnemonic, networkInfo)
+        val walletTsp = "did:com:id"
 
         val expectedBuyMembership = BuyMembership(
             membershipType = MembershipType.GOLD,
             buyerDid = newUserWallet.bech32Address,
-            tsp = walletTsp.bech32Address
+            tsp = walletTsp
         )
 
         val buyMembership = BuyMembershipHelper.fromWallet(
             wallet = newUserWallet,
             membershipType = MembershipType.GOLD,
-            tsp = walletTsp.bech32Address
+            tsp = walletTsp
         )
 
         Assert.assertEquals(expectedBuyMembership.toString(), buyMembership.toString())
