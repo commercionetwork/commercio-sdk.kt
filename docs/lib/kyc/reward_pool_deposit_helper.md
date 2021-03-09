@@ -50,7 +50,7 @@ val userMnemonic = listOf(
    "man"
 )
 val wallet = Wallet.derive(mnemonic = userMnemonic, networkInfo = info)
-val depositAmount = listOf(StdCoin(denom = "uccc", amount = "10"))
+val depositAmount = listOf(StdCoin(denom = "ucommercio", amount = "10")) // only ucommercio
 
 val rewardPoolDeposit = RewardPoolDepositHelper.fromWallet(
    wallet = wallet,

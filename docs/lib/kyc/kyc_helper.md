@@ -1,16 +1,11 @@
-# Membership helper
-Membership helper allows to easily perform all the operations related to the commercio.network `membership` module.
+# Kyc helper
+
+Kyc helper allows to easily perform all the operations related to the commercio.network `kyc` module.
+
 ## Provided operations
-1. Sends a new transaction in order to invite the given `userDid`. Optionally `fee` and broadcasting `mode` parameters can be specified.
-    ```kotlin
-    suspend fun inviteUser( 
-        user: Did,
-        wallet: Wallet,
-        fee: StdFee? = null,
-        mode: BroadcastingMode? = null
-    ): TxResponse
-    ```
-2. Sends a new transaction in order to invite the given `inviteUsers` users list. Optionally `fee` and broadcasting `mode` parameters can be specified.   
+
+1. Sends a new transaction in order to invite the given `inviteUsers` users list and `wallet`. Optionally `fee` and
+   broadcasting `mode` parameters can be specified.
     ```kotlin
     suspend fun inviteUsersList(
         inviteUsers: List<InviteUser>,
@@ -19,16 +14,9 @@ Membership helper allows to easily perform all the operations related to the com
         mode: BroadcastingMode? = null
     ): TxResponse
     ```
-3. Buys the membership with the given `membershipType`. Optionally `fee` and broadcasting `mode` parameters can be specified.
-    ```kotlin
-    suspend fun buyMembership(
-        membershipType: MembershipType,
-        wallet: Wallet,
-        fee: StdFee? = null,
-        mode: BroadcastingMode? = null
-    ): TxResponse
-    ```
-4. Buys the membership with the given `buyMemberships` memberships list. Optionally `fee` and broadcasting `mode` parameters can be specified.   
+
+2. Buys the membership with the given `buyMemberships` memberships list and `wallet`. Optionally `fee` and
+   broadcasting `mode` parameters can be specified.
     ```kotlin
     suspend fun buyMembershipsList(
         buyMemberships: List<BuyMembership>,
@@ -38,7 +26,21 @@ Membership helper allows to easily perform all the operations related to the com
     ): TxResponse
     ```
 
+2. Deposit a list of the given deposits `rewardPoolDeposits` into reward pool with the depositor `wallet`.
+   Optionally `fee` and broadcasting `mode` parameters can be specified.
+   ```kotlin
+   suspend fun rewardPoolDepositsList(
+       rewardPoolDeposits: List<RewardPoolDeposit>,
+       wallet: Wallet,
+       fee: StdFee? = null,
+       mode: BroadcastingMode? = null
+   ): TxResponse
+   ```
+
+// todo fix code example
+
 ## Usage examples
+
 ```kotlin
     val info = NetworkInfo(
         bech32Hrp = "did:com:", 
@@ -100,7 +102,7 @@ Membership helper allows to easily perform all the operations related to the com
             "laptop",
             "arrest"
         )
-        val newUserWallet = Wallet.derive(newUserMnemonic, info)
+    val newUserWallet = Wallet.derive(newUserMnemonic, info)
 
         try {
             // Invite user

@@ -45,4 +45,19 @@ object KycHelper {
         val msgs = buyMemberships.map { MsgBuyMembership(it) }
         return TxHelper.createSignAndSendTx(msgs = msgs, wallet = wallet, fee = fee, mode = mode)
     }
+
+    /**
+     * Deposit a list of [rewardPoolDeposits] deposits into reward pool
+     * with the depositor [wallet].
+     * Optionally [fee] and broadcasting [mode] parameters can be specified.
+     */
+    suspend fun rewardPoolDepositsList(
+        rewardPoolDeposits: List<RewardPoolDeposit>,
+        wallet: Wallet,
+        fee: StdFee? = null,
+        mode: BroadcastingMode? = null
+    ): TxResponse {
+        val msgs = rewardPoolDeposits.map { MsgRewardPoolDeposit(it) }
+        return TxHelper.createSignAndSendTx(msgs = msgs, wallet = wallet, fee = fee, mode = mode)
+    }
 }
