@@ -33,7 +33,7 @@ module.exports = {
                     ["lib/id/id_helper", "Id Helper"],
                     ["lib/id/did_document_helper", "Did Document Helper"],
                     ["lib/docs/docs_helper", "Docs Helper"],
-                    ["lib/membership/membership_helper", "Membership Helper"],
+                    ["lib/kyc/kyc_helper", "Kyc Helper"],
                     ["lib/mint/mint_helper", "Mint Helper"],
                     ["lib/tx/tx_helper", "Tx Helper"],
                     ["lib/crypto/sign_helper", "Sign Helper"]
