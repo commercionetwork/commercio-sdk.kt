@@ -9,31 +9,12 @@ import network.commercio.sdk.tx.TxHelper
 import network.commercio.sdk.tx.TxHelper.BroadcastingMode
 
 /**
- * Allows to easily perform CommercioKYC related operations.
+ * Allows to easily perform Commercio KYC module related operations.
  */
 object KycHelper {
 
     init {
         System.setProperty("javax.net.ssl.trustStoreType", "JKS")
-    }
-
-    /**
-     * Sends a new transaction in order to invite the given [user].
-     * Optionally [fee] and broadcasting [mode] parameters can be specified.
-     */
-    suspend fun inviteUser(
-        user: Did,
-        wallet: Wallet,
-        fee: StdFee? = null,
-        mode: BroadcastingMode? = null
-    ): TxResponse {
-        val msg = MsgInviteUser(
-            inviteUser = InviteUser(
-                recipientDid = user.value,
-                senderDid = wallet.bech32Address
-            )
-        )
-        return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet, fee = fee, mode = mode)
     }
 
     /**
@@ -50,26 +31,6 @@ object KycHelper {
         return TxHelper.createSignAndSendTx(msgs = msgs, wallet = wallet, fee = fee, mode = mode)
     }
 
-    /**
-     * Buys the membership with the given [membershipType], [wallet] and [tsp].
-     * Optionally [fee] and broadcasting [mode] parameters can be specified.
-     */
-    suspend fun buyMembership(
-        membershipType: MembershipType,
-        wallet: Wallet,
-        tsp: String,
-        fee: StdFee? = null,
-        mode: BroadcastingMode? = null
-    ): TxResponse {
-        val msg = MsgBuyMembership(
-            buyMembership = BuyMembership(
-                membershipType = membershipType,
-                buyerDid = wallet.bech32Address,
-                tsp = tsp
-            )
-        )
-        return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet, fee = fee, mode = mode)
-    }
 
     /**
      * Buys the membership with the given [buyMemberships] memberships list.
