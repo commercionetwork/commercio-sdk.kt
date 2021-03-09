@@ -17,10 +17,8 @@ import network.commercio.sdk.entities.mint.BurnCcc
 import network.commercio.sdk.entities.mint.MintCcc
 import network.commercio.sdk.id.DidDocumentHelper
 import network.commercio.sdk.id.IdHelper
-import network.commercio.sdk.membership.MembershipHelper
+import network.commercio.sdk.kyc.MembershipHelper
 import network.commercio.sdk.mint.MintHelper
-import network.commercio.sdk.mint.MintHelper.burnCccsList
-import network.commercio.sdk.mint.MintHelper.mintCccsList
 import network.commercio.sdk.tx.TxHelper
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -131,8 +129,17 @@ class Examples {
      * Shows how to create a Did Document and associate it to an existing account Did.
      * Documentation: https://docs.commercio.network/x/id/tx/associate-a-did-document.html
      */
-    private suspend fun createDidDocument(wallet: Wallet, rsaVerificationKeyPair: KeyPairWrapper, rsaSignatureKeyPair: KeyPairWrapper, fee: StdFee, mode: TxHelper.BroadcastingMode) {
-        val didDocument = DidDocumentHelper.fromWallet(wallet, listOf(rsaVerificationKeyPair.publicWrapper, rsaSignatureKeyPair.publicWrapper))
+    private suspend fun createDidDocument(
+        wallet: Wallet,
+        rsaVerificationKeyPair: KeyPairWrapper,
+        rsaSignatureKeyPair: KeyPairWrapper,
+        fee: StdFee,
+        mode: TxHelper.BroadcastingMode
+    ) {
+        val didDocument = DidDocumentHelper.fromWallet(
+            wallet,
+            listOf(rsaVerificationKeyPair.publicWrapper, rsaSignatureKeyPair.publicWrapper)
+        )
         val response = IdHelper.setDidDocument(
             didDocument = didDocument,
             wallet = wallet,
@@ -147,7 +154,14 @@ class Examples {
      * APIs that will send the funds to such account.
      * Documentation: https://docs.commercio.network/x/id/tx/request-did-power-up.html
      */
-    private suspend fun postPowerUpRequest(pairwiseDid: String, amount: List<StdCoin>, wallet: Wallet, privateKey: RSAPrivateKey, fee: StdFee, mode: TxHelper.BroadcastingMode) {
+    private suspend fun postPowerUpRequest(
+        pairwiseDid: String,
+        amount: List<StdCoin>,
+        wallet: Wallet,
+        privateKey: RSAPrivateKey,
+        fee: StdFee,
+        mode: TxHelper.BroadcastingMode
+    ) {
         val response = IdHelper.requestDidPowerUp(
             pairwiseDid = Did(pairwiseDid),
             amount = amount,
@@ -207,7 +221,12 @@ class Examples {
      * Shows how to share a document to the given recipients.
      * Documentation: https://docs.commercio.network/x/docs/tx/send-document.html
      */
-    private suspend fun shareDocument(recipients: List<Did>, wallet: Wallet, fee: StdFee, mode: TxHelper.BroadcastingMode): Pair<String, String> {
+    private suspend fun shareDocument(
+        recipients: List<Did>,
+        wallet: Wallet,
+        fee: StdFee,
+        mode: TxHelper.BroadcastingMode
+    ): Pair<String, String> {
         val docId = UUID.randomUUID().toString()
         val response = DocsHelper.shareDocument(
             id = docId,
@@ -233,7 +252,14 @@ class Examples {
      * Shows how to send a document receipt to the specified [recipient] for the given [docId] present
      * inside the transaction having the given [txHash].
      */
-    private suspend fun sendDocumentReceipt(docId: String, txHash: String, recipient: Did, wallet: Wallet, fee : StdFee, mode: TxHelper.BroadcastingMode) {
+    private suspend fun sendDocumentReceipt(
+        docId: String,
+        txHash: String,
+        recipient: Did,
+        wallet: Wallet,
+        fee: StdFee,
+        mode: TxHelper.BroadcastingMode
+    ) {
         val response = DocsHelper.sendDocumentReceipt(
             recipient = recipient,
             txHash = txHash,
@@ -249,7 +275,7 @@ class Examples {
     fun `MintHelper examples`() = runBlocking {
 
         val did = userWallet.bech32Address
-        val amount = StdCoin(denom = "ucommercio", amount = "100000")
+        val amount = StdCoin(denom = "uccc", amount = "20")
 
         // --- Optional
         val fee = StdFee(gas = "200000", amount = listOf(StdCoin(denom = "ucommercio", amount = "10000")))
@@ -259,7 +285,8 @@ class Examples {
         val mintCccs = MintCcc(depositAmount = listOf(amount), depositorDid = did, id = UUID.randomUUID().toString())
         //mintCccsList(mintCccs = listOf(mintCccs), wallet = userWallet, fee = fee, mode = mode)
 
-        // todo add getExchangeTradePositions
+        // --- getExchangeTradePositions
+        val etps = MintHelper.getExchangeTradePositions(userWallet)
 
         // --- BurnCcc
         val burnCccs = BurnCcc(amount = amount, signerDid = did, id = UUID.randomUUID().toString())
@@ -304,7 +331,7 @@ class Examples {
     }
 
     @Test
-    fun `MembershipsHelper examples`() = runBlocking {
+    fun `KycHelper examples`() = runBlocking {
         val newUserMnemonic = listOf(
             "often",
             "emerge",
@@ -338,27 +365,43 @@ class Examples {
         val mode = TxHelper.BroadcastingMode.BLOCK
 
         // --- Invite user
+        // todo replace inviteUser with inviteUsersList
         // inviteUser(user = Did(newUserWallet.bech32Address), wallet = userWallet, fee = fee, mode = mode)
 
         // --- Buy a membership
+        // todo replace buyMembership with buyMembershipsList
         // buyMembership(membershipType = MembershipType.GOLD, wallet = newUserWallet, fee = fee, mode = mode)
+
+        // todo add rewardPoolDepositsList
+        // rewardPoolDepositsList(...)
     }
 
     /**
      * Shows how to perform a transaction to invite a user.
      * Note that in order to invite a user, you must already have a membership.
      */
-    private suspend fun inviteUser(user: Did, wallet: Wallet, fee : StdFee, mode: TxHelper.BroadcastingMode) {
-        val response = MembershipHelper.inviteUser(user, wallet, fee, mode)
-        assertTrue(response is TxResponse.Successful)
-    }
+    // todo fix
+//    private suspend fun inviteUsersList(user: List<InviteUser>, wallet: Wallet, fee : StdFee, mode: TxHelper.BroadcastingMode) {
+//        val response = MembershipHelper.inviteUser(user, wallet, fee, mode)
+//        assertTrue(response is TxResponse.Successful)
+//    }
 
     /**
      * Shows how to perform the transaction that allows the owner of the given [wallet] to buy a membership
      * of the specified [membershipType].
      */
-    private suspend fun buyMembership(membershipType: MembershipType, wallet: Wallet, fee : StdFee, mode: TxHelper.BroadcastingMode) {
-        val response = MembershipHelper.buyMembership(membershipType, wallet, fee, mode)
-        assertTrue(response is TxResponse.Successful)
-    }
+    // todo fix
+//    private suspend fun buyMembershipsList(membershipType: MembershipType, wallet: Wallet, fee : StdFee, mode: TxHelper.BroadcastingMode) {
+//        val response = MembershipHelper.buyMembership(membershipType, wallet, fee, mode)
+//        assertTrue(response is TxResponse.Successful)
+//    }
+
+    // todo add rewardPoolDepositsList(
+    //    List<RewardPoolDeposit> rewardPoolDeposits,
+    //    Wallet wallet, {
+    //    StdFee fee,
+    //    BroadcastingMode mode,
+    //  }) async {
+
+
 }
