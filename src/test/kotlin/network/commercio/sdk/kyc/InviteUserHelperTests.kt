@@ -4,7 +4,7 @@ import kotlinx.coroutines.runBlocking
 import network.commercio.sacco.NetworkInfo
 import network.commercio.sacco.Wallet
 import network.commercio.sdk.entities.id.Did
-import network.commercio.sdk.entities.membership.InviteUser
+import network.commercio.sdk.entities.kyc.InviteUser
 import org.junit.Assert
 import org.junit.Test
 import org.kethereum.bip39.generateMnemonic

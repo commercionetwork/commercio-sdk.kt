@@ -12,12 +12,10 @@ import network.commercio.sdk.crypto.KeysHelper
 import network.commercio.sdk.docs.DocsHelper
 import network.commercio.sdk.entities.docs.CommercioDoc
 import network.commercio.sdk.entities.id.Did
-import network.commercio.sdk.entities.membership.MembershipType
 import network.commercio.sdk.entities.mint.BurnCcc
 import network.commercio.sdk.entities.mint.MintCcc
 import network.commercio.sdk.id.DidDocumentHelper
 import network.commercio.sdk.id.IdHelper
-import network.commercio.sdk.kyc.MembershipHelper
 import network.commercio.sdk.mint.MintHelper
 import network.commercio.sdk.tx.TxHelper
 import org.junit.Assert.assertTrue
@@ -74,8 +72,7 @@ class Examples {
         // --- Set the Did Document
         val rsaVerificationKeyPair = KeysHelper.generateRsaKeyPair()
         val rsaSignatureKeyPair = KeysHelper.generateRsaKeyPair(type = "RsaSignatureKey2018")
-//        createDidDocument(wallet = userWallet, rsaVerificationKeyPair= rsaVerificationKeyPair ,rsaSignatureKeyPair= rsaSignatureKeyPair, fee = fee, mode = mode)
-
+        //createDidDocument(wallet = userWallet, rsaVerificationKeyPair= rsaVerificationKeyPair ,rsaSignatureKeyPair= rsaSignatureKeyPair, fee = fee, mode = mode)
 
         // --- Request the Did power up
         val pairwiseMnemonic = listOf(
@@ -105,8 +102,7 @@ class Examples {
             "second"
         )
         val pairwiseWallet = Wallet.derive(mnemonic = pairwiseMnemonic, networkInfo = info)
-//        postPowerUpRequest(pairwiseDid = pairwiseWallet.bech32Address, amount = depositAmount, wallet = userWallet, privateKey = privateKey, fee = fee, mode = mode)
-
+        //postPowerUpRequest(pairwiseDid = pairwiseWallet.bech32Address, amount = depositAmount, wallet = userWallet, privateKey = privateKey, fee = fee, mode = mode)
     }
 
     @Test
@@ -286,7 +282,7 @@ class Examples {
         //mintCccsList(mintCccs = listOf(mintCccs), wallet = userWallet, fee = fee, mode = mode)
 
         // --- getExchangeTradePositions
-        val etps = MintHelper.getExchangeTradePositions(userWallet)
+        //val etps = MintHelper.getExchangeTradePositions(userWallet)
 
         // --- BurnCcc
         val burnCccs = BurnCcc(amount = amount, signerDid = did, id = UUID.randomUUID().toString())

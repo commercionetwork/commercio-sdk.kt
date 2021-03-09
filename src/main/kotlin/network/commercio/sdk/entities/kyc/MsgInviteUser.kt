@@ -1,4 +1,4 @@
-package network.commercio.sdk.entities.membership
+package network.commercio.sdk.entities.kyc
 
 import network.commercio.sacco.models.types.StdMsg
 

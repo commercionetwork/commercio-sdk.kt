@@ -2,7 +2,7 @@ package network.commercio.sdk.kyc
 
 import network.commercio.sacco.Wallet
 import network.commercio.sdk.entities.id.Did
-import network.commercio.sdk.entities.membership.InviteUser
+import network.commercio.sdk.entities.kyc.InviteUser
 
 /**
  * Allows to easily create an InviteUser and perform common related operations.

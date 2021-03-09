@@ -1,4 +1,4 @@
-package network.commercio.sdk.entities.membership
+package network.commercio.sdk.entities.kyc
 
 /**
  * Contains the data related to invite a new user to join the system.

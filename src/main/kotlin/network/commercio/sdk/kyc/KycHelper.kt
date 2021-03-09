@@ -4,14 +4,14 @@ import network.commercio.sacco.TxResponse
 import network.commercio.sacco.Wallet
 import network.commercio.sacco.models.types.StdFee
 import network.commercio.sdk.entities.id.Did
-import network.commercio.sdk.entities.membership.*
+import network.commercio.sdk.entities.kyc.*
 import network.commercio.sdk.tx.TxHelper
 import network.commercio.sdk.tx.TxHelper.BroadcastingMode
 
 /**
- * Allows to easily perform CommercioMEMBERSHIP related operations.
+ * Allows to easily perform CommercioKYC related operations.
  */
-object MembershipHelper {
+object KycHelper {
 
     init {
         System.setProperty("javax.net.ssl.trustStoreType", "JKS")
@@ -51,19 +51,21 @@ object MembershipHelper {
     }
 
     /**
-     * Buys the membership with the given [membershipType].
+     * Buys the membership with the given [membershipType], [wallet] and [tsp].
      * Optionally [fee] and broadcasting [mode] parameters can be specified.
      */
     suspend fun buyMembership(
         membershipType: MembershipType,
         wallet: Wallet,
+        tsp: String,
         fee: StdFee? = null,
         mode: BroadcastingMode? = null
     ): TxResponse {
         val msg = MsgBuyMembership(
             buyMembership = BuyMembership(
                 membershipType = membershipType,
-                buyerDid = wallet.bech32Address
+                buyerDid = wallet.bech32Address,
+                tsp = tsp
             )
         )
         return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet, fee = fee, mode = mode)

@@ -3,8 +3,8 @@ package network.commercio.sdk.kyc
 import kotlinx.coroutines.runBlocking
 import network.commercio.sacco.NetworkInfo
 import network.commercio.sacco.Wallet
-import network.commercio.sdk.entities.membership.BuyMembership
-import network.commercio.sdk.entities.membership.MembershipType
+import network.commercio.sdk.entities.kyc.BuyMembership
+import network.commercio.sdk.entities.kyc.MembershipType
 import org.junit.Assert
 import org.junit.Test
 import org.kethereum.bip39.generateMnemonic
@@ -19,14 +19,19 @@ class BuyMembershipHelperTest {
         val newUserMnemonic = generateMnemonic(strength = 256, wordList = WORDLIST_ENGLISH).split(" ")
         val newUserWallet = Wallet.derive(newUserMnemonic, networkInfo)
 
+        val mnemonicTsp = generateMnemonic(strength = 256, wordList = WORDLIST_ENGLISH).split(" ")
+        val walletTsp = Wallet.derive(newUserMnemonic, networkInfo)
+
         val expectedBuyMembership = BuyMembership(
             membershipType = MembershipType.GOLD,
-            buyerDid = newUserWallet.bech32Address
+            buyerDid = newUserWallet.bech32Address,
+            tsp = walletTsp.bech32Address
         )
 
         val buyMembership = BuyMembershipHelper.fromWallet(
             wallet = newUserWallet,
-            membershipType = MembershipType.GOLD
+            membershipType = MembershipType.GOLD,
+            tsp = walletTsp.bech32Address
         )
 
         Assert.assertEquals(expectedBuyMembership.toString(), buyMembership.toString())

@@ -1,4 +1,4 @@
-package network.commercio.sdk.entities.membership
+package network.commercio.sdk.entities.kyc
 
 import network.commercio.sacco.models.types.StdMsg
 
@@ -11,6 +11,7 @@ data class MsgBuyMembership(
     type = "commercio/MsgBuyMembership",
     value = mapOf(
         "membership_type" to buyMembership.membershipType.toString().toLowerCase(),
-        "buyer" to buyMembership.buyerDid
+        "buyer" to buyMembership.buyerDid,
+        "tsp" to buyMembership.tsp
     )
 )
