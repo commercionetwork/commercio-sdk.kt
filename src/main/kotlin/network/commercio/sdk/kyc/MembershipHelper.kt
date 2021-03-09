@@ -1,4 +1,4 @@
-package network.commercio.sdk.membership
+package network.commercio.sdk.kyc
 
 import network.commercio.sacco.TxResponse
 import network.commercio.sacco.Wallet

@@ -1,4 +1,4 @@
-package network.commercio.sdk.membership
+package network.commercio.sdk.kyc
 
 import kotlinx.coroutines.runBlocking
 import network.commercio.sacco.NetworkInfo

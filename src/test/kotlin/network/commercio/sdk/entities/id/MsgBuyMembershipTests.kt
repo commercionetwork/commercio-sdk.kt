@@ -7,7 +7,7 @@ import network.commercio.sdk.entities.membership.BuyMembership
 import network.commercio.sdk.entities.membership.MembershipType
 import network.commercio.sdk.entities.membership.MsgBuyMembership
 import network.commercio.sdk.entities.msgObjectMapper
-import network.commercio.sdk.membership.BuyMembershipHelper
+import network.commercio.sdk.kyc.BuyMembershipHelper
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Test

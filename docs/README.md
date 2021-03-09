@@ -35,18 +35,18 @@ Here's the helpers' list:
   - [`DidDocumentHelper`](lib/id/did_document_helper.md)
   - [`RequestDidPowerUpHelper`](lib/id/request_did_power_up_helper.md)
 - **Docs:**
-  - [`DocsHelper`](lib/docs/docs_helper.md)  // ok, done
-  - [`CommercioDocHelper`](lib/docs/commercio_doc_helper.md) // ok, done
-  - [`CommercioDocReceiptHelper`](lib/docs/commercio_doc_receipt_helper.md) // ok, done
+  - [`DocsHelper`](lib/docs/docs_helper.md)
+  - [`CommercioDocHelper`](lib/docs/commercio_doc_helper.md)
+  - [`CommercioDocReceiptHelper`](lib/docs/commercio_doc_receipt_helper.md)
 - **CommercioMint:**
-  - [`MintHelper`](lib/mint/mint_helper.md) // ok, done
-  - [`MintCccHelper`](lib/mint/mint_ccc_helper.md)   // ok, done
-  - [`BurnCccHelper`](lib/mint/burn_ccc_helper.md)   // ok, done
+  - [`MintHelper`](lib/mint/mint_helper.md)
+  - [`MintCccHelper`](lib/mint/mint_ccc_helper.md)
+  - [`BurnCccHelper`](lib/mint/burn_ccc_helper.md)
 - **CommercioKyc:**
-  - [`KycHelper`](lib/kyc/kyc_helper.md) // todo add
-  - [`BuyMembershipHelper`](lib/kyc/buy_membership_helper.md)  // todo add (ex membership)
-  - [`InviteUserHelper`](lib/kyc/invite_user_helper.md) // todo add (ex membership)
-  - [`RewardPoolDepositHelper`](lib/kyc/reward_pool_deposit_helper.md) // todo add
+  - [`KycHelper`](lib/kyc/kyc_helper.md)
+  - [`BuyMembershipHelper`](lib/kyc/buy_membership_helper.md)
+  - [`InviteUserHelper`](lib/kyc/invite_user_helper.md)
+  - [`RewardPoolDepositHelper`](lib/kyc/reward_pool_deposit_helper.md)
 - **Tx:**
   - [`TxHelper`](lib/tx/tx_helper.md)
 
@@ -58,7 +58,7 @@ encryption/decryption, RSA/AES keys generation, JSON signature.
 Here's the helpers' list:
 
 - **Crypto**
+  - [`CertificateHelper`](lib/crypto/certificate_helper.md)
   - [`EncryptionHelper`](lib/crypto/encryption_helper.md)
   - [`KeysHelper`](lib/crypto/keys_helper.md)
   - [`SignHelper`](lib/crypto/sign_helper.md)
-  - [`CertificateHelper`](lib/crypto/certificate_helper.md) // todo keep it
