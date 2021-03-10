@@ -1,248 +1,264 @@
 <!DOCTYPE html>
 <html lang="en-US">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Commercio.network SDK (Kotlin) Documentation | Commercio.network Kotlin SDK Documentation</title>
-    <meta content="VuePress 1.8.2" name="generator">
-    <link rel="commercio-icon" href="/.vuepress/icon.png">
-    <meta name="description" content="Documentation for the Commercio.network blockhain Kotlin SDK.">
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>Commercio.network SDK (Kotlin) Documentation | Commercio.network Kotlin SDK Documentation</title>
+      <meta content="VuePress 1.8.2" name="generator">
+      <link rel="commercio-icon" href="/.vuepress/icon.png">
+      <meta name="description" content="Documentation for the Commercio.network blockhain Kotlin SDK.">
 
-    <link as="style" href="/assets/css/0.styles.c8e23b86.css" rel="preload">
-    <link as="script" href="/assets/js/app.341a32bd.js" rel="preload">
-    <link as="script" href="/assets/js/2.205efb8f.js" rel="preload">
-    <link as="script" href="/assets/js/7.b3d6143a.js" rel="preload">
-    <link href="/assets/js/10.0e9da1d3.js" rel="prefetch">
-    <link href="/assets/js/11.5adbec83.js" rel="prefetch">
-    <link href="/assets/js/12.9060daa2.js" rel="prefetch">
-    <link href="/assets/js/13.0a2329d8.js" rel="prefetch">
-    <link href="/assets/js/14.91ebcfd0.js" rel="prefetch">
-    <link href="/assets/js/15.27322730.js" rel="prefetch">
-    <link href="/assets/js/16.56f708ac.js" rel="prefetch">
-    <link href="/assets/js/17.4b257716.js" rel="prefetch">
-    <link href="/assets/js/18.9787037c.js" rel="prefetch">
-    <link href="/assets/js/19.ee82e4ac.js" rel="prefetch">
-    <link href="/assets/js/20.600e5647.js" rel="prefetch">
-    <link href="/assets/js/21.62bd1d28.js" rel="prefetch">
-    <link href="/assets/js/22.6b386f30.js" rel="prefetch">
-    <link href="/assets/js/23.d12e5a64.js" rel="prefetch">
-    <link href="/assets/js/24.c45a155d.js" rel="prefetch">
-    <link href="/assets/js/25.2b275cb1.js" rel="prefetch">
-    <link href="/assets/js/26.3f705602.js" rel="prefetch">
-    <link href="/assets/js/27.554108d4.js" rel="prefetch">
-    <link href="/assets/js/28.c7c4469d.js" rel="prefetch">
-    <link href="/assets/js/3.f34435cc.js" rel="prefetch">
-    <link href="/assets/js/4.7fe12137.js" rel="prefetch">
-    <link href="/assets/js/5.d3f3bf42.js" rel="prefetch">
-    <link href="/assets/js/6.72ad7c85.js" rel="prefetch">
-    <link href="/assets/js/8.d34c0a4a.js" rel="prefetch">
-    <link href="/assets/js/9.74045f33.js" rel="prefetch">
-    <link href="/assets/css/0.styles.c8e23b86.css" rel="stylesheet">
+      <link as="style" href="/assets/css/0.styles.c8e23b86.css" rel="preload">
+      <link as="script" href="/assets/js/app.63d2ee9d.js" rel="preload">
+      <link as="script" href="/assets/js/2.205efb8f.js" rel="preload">
+      <link as="script" href="/assets/js/7.b3d6143a.js" rel="preload">
+      <link href="/assets/js/10.d3813a74.js" rel="prefetch">
+      <link href="/assets/js/11.77c2a161.js" rel="prefetch">
+      <link href="/assets/js/12.159fa5f0.js" rel="prefetch">
+      <link href="/assets/js/13.0a2329d8.js" rel="prefetch">
+      <link href="/assets/js/14.e07fd201.js" rel="prefetch">
+      <link href="/assets/js/15.cc0f364e.js" rel="prefetch">
+      <link href="/assets/js/16.ff67a749.js" rel="prefetch">
+      <link href="/assets/js/17.1ecb83bc.js" rel="prefetch">
+      <link href="/assets/js/18.5496be4a.js" rel="prefetch">
+      <link href="/assets/js/19.c638282f.js" rel="prefetch">
+      <link href="/assets/js/20.2a670345.js" rel="prefetch">
+      <link href="/assets/js/21.fa460aef.js" rel="prefetch">
+      <link href="/assets/js/22.d8a7c725.js" rel="prefetch">
+      <link href="/assets/js/23.abc1c04b.js" rel="prefetch">
+      <link href="/assets/js/24.3d69c443.js" rel="prefetch">
+      <link href="/assets/js/25.cfa0f7b6.js" rel="prefetch">
+      <link href="/assets/js/26.3688d7b4.js" rel="prefetch">
+      <link href="/assets/js/27.d30b9d21.js" rel="prefetch">
+      <link href="/assets/js/28.c7c4469d.js" rel="prefetch">
+      <link href="/assets/js/3.f34435cc.js" rel="prefetch">
+      <link href="/assets/js/4.7fe12137.js" rel="prefetch">
+      <link href="/assets/js/5.d3f3bf42.js" rel="prefetch">
+      <link href="/assets/js/6.72ad7c85.js" rel="prefetch">
+      <link href="/assets/js/8.cf2df8e5.js" rel="prefetch">
+      <link href="/assets/js/9.91be0e6e.js" rel="prefetch">
+      <link href="/assets/css/0.styles.c8e23b86.css" rel="stylesheet">
   </head>
   <body>
   <div data-server-rendered="true" id="app">
-    <div class="theme-container">
-      <header class="navbar">
-        <div class="sidebar-button">
-          <svg aria-hidden="true" class="icon" role="img" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
-            <path d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"
-                  fill="currentColor"></path>
-          </svg>
-        </div>
-        <a aria-current="page" class="home-link router-link-exact-active router-link-active" href="/"><!----> <span
-                class="site-name">Commercio.network Kotlin SDK Documentation</span></a>
-        <div class="links">
-          <div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!---->
-          </div>
-          <nav class="nav-links can-hide">
-            <div class="nav-item"><a class="nav-link external" href="https://commercio.network"
-                                     rel="noopener noreferrer" target="_blank">
-              Commercio.network
-              <span><svg aria-hidden="true" class="icon outbound" focusable="false" height="15" viewBox="0 0 100 100"
-                         width="15" x="0px" xmlns="http://www.w3.org/2000/svg" y="0px"><path
-                      d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"
-                      fill="currentColor"></path> <polygon fill="currentColor"
-                                                           points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span
-                      class="sr-only">(opens new window)</span></span></a></div>
-            <a class="repo-link" href="https://github.com/commercionetwork/commercio-sdk.kt" rel="noopener noreferrer"
-               target="_blank">
-              GitHub
-              <span><svg aria-hidden="true" class="icon outbound" focusable="false" height="15" viewBox="0 0 100 100"
-                         width="15" x="0px" xmlns="http://www.w3.org/2000/svg" y="0px"><path
-                      d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"
-                      fill="currentColor"></path> <polygon fill="currentColor"
-                                                           points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span
-                      class="sr-only">(opens new window)</span></span></a></nav>
-        </div>
-      </header>
-      <div class="sidebar-mask"></div>
-      <aside class="sidebar">
-        <nav class="nav-links">
-          <div class="nav-item"><a class="nav-link external" href="https://commercio.network" rel="noopener noreferrer"
-                                   target="_blank">
-            Commercio.network
-            <span><svg aria-hidden="true" class="icon outbound" focusable="false" height="15" viewBox="0 0 100 100"
-                       width="15" x="0px" xmlns="http://www.w3.org/2000/svg" y="0px"><path
-                    d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"
-                    fill="currentColor"></path> <polygon fill="currentColor"
-                                                         points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span
-                    class="sr-only">(opens new window)</span></span></a></div>
-          <a class="repo-link" href="https://github.com/commercionetwork/commercio-sdk.kt" rel="noopener noreferrer"
-             target="_blank">
-            GitHub
-            <span><svg aria-hidden="true" class="icon outbound" focusable="false" height="15" viewBox="0 0 100 100"
-                       width="15" x="0px" xmlns="http://www.w3.org/2000/svg" y="0px"><path
-                    d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"
-                    fill="currentColor"></path> <polygon fill="currentColor"
-                                                         points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span
-                    class="sr-only">(opens new window)</span></span></a></nav>
-        <ul class="sidebar-links">
-          <li>
-            <section class="sidebar-group depth-0"><p class="sidebar-heading open"><span>Wallet</span> <!----></p>
-              <ul class="sidebar-links sidebar-group-items">
-                <li><a class="sidebar-link" href="/wallet/create-wallet.html">Create a wallet</a></li>
+      <div class="theme-container">
+          <header class="navbar">
+              <div class="sidebar-button">
+                  <svg aria-hidden="true" class="icon" role="img" viewBox="0 0 448 512"
+                       xmlns="http://www.w3.org/2000/svg">
+                      <path d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"
+                            fill="currentColor"></path>
+                  </svg>
+              </div>
+              <a aria-current="page" class="home-link router-link-exact-active router-link-active" href="/"><!---->
+                  <span class="site-name">Commercio.network Kotlin SDK Documentation</span></a>
+              <div class="links">
+                  <div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value="">
+                      <!----></div>
+                  <nav class="nav-links can-hide">
+                      <div class="nav-item"><a class="nav-link external" href="https://commercio.network"
+                                               rel="noopener noreferrer" target="_blank">
+                          Commercio.network
+                          <span><svg aria-hidden="true" class="icon outbound" focusable="false" height="15"
+                                     viewBox="0 0 100 100" width="15" x="0px" xmlns="http://www.w3.org/2000/svg"
+                                     y="0px"><path
+                                  d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"
+                                  fill="currentColor"></path> <polygon fill="currentColor"
+                                                                       points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span
+                                  class="sr-only">(opens new window)</span></span></a></div>
+                      <a class="repo-link" href="https://github.com/commercionetwork/commercio-sdk.kt"
+                         rel="noopener noreferrer" target="_blank">
+                          GitHub
+                          <span><svg aria-hidden="true" class="icon outbound" focusable="false" height="15"
+                                     viewBox="0 0 100 100" width="15" x="0px" xmlns="http://www.w3.org/2000/svg"
+                                     y="0px"><path
+                                  d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"
+                                  fill="currentColor"></path> <polygon fill="currentColor"
+                                                                       points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span
+                                  class="sr-only">(opens new window)</span></span></a></nav>
+              </div>
+          </header>
+          <div class="sidebar-mask"></div>
+          <aside class="sidebar">
+              <nav class="nav-links">
+                  <div class="nav-item"><a class="nav-link external" href="https://commercio.network"
+                                           rel="noopener noreferrer" target="_blank">
+                      Commercio.network
+                      <span><svg aria-hidden="true" class="icon outbound" focusable="false" height="15"
+                                 viewBox="0 0 100 100" width="15" x="0px" xmlns="http://www.w3.org/2000/svg" y="0px"><path
+                              d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"
+                              fill="currentColor"></path> <polygon fill="currentColor"
+                                                                   points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span
+                              class="sr-only">(opens new window)</span></span></a></div>
+                  <a class="repo-link" href="https://github.com/commercionetwork/commercio-sdk.kt"
+                     rel="noopener noreferrer" target="_blank">
+                      GitHub
+                      <span><svg aria-hidden="true" class="icon outbound" focusable="false" height="15"
+                                 viewBox="0 0 100 100" width="15" x="0px" xmlns="http://www.w3.org/2000/svg" y="0px"><path
+                              d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"
+                              fill="currentColor"></path> <polygon fill="currentColor"
+                                                                   points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span
+                              class="sr-only">(opens new window)</span></span></a></nav>
+              <ul class="sidebar-links">
+                  <li>
+                      <section class="sidebar-group depth-0"><p class="sidebar-heading open"><span>Wallet</span> <!---->
+                      </p>
+                          <ul class="sidebar-links sidebar-group-items">
+                              <li><a class="sidebar-link" href="/wallet/create-wallet.html">Create a wallet</a></li>
+                          </ul>
+                      </section>
+                  </li>
+                  <li>
+                      <section class="sidebar-group collapsable depth-0"><p class="sidebar-heading">
+                          <span>Id helpers</span> <span class="arrow right"></span></p> <!----></section>
+                  </li>
+                  <li>
+                      <section class="sidebar-group collapsable depth-0"><p class="sidebar-heading">
+                          <span>Docs helpers</span> <span class="arrow right"></span></p> <!----></section>
+                  </li>
+                  <li>
+                      <section class="sidebar-group collapsable depth-0"><p class="sidebar-heading">
+                          <span>Mint helpers</span> <span class="arrow right"></span></p> <!----></section>
+                  </li>
+                  <li>
+                      <section class="sidebar-group collapsable depth-0"><p class="sidebar-heading">
+                          <span>Kyc helpers</span> <span class="arrow right"></span></p> <!----></section>
+                  </li>
+                  <li>
+                      <section class="sidebar-group collapsable depth-0"><p class="sidebar-heading">
+                          <span>Tx helpers</span> <span class="arrow right"></span></p> <!----></section>
+                  </li>
+                  <li>
+                      <section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>Utility Helpers</span>
+                          <span class="arrow right"></span></p> <!----></section>
+                  </li>
+                  <li>
+                      <section class="sidebar-group collapsable depth-0"><p class="sidebar-heading">
+                          <span>Localnet</span> <span class="arrow right"></span></p> <!----></section>
+                  </li>
+                  <li>
+                      <section class="sidebar-group depth-0"><p class="sidebar-heading"><span>Glossary</span> <!---->
+                      </p>
+                          <ul class="sidebar-links sidebar-group-items">
+                              <li><a class="sidebar-link" href="/lib/glossary.html">Glossary</a></li>
+                          </ul>
+                      </section>
+                  </li>
               </ul>
-            </section>
-          </li>
-          <li>
-            <section class="sidebar-group depth-0"><p class="sidebar-heading"><span>Blockchain's Helpers</span> <!---->
-            </p>
-              <ul class="sidebar-links sidebar-group-items">
-                <li><a class="sidebar-link" href="/lib/id/id_helper.html">Id Helper</a></li>
-                <li><a class="sidebar-link" href="/lib/id/did_document_helper.html">Did Document Helper</a></li>
-                <li><a class="sidebar-link" href="/lib/docs/docs_helper.html">Docs Helper</a></li>
-                <li><a class="sidebar-link" href="/lib/kyc/kyc_helper.html">Kyc Helper</a></li>
-                <li><a class="sidebar-link" href="/lib/mint/mint_helper.html">Mint Helper</a></li>
-                <li><a class="sidebar-link" href="/lib/tx/tx_helper.html">Tx Helper</a></li>
-                <li><a class="sidebar-link" href="/lib/crypto/sign_helper.html">Sign Helper</a></li>
-              </ul>
-            </section>
-          </li>
-          <li>
-            <section class="sidebar-group depth-0"><p class="sidebar-heading"><span>Utility Helpers</span> <!----></p>
-              <ul class="sidebar-links sidebar-group-items">
-                <li><a class="sidebar-link" href="/lib/crypto/keys_helper.html">Keys Helper</a></li>
-                <li><a class="sidebar-link" href="/lib/crypto/encryption_helper.html">Encryption Helper</a></li>
-                <li><a class="sidebar-link" href="/lib/crypto/certificate_helper.html">Certificate Helper</a></li>
-              </ul>
-            </section>
-          </li>
-          <li>
-            <section class="sidebar-group depth-0"><p class="sidebar-heading"><span>Glossary</span> <!----></p>
-              <ul class="sidebar-links sidebar-group-items">
-                <li><a class="sidebar-link" href="/lib/glossary.html">Glossary</a></li>
-              </ul>
-            </section>
-          </li>
-        </ul>
-      </aside>
-      <main class="page">
-        <div class="theme-default-content content__default"><h1 id="commercio-network-sdk-kotlin-documentation"><a
-                class="header-anchor" href="#commercio-network-sdk-kotlin-documentation">#</a> Commercio.network SDK
-          (Kotlin) Documentation</h1>
-          <p>Inside the following page you will learn how to perform all the Commercio.network transactions by using the
-            Commercio.network SDK.</p>
-          <div class="custom-block tip"><p class="custom-block-title">Disclaimer This documentation is valid for the
-            `v2.2.0` sdk version</p></div>
-          <h2 id="installation"><a class="header-anchor" href="#installation">#</a> Installation</h2>
-          <p>In order to use the SDK inside your project you can easilly follow the guidelines
-            provided <a href="https://jitpack.io/#commercionetwork/sdk.kt" rel="noopener noreferrer" target="_blank">here<span><svg
-                    aria-hidden="true" class="icon outbound" focusable="false" height="15" viewBox="0 0 100 100"
-                    width="15" x="0px" xmlns="http://www.w3.org/2000/svg" y="0px"><path
-                    d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"
-                    fill="currentColor"></path> <polygon fill="currentColor"
-                                                         points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span
-                    class="sr-only">(opens new window)</span></span></a>.
-          </p>
-          <h2 id="how-to-start-using-sdk"><a class="header-anchor" href="#how-to-start-using-sdk">#</a> How to start
-            using SDK</h2>
-          <h3 id="wallet"><a class="header-anchor" href="#wallet">#</a> Wallet</h3>
-          <p>In order to perform transactions on the Commercio.network blockchain you need to create a
-            <strong>wallet</strong>.</p>
-          <div class="custom-block tip"><p class="custom-block-title">Wallet</p>
-            <p>To know what a wallet is and how to create it, you can read the <a href="/wallet/create-wallet.html">wallet
-              creation guide</a></p></div>
-          <h3 id="helpers"><a class="header-anchor" href="#helpers">#</a> Helpers</h3> <h4 id="blockchain-s-helpers"><a
-                  class="header-anchor" href="#blockchain-s-helpers">#</a> <em>Blockchain's helpers</em></h4>
-          <p>After creating the wallet, you can use it inside the blockchain's <strong>Helpers</strong>, specific
-            classes used to allow a simple
-            way to send Commercio.network blockchain's messages and perform transactions.</p>
-          <p>Here's the helpers' list:</p>
-          <ul>
-            <li><strong>Id:</strong>
-              <ul>
-                <li><a href="/lib/id/id_helper.html"><code>IdHelper</code></a></li>
-                <li><a href="/lib/id/did_document_helper.html"><code>DidDocumentHelper</code></a></li>
-                <li><a href="/lib/id/request_did_power_up_helper.html"><code>RequestDidPowerUpHelper</code></a></li>
-              </ul>
-            </li>
-            <li><strong>Docs:</strong>
-              <ul>
-                <li><a href="/lib/docs/docs_helper.html"><code>DocsHelper</code></a></li>
-                <li><a href="/lib/docs/commercio_doc_helper.html"><code>CommercioDocHelper</code></a></li>
-                <li><a href="/lib/docs/commercio_doc_receipt_helper.html"><code>CommercioDocReceiptHelper</code></a>
-                </li>
-              </ul>
-            </li>
-            <li><strong>CommercioMint:</strong>
-              <ul>
-                <li><a href="/lib/mint/mint_helper.html"><code>MintHelper</code></a></li>
-                <li><a href="/lib/mint/mint_ccc_helper.html"><code>MintCccHelper</code></a></li>
-                <li><a href="/lib/mint/burn_ccc_helper.html"><code>BurnCccHelper</code></a></li>
-              </ul>
-            </li>
-            <li><strong>CommercioKyc:</strong>
-              <ul>
-                <li><a href="/lib/kyc/kyc_helper.html"><code>KycHelper</code></a></li>
-                <li><a href="/lib/kyc/buy_membership_helper.html"><code>BuyMembershipHelper</code></a></li>
-                <li><a href="/lib/kyc/invite_user_helper.html"><code>InviteUserHelper</code></a></li>
-                <li><a href="/lib/kyc/reward_pool_deposit_helper.html"><code>RewardPoolDepositHelper</code></a></li>
-              </ul>
-            </li>
-            <li><strong>Tx:</strong>
-              <ul>
-                <li><a href="/lib/tx/tx_helper.html"><code>TxHelper</code></a></li>
-              </ul>
-            </li>
-          </ul>
-          <h4 id="utility-helpers"><a class="header-anchor" href="#utility-helpers">#</a> <em>Utility helpers</em></h4>
-          <p>Beside the above helpers, there is a few more that allows you to perform specific operations such as string
-            or bytes
-            encryption/decryption, RSA/AES keys generation, JSON signature.</p>
-          <p>Here's the helpers' list:</p>
-          <ul>
-            <li><strong>Crypto</strong>
-              <ul>
-                <li><a href="/lib/crypto/certificate_helper.html"><code>CertificateHelper</code></a></li>
-                <li><a href="/lib/crypto/encryption_helper.html"><code>EncryptionHelper</code></a></li>
-                <li><a href="/lib/crypto/keys_helper.html"><code>KeysHelper</code></a></li>
-                <li><a href="/lib/crypto/sign_helper.html"><code>SignHelper</code></a></li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-        <footer class="page-edit">
-          <div class="edit-link"><a
-                  href="https://github.com/commercionetwork/commercio-sdk.kt/edit/master/docs/README.md"
-                  rel="noopener noreferrer" target="_blank">Edit this page on Github</a> <span><svg aria-hidden="true"
-                                                                                                    class="icon outbound"
-                                                                                                    focusable="false"
-                                                                                                    height="15"
-                                                                                                    viewBox="0 0 100 100"
-                                                                                                    width="15" x="0px"
-                                                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                                                    y="0px"><path
-                  d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"
-                  fill="currentColor"></path> <polygon fill="currentColor"
-                                                       points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span
-                  class="sr-only">(opens new window)</span></span></div>
-          <div class="last-updated"><span class="prefix">Last Updated:</span> <span
-                  class="time">3/9/2021, 8:39:00 AM</span></div>
-        </footer> <!----> </main>
-    </div>
-    <div class="global-ui"></div>
+          </aside>
+          <main class="page">
+              <div class="theme-default-content content__default"><h1 id="commercio-network-sdk-kotlin-documentation"><a
+                      class="header-anchor" href="#commercio-network-sdk-kotlin-documentation">#</a> Commercio.network
+                  SDK (Kotlin) Documentation</h1>
+                  <p>Inside the following page you will learn how to perform all the Commercio.network transactions by
+                      using the
+                      Commercio.network SDK.</p>
+                  <div class="custom-block tip"><p class="custom-block-title">Disclaimer This documentation is valid for
+                      the `v2.2.0` sdk version</p></div>
+                  <h2 id="installation"><a class="header-anchor" href="#installation">#</a> Installation</h2>
+                  <p>In order to use the SDK inside your project you can easilly follow the guidelines
+                      provided <a href="https://jitpack.io/#commercionetwork/sdk.kt" rel="noopener noreferrer"
+                                  target="_blank">here<span><svg aria-hidden="true" class="icon outbound"
+                                                                 focusable="false" height="15" viewBox="0 0 100 100"
+                                                                 width="15" x="0px" xmlns="http://www.w3.org/2000/svg"
+                                                                 y="0px"><path
+                              d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"
+                              fill="currentColor"></path> <polygon fill="currentColor"
+                                                                   points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span
+                              class="sr-only">(opens new window)</span></span></a>.
+                  </p>
+                  <h2 id="how-to-start-using-sdk"><a class="header-anchor" href="#how-to-start-using-sdk">#</a> How to
+                      start using SDK</h2>
+                  <h3 id="wallet"><a class="header-anchor" href="#wallet">#</a> Wallet</h3>
+                  <p>In order to perform transactions on the Commercio.network blockchain you need to create a <strong>wallet</strong>.
+                  </p>
+                  <div class="custom-block tip"><p class="custom-block-title">Wallet</p>
+                      <p>To know what a wallet is and how to create it, you can read the <a
+                              href="/wallet/create-wallet.html">wallet creation guide</a></p></div>
+                  <h3 id="helpers"><a class="header-anchor" href="#helpers">#</a> Helpers</h3> <h4
+                          id="blockchain-s-helpers"><a class="header-anchor" href="#blockchain-s-helpers">#</a> <em>Blockchain's
+                      helpers</em></h4>
+                  <p>After creating the wallet, you can use it inside the blockchain's <strong>Helpers</strong>,
+                      specific classes used to allow a simple
+                      way to send Commercio.network blockchain's messages and perform transactions.</p>
+                  <p>Here's the helpers' list:</p>
+                  <ul>
+                      <li><strong>Id:</strong>
+                          <ul>
+                              <li><a href="/lib/id/id_helper.html"><code>IdHelper</code></a></li>
+                              <li><a href="/lib/id/did_document_helper.html"><code>DidDocumentHelper</code></a></li>
+                              <li>
+                                  <a href="/lib/id/request_did_power_up_helper.html"><code>RequestDidPowerUpHelper</code></a>
+                              </li>
+                          </ul>
+                      </li>
+                      <li><strong>Docs:</strong>
+                          <ul>
+                              <li><a href="/lib/docs/docs_helper.html"><code>DocsHelper</code></a></li>
+                              <li><a href="/lib/docs/commercio_doc_helper.html"><code>CommercioDocHelper</code></a></li>
+                              <li>
+                                  <a href="/lib/docs/commercio_doc_receipt_helper.html"><code>CommercioDocReceiptHelper</code></a>
+                              </li>
+                          </ul>
+                      </li>
+                      <li><strong>CommercioMint:</strong>
+                          <ul>
+                              <li><a href="/lib/mint/mint_helper.html"><code>MintHelper</code></a></li>
+                              <li><a href="/lib/mint/mint_ccc_helper.html"><code>MintCccHelper</code></a></li>
+                              <li><a href="/lib/mint/burn_ccc_helper.html"><code>BurnCccHelper</code></a></li>
+                          </ul>
+                      </li>
+                      <li><strong>CommercioKyc:</strong>
+                          <ul>
+                              <li><a href="/lib/kyc/kyc_helper.html"><code>KycHelper</code></a></li>
+                              <li><a href="/lib/kyc/buy_membership_helper.html"><code>BuyMembershipHelper</code></a>
+                              </li>
+                              <li><a href="/lib/kyc/invite_user_helper.html"><code>InviteUserHelper</code></a></li>
+                              <li>
+                                  <a href="/lib/kyc/reward_pool_deposit_helper.html"><code>RewardPoolDepositHelper</code></a>
+                              </li>
+                          </ul>
+                      </li>
+                      <li><strong>Tx:</strong>
+                          <ul>
+                              <li><a href="/lib/tx/tx_helper.html"><code>TxHelper</code></a></li>
+                          </ul>
+                      </li>
+                  </ul>
+                  <h4 id="utility-helpers"><a class="header-anchor" href="#utility-helpers">#</a> <em>Utility
+                      helpers</em></h4>
+                  <p>Beside the above helpers, there is a few more that allows you to perform specific operations such
+                      as string or bytes
+                      encryption/decryption, RSA/AES keys generation, JSON signature.</p>
+                  <p>Here's the helpers' list:</p>
+                  <ul>
+                      <li><strong>Crypto</strong>
+                          <ul>
+                              <li><a href="/lib/crypto/certificate_helper.html"><code>CertificateHelper</code></a></li>
+                              <li><a href="/lib/crypto/encryption_helper.html"><code>EncryptionHelper</code></a></li>
+                              <li><a href="/lib/crypto/keys_helper.html"><code>KeysHelper</code></a></li>
+                              <li><a href="/lib/crypto/sign_helper.html"><code>SignHelper</code></a></li>
+                          </ul>
+                      </li>
+                  </ul>
+              </div>
+              <footer class="page-edit">
+                  <div class="edit-link"><a
+                          href="https://github.com/commercionetwork/commercio-sdk.kt/edit/master/docs/README.md"
+                          rel="noopener noreferrer" target="_blank">Edit this page on Github</a> <span><svg
+                          aria-hidden="true" class="icon outbound" focusable="false" height="15" viewBox="0 0 100 100"
+                          width="15" x="0px" xmlns="http://www.w3.org/2000/svg" y="0px"><path
+                          d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"
+                          fill="currentColor"></path> <polygon fill="currentColor"
+                                                               points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span
+                          class="sr-only">(opens new window)</span></span></div>
+                  <div class="last-updated"><span class="prefix">Last Updated:</span> <span class="time">3/9/2021, 8:39:00 AM</span>
+                  </div>
+              </footer> <!----> </main>
+      </div>
+      <div class="global-ui"></div>
   </div>
-  <script defer src="/assets/js/app.341a32bd.js"></script>
+  <script defer src="/assets/js/app.63d2ee9d.js"></script>
   <script defer src="/assets/js/2.205efb8f.js"></script>
   <script defer src="/assets/js/7.b3d6143a.js"></script>
   </body>

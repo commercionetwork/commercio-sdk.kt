@@ -37,7 +37,6 @@ Kyc helper allows to easily perform all the operations related to the commercio.
    ): TxResponse
    ```
 
-// todo fix code example
 
 ## Usage examples
 
@@ -73,10 +72,9 @@ Kyc helper allows to easily perform all the operations related to the commercio.
         "word",
         "man"
     )
-    
-    val userWallet = Wallet.derive(mnemonic = userMnemonic, networkInfo = info)
-    
-    val newUserMnemonic = listOf(
+val government = Wallet.derive(mnemonic = userMnemonic, networkInfo = info)
+
+val newUserMnemonic = listOf(
             "often",
             "emerge",
             "table",
@@ -96,27 +94,65 @@ Kyc helper allows to easily perform all the operations related to the commercio.
             "flight",
             "lady",
             "elephant",
-            "twenty",
-            "join",
-            "depth",
-            "laptop",
-            "arrest"
-        )
-    val newUserWallet = Wallet.derive(newUserMnemonic, info)
+   "twenty",
+   "join",
+   "depth",
+   "laptop",
+   "arrest"
+)
+val newUserWallet = Wallet.derive(newUserMnemonic, info)
 
-        try {
-            // Invite user
-            inviteUser(
-                user = Did(newUserWallet.bech32Address), 
-                wallet = userWallet
-            )
-            
-            // Buy a membership
-            buyMembership(
-                membershipType = MembershipType.GOLD, 
-                wallet = newUserWallet
-            )
-        } catch (e: Exception){
-            throw e
-        }
+try {
+   // Invite user
+   val responseInviteUser = KycHelper.inviteUsersList(
+      wallet = government,
+      inviteUsers = listOf(
+         InviteUserHelper.fromWallet(
+            wallet = government, // user with membership
+            recipientDid = Did(newUserWallet.bech32Address) // user to invite
+         )
+      )
+   )
+
+   // Recharge the user
+   val responseSendCoin = TxHelper.createSignAndSendTx(
+      msgs = listOf(
+         MsgSend(
+            amount = listOf(
+               StdCoin(denom = "uccc", amount = "100"),
+               StdCoin(denom = "ucommercio", amount = "20000")
+            ),
+            fromAddress = government.bech32Address,
+            toAddress = newUserWallet.bech32Address
+         )
+      ),
+      wallet = government
+   )
+
+   // Buy a membership
+   val responseBuy = KycHelper.buyMembershipsList(
+      wallet = government,
+      buyMemberships = listOf(
+         BuyMembership(
+            buyerDid = newUserWallet.bech32Address,
+            membershipType = MembershipType.BRONZE,
+            tsp = government.bech32Address
+         )
+      )
+   )
+
+   // Deposit into the reward pool
+   val responseRewardPoolDeposit = rewardPoolDepositsList(
+      wallet = wallet,
+      rewardPoolDeposits = listOf(
+         RewardPoolDepositHelper.fromWallet(
+            wallet = wallet,
+            amount = listOf(StdCoin(denom = "ucommercio", amount = "50"))
+         )
+      )
+   )
+
+} catch (e: Exception) {
+   throw e
+}
 ```

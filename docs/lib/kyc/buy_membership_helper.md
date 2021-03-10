@@ -4,12 +4,13 @@ Buy Membership Helper allows to easily create a Buy Membership object.
 
 ## Provided Operations
 
-1. Creates a BuyMembership from the given `wallet` and `membershipType`.
+1. Creates a BuyMembership from the given `wallet` ,the `membershipType` and `tsp` address.
 
     ```kotlin
-    fun fromWallet(
+   fun fromWallet(
         wallet: Wallet,
-        membershipType: MembershipType
+        membershipType: MembershipType,
+        tsp: String
     ): BuyMembership
     ```
 
@@ -42,16 +43,17 @@ Buy Membership Helper allows to easily create a Buy Membership object.
             "blur",
             "piece",
             "wheel",
-            "film",
-            "notable",
-            "word",
-            "man"
-        )
-        
-    val wallet = Wallet.derive(mnemonic = userMnemonic, networkInfo = info)
-        
-    val buyMembership = BuyMembershipHelper.fromWallet(
-        wallet = wallet,
-        membershipType = MembershipType.GOLD
+       "film",
+       "notable",
+       "word",
+       "man"
     )
+
+val wallet = Wallet.derive(mnemonic = userMnemonic, networkInfo = info)
+
+val buyMembership = BuyMembershipHelper.fromWallet(
+   wallet = wallet,
+   membershipType = MembershipType.GOLD,
+   tsp = tspAddress
+)
 ```
