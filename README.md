@@ -37,18 +37,16 @@ We highly suggest you checking it out to have a complete reference of the SDK.
 ### Id
 
 - Create Did Document
-- Associate Did Document // todo add
+- Associate Did Document
 - Request power up
-- Create connection invitation // todo remove
-- Verify connection invitation // todo remove
 
 ### CommercioMint
 
-- Open CDP // todo replace with Mint CCC
-- Close CDP // todo replace with Burn CCC
+- Mint CCC
+- Burn CCC
 
 ### CommercioKYC
 
 - Invite user
 - Buy membership
-- Deposit into reward pool // todo add
+- Deposit into reward pool 
