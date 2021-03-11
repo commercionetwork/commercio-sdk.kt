@@ -11,10 +11,7 @@ import java.security.spec.X509EncodedKeySpec
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.SecretKeySpec
-import javax.crypto.spec.GCMParameterSpec
 import java.security.SecureRandom
-import javax.crypto.Cipher
-
 
 
 /**
@@ -64,7 +61,6 @@ object KeysHelper {
         return KeyPairWrapper(PublicKeyWrapper(public = keyPair.public, type = type),keyPair.private)
     }
 
-    //TODO test these
     /**
      * Export public [key] of [type] RSA or EC into an HEX string.
      */
@@ -113,5 +109,4 @@ object KeysHelper {
 
         return publicSignature.verify(signatureBytes)
     }
-
 }
