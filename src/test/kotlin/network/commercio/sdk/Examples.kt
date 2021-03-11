@@ -5,6 +5,7 @@ import kotlinx.coroutines.runBlocking
 import network.commercio.sacco.NetworkInfo
 import network.commercio.sacco.TxResponse
 import network.commercio.sacco.Wallet
+import network.commercio.sacco.models.messages.MsgSend
 import network.commercio.sacco.models.types.StdCoin
 import network.commercio.sacco.models.types.StdFee
 import network.commercio.sdk.crypto.CertificateHelper
@@ -12,10 +13,17 @@ import network.commercio.sdk.crypto.KeysHelper
 import network.commercio.sdk.docs.DocsHelper
 import network.commercio.sdk.entities.docs.CommercioDoc
 import network.commercio.sdk.entities.id.Did
+import network.commercio.sdk.entities.kyc.BuyMembership
+import network.commercio.sdk.entities.kyc.InviteUser
+import network.commercio.sdk.entities.kyc.MembershipType
+import network.commercio.sdk.entities.kyc.RewardPoolDeposit
 import network.commercio.sdk.entities.mint.BurnCcc
 import network.commercio.sdk.entities.mint.MintCcc
 import network.commercio.sdk.id.DidDocumentHelper
 import network.commercio.sdk.id.IdHelper
+import network.commercio.sdk.kyc.InviteUserHelper
+import network.commercio.sdk.kyc.KycHelper
+import network.commercio.sdk.kyc.RewardPoolDepositHelper
 import network.commercio.sdk.mint.MintHelper
 import network.commercio.sdk.tx.TxHelper
 import org.junit.Assert.assertTrue
@@ -361,43 +369,87 @@ class Examples {
         val mode = TxHelper.BroadcastingMode.BLOCK
 
         // --- Invite user
-        // todo replace inviteUser with inviteUsersList
-        // inviteUser(user = Did(newUserWallet.bech32Address), wallet = userWallet, fee = fee, mode = mode)
+        val inviteUser = InviteUserHelper.fromWallet(
+            wallet = userWallet, // user with membership
+            recipientDid = Did(newUserWallet.bech32Address)
+        )
+
+        //val responseInviteUser = inviteUsersList( inviteUsers = listOf(inviteUser), wallet = userWallet, mode = mode, fee = fee)
+
+        // --- Need coin to buy membership
+
+        val msg = listOf(
+            MsgSend(
+                amount = listOf(
+                    StdCoin(denom = "uccc", amount = "100"),
+                    StdCoin(denom = "ucommercio", amount = "20000")
+                ),
+                fromAddress = userWallet.bech32Address,
+                toAddress = newUserWallet.bech32Address
+            )
+        )
+
+        //val responseSendCoin = TxHelper.createSignAndSendTx(msgs = msg,wallet = userWallet)
 
         // --- Buy a membership
-        // todo replace buyMembership with buyMembershipsList
-        // buyMembership(membershipType = MembershipType.GOLD, wallet = newUserWallet, fee = fee, mode = mode)
+        val buyMemberships = BuyMembership(
+            buyerDid = newUserWallet.bech32Address,
+            membershipType = MembershipType.GOLD,
+            tsp = userWallet.bech32Address
+        )
 
-        // todo add rewardPoolDepositsList
-        // rewardPoolDepositsList(...)
+        // val responseBuy = buyMembershipsList( buyMemberships = listOf(buyMemberships), wallet = userWallet, fee = fee, mode = mode )
+
+        // --- Get Reward Pool Deposits List
+        val rewardPoolDeposit = RewardPoolDepositHelper.fromWallet(
+            wallet = userWallet,
+            amount = listOf(StdCoin(denom = "ucommercio", amount = "5"))
+        )
+
+        //val responseRewardPoolDeposit = KycHelper.rewardPoolDepositsList(wallet = userWallet,rewardPoolDeposits = listOf(rewardPoolDeposit))
     }
 
     /**
-     * Shows how to perform a transaction to invite a user.
-     * Note that in order to invite a user, you must already have a membership.
+     * Shows how to perform the transaction that allows to invite the given [inviteUsers] users list.
+     * Optionally [fee] and broadcasting [mode] parameters can be specified.
      */
-    // todo fix
-//    private suspend fun inviteUsersList(user: List<InviteUser>, wallet: Wallet, fee : StdFee, mode: TxHelper.BroadcastingMode) {
-//        val response = MembershipHelper.inviteUser(user, wallet, fee, mode)
-//        assertTrue(response is TxResponse.Successful)
-//    }
+    private suspend fun inviteUsersList(
+        inviteUsers: List<InviteUser>,
+        wallet: Wallet,
+        fee: StdFee,
+        mode: TxHelper.BroadcastingMode
+    ) {
+        val response = KycHelper.inviteUsersList(inviteUsers, wallet, fee, mode)
+        assertTrue(response is TxResponse.Successful)
+    }
 
     /**
-     * Shows how to perform the transaction that allows the owner of the given [wallet] to buy a membership
-     * of the specified [membershipType].
+     * Shows how to perform the transaction that allows to buy the membership
+     * with the given [buyMemberships] memberships list.
+     * Optionally [fee] and broadcasting [mode] parameters can be specified.
      */
-    // todo fix
-//    private suspend fun buyMembershipsList(membershipType: MembershipType, wallet: Wallet, fee : StdFee, mode: TxHelper.BroadcastingMode) {
-//        val response = MembershipHelper.buyMembership(membershipType, wallet, fee, mode)
-//        assertTrue(response is TxResponse.Successful)
-//    }
+    private suspend fun buyMembershipsList(
+        buyMemberships: List<BuyMembership>,
+        wallet: Wallet,
+        fee: StdFee,
+        mode: TxHelper.BroadcastingMode
+    ) {
+        val response = KycHelper.buyMembershipsList(buyMemberships, wallet, fee, mode)
+        assertTrue(response is TxResponse.Successful)
+    }
 
-    // todo add rewardPoolDepositsList(
-    //    List<RewardPoolDeposit> rewardPoolDeposits,
-    //    Wallet wallet, {
-    //    StdFee fee,
-    //    BroadcastingMode mode,
-    //  }) async {
-
-
+    /**
+     * Deposit a list of [rewardPoolDeposits] deposits into reward pool
+     * with the depositor [wallet].
+     * Optionally [fee] and broadcasting [mode] parameters can be specified.
+     */
+    private suspend fun rewardPoolDepositsList(
+        rewardPoolDeposits: List<RewardPoolDeposit>,
+        wallet: Wallet,
+        fee: StdFee,
+        mode: TxHelper.BroadcastingMode
+    ) {
+        val response = KycHelper.rewardPoolDepositsList(rewardPoolDeposits, wallet, fee, mode)
+        assertTrue(response is TxResponse.Successful)
+    }
 }
