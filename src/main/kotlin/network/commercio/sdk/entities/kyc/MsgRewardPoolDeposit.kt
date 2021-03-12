@@ -16,14 +16,3 @@ data class MsgRewardPoolDeposit(
     )
 
 )
-
-
-//data class MsgInviteUser(
-//    private val inviteUser: InviteUser
-//) : StdMsg(
-//    type = "commercio/MsgInviteUser",
-//    value = mapOf(
-//        "recipient" to inviteUser.recipientDid,
-//        "sender" to inviteUser.senderDid
-//    )
-//)
