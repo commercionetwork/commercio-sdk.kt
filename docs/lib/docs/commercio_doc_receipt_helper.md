@@ -16,97 +16,63 @@ Allows to easily create a CommercioDocReceipt and perform common related operati
     ): CommercioDocReceipt
     ```
 
-
 ## Usage examples
 
+Suppose that we received a `MsgShareDocument` with our wallet address in the `recipients` list and we whant to send back
+a receipt. Let's assume that we check the transaction
+at http://localhost:1337/txs/3959641D57D8B6DE0DE7F71CFB636F3140AB0F8FD9976E996477C6AAD5FBF730 and extract the needed
+information to build our receipt in the following example:
+
 ```kotlin
+// Configure the blockchain network
 val info = NetworkInfo(
-        bech32Hrp = "did:com:", 
-        lcdUrl = "http://localhost:1317"
+   bech32Hrp = "did:com:",
+   lcdUrl = "http://localhost:1317"
 )
 
-val userMnemonic = listOf(
-        "will",
-        "hard",
-        "topic",
-        "spray",
-        "beyond",
-        "ostrich",
-        "moral",
-        "morning",
-        "gas",
-        "loyal",
-        "couch",
-        "horn",
-        "boss",
-        "across",
-        "age",
-        "post",
-        "october",
-        "blur",
-        "piece",
-        "wheel",
-        "film",
-        "notable",
-        "word",
-        "man"
-) 
-val senderWallet = Wallet.derive(mnemonic = userMnemonic, networkInfo = info)
-val recipientMnemonic = listOf(
-            "crisp",
-            "become",
-            "thumb",
-            "fetch",
-            "forest",
-            "senior",
-            "polar",
-            "slush",
-            "wise",
-            "wash",
-            "doctor",
-            "sunset",
-            "skate",
-            "disease",
-            "power",
-            "tool",
-            "sock",
-            "upper",
-            "diary",
-            "what",
-            "trap",
-            "artist",
-            "wood",
-            "cereal"
+// Build our wallet from the mnemonics
+val mnemonic = listOf(
+   "will",
+   "hard",
+   "topic",
+   "spray",
+   "beyond",
+   "ostrich",
+   "moral",
+   "morning",
+   "gas",
+   "loyal",
+   "couch",
+   "horn",
+   "boss",
+   "across",
+   "age",
+   "post",
+   "october",
+   "blur",
+   "piece",
+   "wheel",
+   "film",
+   "notable",
+   "word",
+   "man"
 )
-val recipientWallet = Wallet.derive(recipientMnemonic, info)
+val wallet = Wallet.derive(mnemonic = mnemonic, networkInfo = info)
 
-val recipientDid = Did(senderWallet.bech32Address)
-val id1 = UUID.randomUUID().toString()
+// The received MsgShareDocument transaction hash
+val txHash = "3959641D57D8B6DE0DE7F71CFB636F3140AB0F8FD9976E996477C6AAD5FBF730"
 
-val commercioDoc = CommercioDocHelper.fromWallet(
-    id = id1,
-    metadata = metadata,
-    recipients = listOf(Did(recipientWallet.bech32Address)),
-    wallet = senderWallet,
-    checksum = checksum,
-    aesKey = KeysHelper.generateAesKey(),
-    encryptedData = listOf(EncryptedData.METADATA_CONTENT_URI),
-    contentUri = "https://example.com/document"
-)
+// The MsgShareDocument sender
+val shareDocSender = "did:com:1cc65t29yuwuc32ep2h9uqhnwrregfq230lf2rj"
 
-val response = DocsHelper.shareDocumentsList(
-    commercioDocs = listOf(commercioDoc),
-    wallet = senderWallet
-)
+// The MsgShareDocument UUID
+val docId = "63df6ade-d2c7-490b-9191-f56f88c8e5eb"
 
-val txHash = response.txHash
-       
 val commercioDocReceipt = CommercioDocReceiptHelper.fromWallet(
-    wallet = recipientWallet,
-    recipient = Did(senderWallet.bech32Address),
-    txHash = txHash,
-    documentId = id1,
-    proof = ""
+   wallet = wallet,
+   recipient = Did(shareDocSender),
+   txHash = txHash,
+   documentId = docId
 )
 ```
 

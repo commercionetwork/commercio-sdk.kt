@@ -93,6 +93,5 @@ ${Base64.encode(rsaPubKeySignature.publicWrapper.public.encoded).toString(Charse
         assertEquals(didDocument.proof.verificationMethod, expectedDidDocument.proof.verificationMethod)
         assertNotEquals(didDocument.proof.timeStamp, expectedComputedProof.timeStamp)
         assertEquals(didDocument.proof.signatureValue.length, expectedDidDocument.proof.signatureValue.length)
-
     }
 }

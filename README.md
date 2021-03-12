@@ -28,22 +28,25 @@ We highly suggest you checking it out to have a complete reference of the SDK.
 - Generate AES key
 - Generate RSA key
 
-### CommercioDOCS
+### Docs
 - Share document
 - Send receipt
 - List documents
 - List receipts
 
-### CommercioID
+### Id
+
 - Create Did Document
+- Associate Did Document
 - Request power up
-- Create connection invitation
-- Verify connection invitation
 
-### CommercioMINT
-- Open CDP
-- Close CDP
+### CommercioMint
 
-### CommercioMEMBERSHIP
+- Mint CCC
+- Burn CCC
+
+### CommercioKYC
+
 - Invite user
 - Buy membership
+- Deposit into reward pool 

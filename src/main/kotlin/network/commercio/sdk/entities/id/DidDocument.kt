@@ -25,7 +25,7 @@ data class DidDocument(
     @JsonProperty("id") val id: String,
     @JsonProperty("publicKey") val publicKeys: List<DidDocumentPublicKey>,
     @JsonProperty("proof") val proof: DidDocumentProof,
-    @JsonProperty("service") @JsonInclude(JsonInclude.Include.NON_NULL) val service: List<DidDocumentService>?
+    @JsonProperty("service") @JsonInclude(JsonInclude.Include.NON_EMPTY) val service: List<DidDocumentService>?
 ) {
 
     /**

@@ -3,17 +3,24 @@ package network.commercio.sdk.docs
 import network.commercio.sacco.Wallet
 import network.commercio.sdk.crypto.KeysHelper
 import network.commercio.sdk.entities.docs.CommercioDoc
+import network.commercio.sdk.entities.docs.EncryptedData
 import network.commercio.sdk.entities.id.Did
 import javax.crypto.SecretKey
 
 /**
- * Allows to easily build CommercioDoc
+ * Allows to easily create a CommercioDoc
+ * and perform common related operations
  */
 object CommercioDocHelper {
 
     /**
-     * Creates a new CommercioDoc that allows to share the document associated with the given [contentUri] and
-     * having the given [metadata] and [checksum]. If [encryptedData] is specified, encrypts the proper data for
+     * Creates a new CommercioDoc that allows to share the document associated with
+     * the given [wallet], the list of recipients [recipients],
+     * an unique document [id] (UUID v4 format) and document [metadata]
+     *
+     * Optionally [contentUri], [checksum], [doSign], [encryptedData], [aesKey] can be provided.
+     *
+     * If [encryptedData] is specified, encrypts the proper data for
      * the specified [recipients] and then sends the transaction to the blockchain.
      */
     suspend fun fromWallet(

@@ -3,9 +3,12 @@ Docs helper allows to easily perform all the operations related to the commercio
 
 ## Provided operations
 
-1. Creates a new transaction that allows to share the document associated with the given `metadata` and having the optional fields `contentUri`, `doSign`, `checksum`, `fee` and broadcasting `mode`.
-      If `encryptedData` is specified, encrypts the proper data and optional `aesKey` for the specified `recipients` and then sends the transaction to the blockchain.
-      
+1. Creates a new transaction that allows to share the document associated with the given `metadata`, document `id`
+   , `recipients` and with the sender `wallet`. Optional fields are `contentUri`, `doSign`, `checksum`, `fee` and the
+   broadcasting `mode`.
+
+   If `encryptedData` is specified, encrypts the proper data and optional `aesKey` for the specified `recipients` and
+   then sends the transaction to the blockchain. If `doSign` is provided then also the `checksum` field is required.
     ```kotlin
     suspend fun shareDocument(
          id: String,
@@ -21,8 +24,9 @@ Docs helper allows to easily perform all the operations related to the commercio
          mode: BroadcastingMode? = null
     ): TxResponse
     ```
-2. Create a new transaction that allows to share a list of previously generated documents commercioDocsList. 
-   Optionally fee and broadcasting mode parameters can be specified.
+
+2. Create a new transaction that allows to share a list of previously generated documents `commercioDocsList` signing
+   the transaction with `wallet`. Optionally `fee` and broadcasting `mode` parameters can be specified.
     ```kotlin
     suspend fun shareDocumentsList(
         commercioDocs: List<CommercioDoc>,
@@ -34,14 +38,15 @@ Docs helper allows to easily perform all the operations related to the commercio
 
 3. Returns the list of all the `CommercioDoc` that the specified `address` has sent.
     ```kotlin
-    suspend fun getSentDocuments(address: Did, wallet: Wallet): List<CommercioDoc>
+    suspend fun getSentDocuments(address: String, networkInfo: NetworkInfo): List<CommercioDoc>
     ```
 4. Returns the list of all the `CommercioDoc` that the specified `address` has received.
     ```kotlin
-    suspend fun getReceivedDocuments(address: Did, wallet: Wallet): List<CommercioDoc>
+    suspend fun getReceivedDocuments(address: String, networkInfo: NetworkInfo): List<CommercioDoc>
     ```
-5. Creates a new transaction which tells the `recipient` that the document having the specified `documentId` and
-   present inside the transaction with hash `txHash` has been properly seen; optionally `proof` of reading, `fee` and broadcasting `mode`.
+5. Creates a new transaction which tells the `recipient` that the document having the specified `documentId` and present
+   inside the transaction with hash `txHash` has been properly seen; optionally `proof` of reading, `fee` and
+   broadcasting `mode`.
     ```kotlin
     suspend fun sendDocumentReceipt(
         recipient: Did,
@@ -53,8 +58,8 @@ Docs helper allows to easily perform all the operations related to the commercio
         mode: BroadcastingMode? = null
     ): TxResponse
     ```
-6. Creates a new transaction which sends a list of previously generated receipts commercioDocReceiptsList. 
-   Optionally fee and broadcasting mode parameters can be specified.
+6. Creates a new transaction which sends a list of previously generated receipts `commercioDocReceiptsList`.
+   Optionally `fee` and broadcasting `mode` parameters can be specified.
     ```kotlin
     suspend fun sendDocumentReceiptsList(
         commercioDocReceipts: List<CommercioDocReceipt>,
@@ -63,16 +68,14 @@ Docs helper allows to easily perform all the operations related to the commercio
         mode: BroadcastingMode? = null
     ): TxResponse 
     ```   
-   
+
 7. Returns the list of all the `CommercioDocReceipt` that have been sent from the given `address`.
     ```kotlin
-    suspend fun getSentReceipts(address: Did, wallet: Wallet)
-        : List<CommercioDocReceipt>
+    suspend fun getSentReceipts(address: String, networkInfo: NetworkInfo): List<CommercioDocReceipt>
     ```
 8. Returns the list of all the `CommercioDocReceipt` that have been received from the given `address`
     ```kotlin
-    suspend fun getReceivedReceipts(address: Did, wallet: Wallet)
-        : List<CommercioDocReceipt>
+    suspend fun getReceivedReceipts(address: String, networkInfo: NetworkInfo): List<CommercioDocReceipt>
     ```
 ## Usage examples
 ```kotlin
@@ -163,16 +166,45 @@ Docs helper allows to easily perform all the operations related to the commercio
         )
         
         val txHash = (response as TxResponse.Successful).txHash
-        
-        // --- Send receipt
-        DocsHelper.sendDocumentReceipt(
-            recipient = recipientDid,
-            txHash = txHash,
-            documentId = docId,
-            wallet = recipientWallet
-        )
-    } catch (e: Exception){
-        throw e
+
+       // --- Send receipt
+       DocsHelper.sendDocumentReceipt(
+          recipient = recipientDid,
+          txHash = txHash,
+          documentId = docId,
+          wallet = recipientWallet
+       )
+    } catch (e: Exception) {
+       throw e
     }
+
+// --- getSentDocuments
+val sentDocs = DocsHelper.getSentDocuments(
+   address = senderWallet.bech32Address,
+   networkInfo = networkInfo
+)
+print("\nsentDocs: $sentDocs\n\n")
+
+// --- getReceivedDocuments
+val receivedDocs = DocsHelper.getReceivedDocuments(
+   address = recipientWallet.bech32Address,
+   networkInfo = networkInfo
+)
+print("\nreceivedDocs: $receivedDocs\n\n")
+
+// --- getSentReceipts
+val sentReceipts = DocsHelper.getSentReceipts(
+   address = senderWallet.bech32Address,
+   networkInfo = networkInfo
+)
+print("\nsentReceipts: $sentReceipts\n")
+
+
+// --- getReceivedReceipts
+val receivedReceipts = DocsHelper.getReceivedReceipts(
+   address = recipientWallet.bech32Address,
+   networkInfo = networkInfo
+)
+print("\nreceivedReceipts: $receivedReceipts\n")
 ```
 

@@ -19,7 +19,7 @@ class MsgShareDocumentTests {
                 ),
                 contentUri = "https://www.vargroup.it/managed-security-services/",
                 encryptionData = CommercioDoc.EncryptionData(
-                    encryptedData = listOf("content"),
+                    encryptedData = listOf(EncryptedData.CONTENT),
                     keys = listOf(
                         CommercioDoc.EncryptionData.Key(
                             recipientDid = "did:com:1ttwtq7kxustrqxstjpcjf7wf7l9ljd8jz7z64r",
@@ -40,5 +40,7 @@ class MsgShareDocumentTests {
 
         val expected = readResource("msgs/MsgShareDocument.json")
         assertEquals(expected, msgObjectMapper.writeValueAsString(msg))
+
+        assertEquals(msg.type, "commercio/MsgShareDocument")
     }
 }

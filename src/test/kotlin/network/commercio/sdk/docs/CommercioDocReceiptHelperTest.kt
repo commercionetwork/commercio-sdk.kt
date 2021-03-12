@@ -28,7 +28,7 @@ class CommercioDocReceiptHelperTest {
 
         val uuid = UUID.randomUUID().toString()
         val txHash = "txHash"
-        val documentId = "documentId"
+        val documentId = UUID.randomUUID().toString()
 
         val expectedDocReceipt = CommercioDocReceipt(
             senderDid = wallet.bech32Address,
@@ -42,7 +42,8 @@ class CommercioDocReceiptHelperTest {
             wallet = wallet,
             recipient = Did(wallet.bech32Address),
             txHash = txHash,
-            documentId = documentId
+            documentId = documentId,
+            proof = ""
         )
 
         assertNotEquals(commercioDocReceipt.uuid, expectedDocReceipt.uuid)
@@ -50,6 +51,30 @@ class CommercioDocReceiptHelperTest {
         assertEquals(commercioDocReceipt.recipientDid, expectedDocReceipt.recipientDid)
         assertEquals(commercioDocReceipt.txHash, expectedDocReceipt.txHash)
         assertEquals(commercioDocReceipt.documentUuid, expectedDocReceipt.documentUuid)
+        assertEquals(commercioDocReceipt.proof, "")
+    }
 
+    @Test(expected = IllegalArgumentException::class)
+    fun `fromWallet for CommercioDocReceipt should throw an IllegalArgumentException because DOCUMENT_UUID requires a valid UUID v4 format`() {
+
+        CommercioDocReceiptHelper.fromWallet(
+            wallet = wallet,
+            recipient = Did(wallet.bech32Address),
+            txHash = "",
+            documentId = "doc invalid uuid",
+            proof = ""
+        )
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun `fromWallet for CommercioDocReceipt should throw an IllegalArgumentException because RECIPIENT requires a valid Bech32 format`() {
+
+        CommercioDocReceiptHelper.fromWallet(
+            wallet = wallet,
+            recipient = Did("doc invalid uuid"),
+            txHash = "",
+            documentId = UUID.randomUUID().toString(),
+            proof = ""
+        )
     }
 }

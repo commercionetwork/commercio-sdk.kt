@@ -6,8 +6,10 @@ import network.commercio.sacco.Wallet
 import network.commercio.sdk.crypto.KeysHelper
 import network.commercio.sdk.docs.CommercioDocHelper
 import network.commercio.sdk.entities.docs.CommercioDoc
+import network.commercio.sdk.entities.docs.EncryptedData
 import network.commercio.sdk.entities.id.Did
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
 import org.junit.Test
 import java.util.*
 
@@ -61,5 +63,48 @@ class CommercioDocHelperTest {
         )
 
         assertEquals(commercioDoc.toString(), expectedCommercioDoc.toString())
+
+        val commercioDocWithEncryptedData = CommercioDocHelper.fromWallet(
+            id = uuid,
+            metadata = metadata,
+            recipients = recipientDids,
+            wallet = wallet,
+            contentUri = "contentUri",
+            encryptedData = listOf(EncryptedData.CONTENT_URI)
+        )
+
+        assertNotEquals(commercioDocWithEncryptedData.contentUri, expectedCommercioDoc.contentUri)
     }
+
+
+    @Test(expected = IllegalArgumentException::class)
+    fun `fromWallet should throw an IllegalArgumentException if passing CONTENT_URI with null contentUri param`() =
+        runBlocking {
+            val commercioDoc = CommercioDocHelper.fromWallet(
+                id = uuid,
+                metadata = metadata,
+                recipients = recipientDids,
+                wallet = wallet,
+                encryptedData = listOf(EncryptedData.CONTENT_URI)
+            )
+        }
+
+
+    @Test(expected = IllegalArgumentException::class)
+    fun `fromWallet should throw an IllegalArgumentException if passing METADATA_SCHEMA_URI with null metadata schema param`() =
+        runBlocking {
+
+            val commercioDoc = CommercioDocHelper.fromWallet(
+                wallet = wallet,
+                recipients = recipientDids,
+                id = uuid,
+                metadata = CommercioDoc.Metadata(
+                    contentUri = "https://example.com/document/metadata",
+                    schema = null,
+                    schemaType = "schemaType"
+                ),
+                encryptedData = listOf(EncryptedData.METADATA_SCHEMA_URI)
+            )
+        }
+
 }

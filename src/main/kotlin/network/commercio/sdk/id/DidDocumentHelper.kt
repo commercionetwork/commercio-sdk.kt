@@ -12,16 +12,16 @@ import network.commercio.sdk.utils.getTimeStamp
 import java.nio.charset.Charset
 
 /**
- * Allows to perform common Did Document related operations.
+ * Allows to easily create a Did Document and perform common related operations.
  */
 object DidDocumentHelper {
 
     /**
-     * Creates a [DidDocument] from the given [wallet] and optional [pubKeys].
+     * Creates a [DidDocument] from the given [wallet], [pubKeys] and optional [service].
      */
     fun fromWallet(
         wallet: Wallet,
-        pubKeys: List<PublicKeyWrapper> = listOf(),
+        pubKeys: List<PublicKeyWrapper>,
         service: List<DidDocumentService>? = null
     ): DidDocument {
         if (pubKeys.size < 2) {
@@ -34,11 +34,17 @@ object DidDocumentHelper {
         val proofContent = DidDocumentProofSignatureContent(
             context = "https://www.w3.org/ns/did/v1",
             id = wallet.bech32Address,
-            publicKeys = keys
+            publicKeys = keys,
+            service = service
         )
 
         val verificationMethod = wallet.bech32PublicKey
-        val proof = computeProof(proofContent.id, verificationMethod, proofContent, wallet)
+        val proof = computeProof(
+            controller = proofContent.id,
+            verificationMethod = verificationMethod,
+            proofSignatureContent = proofContent,
+            wallet = wallet
+        )
 
         // Build the Did Document
         return DidDocument(

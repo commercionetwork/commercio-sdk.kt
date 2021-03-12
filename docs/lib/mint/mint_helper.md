@@ -1,38 +1,32 @@
 # Mint helper
+
 Mint helper allows to easily perform all the operations related to the commercio.network `mint` module.
+
 # Provided operations
-1. Opens a new CDP depositing the given `commercioTokenAmount`. Optionally `fee` and broadcasting `mode` parameters can be specified.
+
+1. Mints the CCCs having the given `mintCccs` list as being associated with the address present inside the
+   specified `wallet`. Optionally `fee` and broadcasting `mode` parameters can be specified.
     ```kotlin
-    suspend fun openCdp(
-        commercioTokenAmount: ULong,
+    suspend fun mintCccsList(
+        mintCccs: List<MintCcc>, 
         wallet: Wallet,
         fee: StdFee? = null,
         mode: BroadcastingMode? = null
-    ): TxResponse
+   ): TxResponse
     ```
-2. Performs a transaction opening a new CDP `openCdp` as being associated with the address present inside the specified `wallet`. Optionally `fee` and broadcasting `mode` parameters can be specified.   
-    ```kotlin
-    suspend fun openCdp(
-        openCdp: OpenCdp,
-        wallet: Wallet,
-        fee: StdFee? = null,
-        mode: BroadcastingMode? = null
-    ): TxResponse
-    ```
-3. Closes the CDP having the given `timestamp`. Optionally `fee` and broadcasting `mode` parameters can be specified.
-    ```kotlin
-    suspend fun closeCdp(
-        timestamp: Int,
-        wallet: Wallet,
-        fee: StdFee? = null,
-        mode: BroadcastingMode? = null
-    ): TxResponse
-    ```
-   
-4. Closes the open CDPs having the given `closeCdps` list as being associated with the address present inside the specified `wallet`. Optionally `fee` and broadcasting `mode` parameters can be specified.
+
+2. Returns the list of all the `ExchangeTradePosition` that the specified wallet has minted.
     ```kotlin    
-    suspend fun closeCdpsList(
-        closeCdps: List<CloseCdp>,
+    suspend fun getExchangeTradePositions(
+        wallet: Wallet
+    ): List<ExchangeTradePosition>
+    ```
+
+3. Burns the CCCs having the given `burnCccs` list as being associated with the address present inside the
+   specified `wallet`. Optionally `fee` and broadcasting `mode` parameters can be specified.
+    ```kotlin    
+    suspend fun burnCccsList(
+        burnCccs: List<BurnCcc>,
         wallet: Wallet,
         fee: StdFee? = null,
         mode: BroadcastingMode? = null
@@ -40,6 +34,7 @@ Mint helper allows to easily perform all the operations related to the commercio
     ```
 
 ## Usage examples
+
 ```kotlin
 val info = NetworkInfo(bech32Hrp = "did:com:", lcdUrl = "http://localhost:1317")
 
@@ -70,17 +65,43 @@ val userMnemonic = listOf(
     "man"
 )
 
-val userWallet = Wallet.derive(mnemonic = userMnemonic, networkInfo = info)
-
-val amount = 100000000.toULong()
+val wallet = Wallet.derive(mnemonic = userMnemonic, networkInfo = info)
+val stdCoin = StdCoin(denom = "uccc", amount = "20")
+val fee = StdFee(gas = "200000", amount = listOf(StdCoin(denom = "ucommercio", amount = "10000")))// optional
+val mode = TxHelper.BroadcastingMode.BLOCK // optional
 
 try {
-    //Opening a cdp
-    MintHelper.openCdp(commercioTokenAmount = amount, wallet = userWallet)
-    
-    //Closing a cdp
-    MintHelper.closeCdp(timestamp = timestamp, wallet = userWallet)
-} catch (e: Exception){
+
+    val mintCcc = MintCcc(
+        depositAmount = listOf(stdCoin),
+        depositorDid = wallet.bech32Address,
+        id = UUID.randomUUID().toString()
+    )
+
+    //Mint CCC
+    MintHelper.mintCccsList(
+        mintCccs = listOf(mintCcc),
+        wallet = wallet,
+        fee = fee,  // optional
+        mode = mode  // optional
+    )
+
+    // Get all Exchange Trade Positions
+    val etps = MintHelper.getExchangeTradePositions(wallet)
+
+    val burnCccs = mutableListOf<BurnCcc>()
+
+    etps.forEach {
+        val _burnCcc = BurnCccHelper.fromWallet(
+            wallet = wallet, id = it.id,
+            amount = StdCoin(denom = it.credits.dnom, amount = it.credits.amount)
+        )
+        burnCccs.add(_burnCcc)
+    }
+
+    //Burn CCC
+    MintHelper.burnCccsList(burnCccs, wallet)
+} catch (e: Exception) {
     throw e
 }
 ```

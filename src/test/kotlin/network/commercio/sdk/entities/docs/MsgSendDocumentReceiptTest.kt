@@ -5,6 +5,7 @@ import network.commercio.sdk.readResource
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
+
 class MsgSendDocumentReceiptTest {
 
     @Test
@@ -21,6 +22,7 @@ class MsgSendDocumentReceiptTest {
 
         val expected = readResource("msgs/MsgSendDocumentReceipt.json")
         assertEquals(expected, msgObjectMapper.writeValueAsString(msg))
-    }
 
+        assertEquals(msg.type, "commercio/MsgSendDocumentReceipt")
+    }
 }

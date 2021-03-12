@@ -15,13 +15,13 @@ import java.util.*
 
 /**
  * Allows to easily build RequestDidPowerUp
+ * and perform common related operations.
  */
 object RequestDidPowerUpHelper {
 
     /**
-     * Creates a new Did power up request for the given [pairwiseDid] and of the given [amount].
-     * Signs everything that needs to be signed (i.e. the signature JSON inside the payload) with the
-     * private key contained inside the given [wallet] and the client generated `signature private RSA key`.
+     * Creates a new Did power up request for the given
+     * [wallet], [pairwiseDid], [amount] and [privateKey].
      */
     suspend fun fromWallet(
         wallet: Wallet,

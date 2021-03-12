@@ -65,10 +65,11 @@ object IdHelper {
     }
 
     /**
-     * Creates a new Did power up request for the given [pairwiseDid] and of the given [amount].
-     * Signs everything that needs to be signed (i.e. the signature JSON inside the payload) with the
-     * private key contained inside the given [wallet] and the client generated `signature private RSA key`.
-     * Optionally a custom `fee` can be specified.
+     * Creates a new transaction to request a Did PowerUp of the given
+     * [amount] from the given [wallet] for the given [pairwiseDid] address.
+     * Signs everything that needs to be signed with private key
+     * contained inside the given [wallet] and the [privateKey].
+     * Optionally [fee] and broadcasting [mode] parameters can be specified.
      */
     suspend fun requestDidPowerUp(
         pairwiseDid: Did,
@@ -79,7 +80,7 @@ object IdHelper {
         mode: BroadcastingMode? = null
     ): TxResponse {
 
-        val requestDidPowerUp= RequestDidPowerUpHelper.fromWallet(
+        val requestDidPowerUp = RequestDidPowerUpHelper.fromWallet(
             wallet = wallet,
             pairwiseDid = pairwiseDid,
             amount = amount,
