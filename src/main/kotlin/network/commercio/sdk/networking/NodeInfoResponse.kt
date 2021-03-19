@@ -11,15 +11,14 @@ data class NodeInfoResponse(
 )
 
 data class NodeInfo(
-    @JsonProperty("protocol_version")
-    val valprotocolVersion: NodeInfoProtocolVersion,
+    @JsonProperty("protocol_version") val protocolVersion: NodeInfoProtocolVersion,
     val id: String,
     @JsonProperty("listen_addr") val listenAddr: String,
     val network: String,
     val version: String,
     val channels: String,
     val moniker: String,
-    val other: NodeInfoOther
+    val other: NodeInfoOther?
 )
 
 data class NodeInfoProtocolVersion(
