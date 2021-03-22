@@ -5,6 +5,7 @@ import network.commercio.sacco.NetworkInfo
 import network.commercio.sacco.TxResponse
 import network.commercio.sacco.Wallet
 import network.commercio.sacco.models.types.StdFee
+import network.commercio.sacco.models.types.StdMsg
 import network.commercio.sdk.crypto.KeysHelper
 import network.commercio.sdk.entities.docs.CommercioDoc
 import network.commercio.sdk.entities.docs.CommercioDocReceipt
@@ -13,9 +14,16 @@ import network.commercio.sdk.entities.docs.MsgSendDocumentReceipt
 import network.commercio.sdk.entities.docs.MsgShareDocument
 import network.commercio.sdk.entities.id.Did
 import network.commercio.sdk.networking.Network
+import network.commercio.sdk.networking.isVersion
 import network.commercio.sdk.tx.TxHelper
 import network.commercio.sdk.tx.TxHelper.BroadcastingMode
 import javax.crypto.SecretKey
+import network.commercio.sdk.entities.docs.legacy.`21`.CommercioDocMapper as CommercioDocMapperLegacy
+import network.commercio.sdk.entities.docs.legacy.`21`.CommercioDoc as CommercioDocLegacy
+import network.commercio.sdk.entities.docs.legacy.`21`.MsgShareDocument as MsgShareDocumentLegacy
+import network.commercio.sdk.entities.docs.legacy.`21`.CommercioDocReceiptMapper as CommercioDocReceiptMapperLegacy
+import network.commercio.sdk.entities.docs.legacy.`21`.MsgSendDocumentReceipt as MsgSendDocumentReceiptLegacy
+
 
 /**
  * Allows to easily perform CommercioDOCS related operations
@@ -65,7 +73,17 @@ object DocsHelper {
         )
 
         // Build the tx message
-        val msg = MsgShareDocument(document = commercioDoc)
+        var msg: StdMsg = MsgShareDocument(document = commercioDoc)
+
+        val isLegacy21Chain = wallet.networkInfo.isVersion(version = "2.1")
+        if (isLegacy21Chain) {
+            // Convert the new CommercioDoc entity to the old format
+            val legacy21Doc: CommercioDocLegacy = CommercioDocMapperLegacy().toLegacy(commercioDoc)
+
+            // Replace the msg with the newer document with the legacy one
+            msg = MsgShareDocumentLegacy(document = legacy21Doc)
+        }
+
         return TxHelper.createSignAndSendTx(msgs = listOf(msg), fee = fee, wallet = wallet, mode = mode)
     }
 
@@ -79,9 +97,20 @@ object DocsHelper {
         fee: StdFee? = null,
         mode: BroadcastingMode? = null
     ): TxResponse {
+        var msgs: List<StdMsg> = mutableListOf()
 
         // Build the tx message
-        val msgs = commercioDocs.map { MsgShareDocument(document = it) }
+        val isLegacy21Chain = wallet.networkInfo.isVersion(version = "2.1")
+        if (isLegacy21Chain) {
+
+            msgs = commercioDocs.map {
+                // Convert the new CommercioDoc entity to the old format
+                MsgShareDocumentLegacy(document = CommercioDocMapperLegacy().toLegacy(it))
+            }.toList()
+
+        } else {
+            msgs = commercioDocs.map { MsgShareDocument(document = it) }.toList()
+        }
         return TxHelper.createSignAndSendTx(msgs = msgs, fee = fee, wallet = wallet, mode = mode)
     }
 
@@ -127,7 +156,16 @@ object DocsHelper {
             proof = proof
         )
 
-        val msg = MsgSendDocumentReceipt(commercioDocReceipt)
+        var msg: StdMsg = MsgSendDocumentReceipt(commercioDocReceipt)
+
+        val isLegacy21Chain = wallet.networkInfo.isVersion(version = "2.1")
+        if (isLegacy21Chain) {
+            // Convert the new CommercioDocReceipt entity to the old format
+            val legacy21Receipt = CommercioDocReceiptMapperLegacy().toLegacy(commercioDocReceipt)
+
+            // Replace the msg with the newer document with the legacy one
+            msg = MsgSendDocumentReceiptLegacy(receipt = legacy21Receipt)
+        }
         return TxHelper.createSignAndSendTx(msgs = listOf(msg), wallet = wallet, fee = fee, mode = mode)
     }
 
@@ -141,7 +179,20 @@ object DocsHelper {
         fee: StdFee? = null,
         mode: BroadcastingMode? = null
     ): TxResponse {
-        val msgs = commercioDocReceipts.map { MsgSendDocumentReceipt(it) }
+        var msgs: List<StdMsg> = mutableListOf()
+
+        // Build the tx message
+        val isLegacy21Chain = wallet.networkInfo.isVersion(version = "2.1")
+        if (isLegacy21Chain) {
+
+            msgs = commercioDocReceipts.map {
+                // Convert the new CommercioDocReceipt entity to the old format
+                MsgSendDocumentReceiptLegacy(receipt = CommercioDocReceiptMapperLegacy().toLegacy(it))
+            }.toList()
+
+        } else {
+            msgs = commercioDocReceipts.map { MsgSendDocumentReceipt(receipt = it) }.toList()
+        }
         return TxHelper.createSignAndSendTx(msgs = msgs, wallet = wallet, fee = fee, mode = mode)
     }
 
