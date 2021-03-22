@@ -16,6 +16,5 @@ suspend fun NetworkInfo.fetchNetworkInfo(): NodeInfoResponse {
 suspend fun NetworkInfo.isVersion(version: String): Boolean {
     require(version.isNotEmpty()) { "The version must not be empty. An valid example is '2.2'" }
     val nodeInfoResponse = this.fetchNetworkInfo()
-    print("version: ${nodeInfoResponse.applicationVersion.version}")
     return nodeInfoResponse.applicationVersion.version.contains(version)
 }
