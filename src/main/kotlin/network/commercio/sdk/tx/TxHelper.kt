@@ -44,7 +44,7 @@ object TxHelper {
         }
 
         val _mode = when (mode) {
-            null -> BroadcastingMode.SYNC.toString()
+            null -> BroadcastingMode.BROADCAST_MODE_SYNC.toString()
             else -> mode.toString()
         }
 
@@ -55,15 +55,15 @@ object TxHelper {
     }
 
     enum class BroadcastingMode {
-        ASYNC,
-        BLOCK,
-        SYNC;
+        BROADCAST_MODE_ASYNC,
+        BROADCAST_MODE_BLOCK,
+        BROADCAST_MODE_SYNC;
 
         override fun toString(): String {
             return when (this) {
-                ASYNC -> "async"
-                BLOCK -> "block"
-                SYNC -> "sync"
+                BROADCAST_MODE_ASYNC -> "BROADCAST_MODE_ASYNC"
+                BROADCAST_MODE_BLOCK -> "BROADCAST_MODE_BLOCK"
+                BROADCAST_MODE_SYNC -> "BROADCAST_MODE_SYNC"
             }
         }
     }

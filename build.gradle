@@ -32,7 +32,8 @@ dependencies {
     // Crypto
     compile "com.github.komputing:kethereum:$kethereum_version"
     compile "org.bitcoinj:bitcoinj-core:0.15.1"
-    compile "com.github.commercionetwork:sacco.kt:$sacco_version"
+    //compile "com.github.commercionetwork:sacco.kt:$sacco_version"
+    compile fileTree(dir: 'libs', include: '*.jar')
 
 
     // Networking

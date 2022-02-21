@@ -7,7 +7,7 @@ import org.junit.Test
 
 class MsgShareDocumentTests {
 
-    @Test
+    /*@Test
     fun `toJson works properly`() {
         val msg = MsgShareDocument(
             document = CommercioDoc(
@@ -42,5 +42,5 @@ class MsgShareDocumentTests {
         assertEquals(expected, msgObjectMapper.writeValueAsString(msg))
 
         assertEquals(msg.type, "commercio/MsgShareDocument")
-    }
+    }*/
 }

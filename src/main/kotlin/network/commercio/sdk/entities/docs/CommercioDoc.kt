@@ -13,8 +13,8 @@ import network.commercio.sdk.utils.matchUuidv4
 data class CommercioDoc(
     @JsonProperty("sender") val senderDid: String,
     @JsonProperty("recipients") val recipientsDids: List<String>,
-    @JsonProperty("uuid") val uuid: String,
-    @JsonProperty("content_uri") @JsonInclude(JsonInclude.Include.NON_EMPTY) val contentUri: String = "",
+    @JsonProperty("UUID") val uuid: String,
+    @JsonProperty("contentUri") @JsonInclude(JsonInclude.Include.NON_EMPTY) val contentUri: String = "",
     @JsonProperty("metadata") val metadata: Metadata,
     @JsonProperty("checksum") @JsonInclude(JsonInclude.Include.NON_NULL) val checksum: Checksum? = null,
     @JsonProperty("encryption_data") @JsonInclude(JsonInclude.Include.NON_EMPTY) val encryptionData: EncryptionData? = null,

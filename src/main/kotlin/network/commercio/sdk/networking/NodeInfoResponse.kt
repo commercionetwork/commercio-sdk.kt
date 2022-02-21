@@ -41,5 +41,6 @@ data class NodeInfoApplicationVersion(
     val commit: String? = null,
     @JsonProperty("build_tags") val buildTags: String? = null,
     val go: String? = null,
-    @JsonProperty("build_deps") val buildDeps: List<String>? = null
+    @JsonProperty("build_deps") val buildDeps: List<String>? = null,
+    @JsonProperty("cosmos_sdk_version") val cosmosSdkVersion: String? = null
 )

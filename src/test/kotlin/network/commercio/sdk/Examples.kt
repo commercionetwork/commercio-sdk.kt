@@ -75,7 +75,7 @@ class Examples {
 
         // --- Optional
         val fee = StdFee(gas = "200000", amount = listOf(StdCoin(denom = "ucommercio", amount = "10000")))
-        val mode = TxHelper.BroadcastingMode.BLOCK
+        val mode = TxHelper.BroadcastingMode.BROADCAST_MODE_BLOCK
 
         // --- Set the Did Document
         val rsaVerificationKeyPair = KeysHelper.generateRsaKeyPair()
@@ -210,7 +210,7 @@ class Examples {
 
         // --- Optional
         val fee = StdFee(gas = "200000", amount = listOf(StdCoin(denom = "ucommercio", amount = "10000")))
-        val mode = TxHelper.BroadcastingMode.BLOCK
+        val mode = TxHelper.BroadcastingMode.BROADCAST_MODE_BLOCK
 
         // --- Share a document
         val docRecipientDid = Did(recipientWallet.bech32Address)
@@ -283,7 +283,7 @@ class Examples {
 
         // --- Optional
         val fee = StdFee(gas = "200000", amount = listOf(StdCoin(denom = "ucommercio", amount = "10000")))
-        val mode = TxHelper.BroadcastingMode.BLOCK
+        val mode = TxHelper.BroadcastingMode.BROADCAST_MODE_BLOCK
 
         // --- MintCcc
         val mintCccs = MintCcc(depositAmount = listOf(amount), depositorDid = did, id = UUID.randomUUID().toString())
@@ -366,7 +366,7 @@ class Examples {
 
         // --- Optional
         val fee = StdFee(gas = "200000", amount = listOf(StdCoin(denom = "ucommercio", amount = "10000")))
-        val mode = TxHelper.BroadcastingMode.BLOCK
+        val mode = TxHelper.BroadcastingMode.BROADCAST_MODE_BLOCK
 
         // --- Invite user
         val inviteUser = InviteUserHelper.fromWallet(

@@ -258,7 +258,7 @@ class CommercioDocTest {
 
         val fullCommercioDocObjSerialized = jacksonObjectMapper().writeValueAsString(correctCommercioDoc)
         val fullJson =
-            """{"sender":"did=com=1acdefg","recipients":["did=com=1acdefg"],"uuid":"c510755c-c27d-4348-bf4c-f6050fc6935c","content_uri":"content-uri","metadata":{"content_uri":"content-uri","schema":{"uri":"http=//uri.url","version":"1"},"schema_type":"schemaType"},"checksum":{"value":"value","algorithm":"md5"},"encryption_data":{"keys":[{"recipient":"did=com=1acdefg","value":"value"}],"encrypted_data":["content_uri"]},"do_sign":{"storage_uri":"http=//do.sign","signer_instance":"signer","vcr_id":"vcrId","certificate_profile":"profile","sdn_data":["common_name"]}}"""
+            """{"sender":"did=com=1acdefg","recipients":["did=com=1acdefg"],"UUID":"c510755c-c27d-4348-bf4c-f6050fc6935c","contentUri":"content-uri","metadata":{"content_uri":"content-uri","schema":{"uri":"http=//uri.url","version":"1"},"schema_type":"schemaType"},"checksum":{"value":"value","algorithm":"md5"},"encryption_data":{"keys":[{"recipient":"did=com=1acdefg","value":"value"}],"encrypted_data":["content_uri"]},"do_sign":{"storage_uri":"http=//do.sign","signer_instance":"signer","vcr_id":"vcrId","certificate_profile":"profile","sdn_data":["common_name"]}}"""
         assertEquals(fullCommercioDocObjSerialized, fullJson)
 
         val minimalDocChecksumNull = CommercioDoc(
@@ -270,7 +270,7 @@ class CommercioDocTest {
 
         val minimalDocChecksumNullSerialized = jacksonObjectMapper().writeValueAsString(minimalDocChecksumNull)
         val minimalDocChecksumNullJson =
-            """{"sender":"did=com=1acdefg","recipients":["did=com=1acdefg"],"uuid":"c510755c-c27d-4348-bf4c-f6050fc6935c","metadata":{"content_uri":"content-uri","schema":{"uri":"http=//uri.url","version":"1"},"schema_type":"schemaType"}}""".trimMargin()
+            """{"sender":"did=com=1acdefg","recipients":["did=com=1acdefg"],"UUID":"c510755c-c27d-4348-bf4c-f6050fc6935c","metadata":{"content_uri":"content-uri","schema":{"uri":"http=//uri.url","version":"1"},"schema_type":"schemaType"}}""".trimMargin()
         assertEquals(minimalDocChecksumNullSerialized, minimalDocChecksumNullJson)
 
         val minimalDocSdnDataNull = CommercioDoc(
@@ -289,7 +289,7 @@ class CommercioDocTest {
 
         val minimalDocSdnDataNullSerialized = jacksonObjectMapper().writeValueAsString(minimalDocSdnDataNull)
         val minimalDocSdnDataNullJson =
-            """{"sender":"did=com=1acdefg","recipients":["did=com=1acdefg"],"uuid":"c510755c-c27d-4348-bf4c-f6050fc6935c","metadata":{"content_uri":"content-uri","schema":{"uri":"http=//uri.url","version":"1"},"schema_type":"schemaType"},"checksum":{"value":"value","algorithm":"md5"},"do_sign":{"storage_uri":"http=//do.sign","signer_instance":"signer","vcr_id":"vcrId","certificate_profile":"profile","sdn_data":null}}""".trimMargin()
+            """{"sender":"did=com=1acdefg","recipients":["did=com=1acdefg"],"UUID":"c510755c-c27d-4348-bf4c-f6050fc6935c","metadata":{"content_uri":"content-uri","schema":{"uri":"http=//uri.url","version":"1"},"schema_type":"schemaType"},"checksum":{"value":"value","algorithm":"md5"},"do_sign":{"storage_uri":"http=//do.sign","signer_instance":"signer","vcr_id":"vcrId","certificate_profile":"profile","sdn_data":null}}""".trimMargin()
         assertEquals(minimalDocSdnDataNullSerialized, minimalDocSdnDataNullJson)
     }
 
@@ -299,12 +299,12 @@ class CommercioDocTest {
         val jsonMinimal = mutableMapOf<String, Any>()
         jsonMinimal["sender"] = correctCommercioDoc.senderDid
         jsonMinimal["recipients"] = correctCommercioDoc.recipientsDids
-        jsonMinimal["uuid"] = correctCommercioDoc.uuid
+        jsonMinimal["UUID"] = correctCommercioDoc.uuid
         jsonMinimal["metadata"] = correctCommercioDoc.metadata
 
         val jsonWithContentUri = mutableMapOf<String, Any>()
         jsonWithContentUri.putAll(jsonMinimal)
-        jsonWithContentUri["content_uri"] = correctCommercioDoc.contentUri
+        jsonWithContentUri["contentUri"] = correctCommercioDoc.contentUri
 
         val checksumMap = mutableMapOf<String, Any>()
         checksumMap["algorithm"] = CommercioDoc.Checksum.Algorithm.MD5
